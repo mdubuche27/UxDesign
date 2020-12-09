@@ -1,0 +1,51 @@
+-> Chubb DI
+
+-> Chubb DAS
+- A voir (Adresse = Adresse DCT) et octet vide (a voir avec Cyril)
+
+-> Chubb Fct
+
+-> Siemens DI
+
+-> Siemens 
+
+-> Siemens Fct
+
+-> DEF DI
+
+-> DEF DAS
+
+-> DEF Fct
+
+==> Attention au char spéciaux !!
+
+-> Esser DI
+-zone 
+-bus (voir avec cyril)
+-libelle (desc)
+-adress physique (voir avec cyril)
+-adress MB
+
+-> Esser DAS
+recup libelle et numero (ex: 1.203.1) fin de libelle 
+-> Esser Fct et UGA
+-Libelle
+-Libelle 2
+-numero de la fonction (id)
+-> Esser TS (1000 à ??)
+-numero et libelle 
+-> Esser ModulDEporte
+-numero
+-> Esser BUS (30 a 50)
+-libelle
+-numero
+
+-> Finsecur DI
+
+-> Finsecur DI_Baltic
+
+-> Finsecur Voie
+
+-> Finsecur MDLO
+
+-> Finsecur Fct

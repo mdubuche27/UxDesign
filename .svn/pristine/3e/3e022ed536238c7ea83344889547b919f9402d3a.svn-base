@@ -1,0 +1,89 @@
+﻿using PcVueSpyLog.Entities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PcVueSpy
+{
+    public partial class OuvertureFermeture : Form
+    {
+        private int CurrentMouseOverRow { get; set; }
+        private int CurrentMouseOverColumn { get; set; } 
+        
+        private List<PcVueSpyLog.OuvertureFermeture> ListeOuvertureFermeture { get; set; }
+
+        public OuvertureFermeture()
+        {
+            InitializeComponent();
+
+            ListeOuvertureFermeture = LogContext.Context.OuvertureFermetures.ToList();
+
+            if (ListeOuvertureFermeture != null)
+            {
+                foreach (PcVueSpyLog.OuvertureFermeture OuvertureFermeture in ListeOuvertureFermeture)
+                {
+                    dataGridView1.Rows.Add
+                    (
+                        OuvertureFermeture.DateTime.ToString(),
+                        OuvertureFermeture.NomProjet,
+                        OuvertureFermeture.NomSynoptique,
+                        OuvertureFermeture.TitreSynoptique,
+                        OuvertureFermeture.Action,
+                        OuvertureFermeture.NomUtilisateur
+                    );
+                }
+            }
+        }
+
+        public OuvertureFermeture(PcVueSpyLog.OuvertureFermeture _OuvertureFermeture)
+        {
+            InitializeComponent();
+
+            voirLesRelationsToolStripMenuItem.Visible = false;
+            this.Text = "Filtre sur les actions d'évènements ouverture et fermeture des synoptiques";
+            ListeOuvertureFermeture = PcVueSpyLog.Log.GetLogsWithSameKey(_OuvertureFermeture).Cast<PcVueSpyLog.OuvertureFermeture>().ToList();
+
+            foreach (PcVueSpyLog.OuvertureFermeture OuvertureFermeture in ListeOuvertureFermeture)
+            {
+                dataGridView1.Rows.Add
+                (
+                    OuvertureFermeture.DateTime.ToString(),
+                    OuvertureFermeture.NomProjet,
+                    OuvertureFermeture.NomSynoptique,
+                    OuvertureFermeture.TitreSynoptique,
+                    OuvertureFermeture.Action,
+                    OuvertureFermeture.NomUtilisateur
+                );
+            }
+        }
+
+        private void DataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if ( e.Button == MouseButtons.Right)
+            {
+                CurrentMouseOverRow = dataGridView1.HitTest(e.X, e.Y).RowIndex;
+                CurrentMouseOverColumn = dataGridView1.HitTest(e.X, e.Y).ColumnIndex;
+
+                if ( CurrentMouseOverRow != -1 && CurrentMouseOverColumn != -1 )
+                    contextMenuStrip1.Show(dataGridView1, new Point(e.X, e.Y));
+            }
+        }
+
+        private void CopierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(dataGridView1.Rows[CurrentMouseOverRow].Cells[CurrentMouseOverColumn].Value);
+        }
+
+        private void VoirLesRelationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OuvertureFermeture OF = new OuvertureFermeture(ListeOuvertureFermeture[CurrentMouseOverRow]);
+            OF.Show();
+        }
+    }
+}

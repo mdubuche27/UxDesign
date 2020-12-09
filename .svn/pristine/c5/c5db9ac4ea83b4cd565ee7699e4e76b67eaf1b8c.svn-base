@@ -1,0 +1,44 @@
+﻿
+	Function FileExists(FilePath As String) As Boolean
+		Dim TestStr As String
+		TestStr = ""
+		On Error Resume Next
+		TestStr = Dir(FilePath)
+		On Error GoTo 0
+		If TestStr = "" Then
+			FileExists = False
+		Else
+			FileExists = True
+		End If
+	End Function
+
+	Public Function WriteContentInFile(FilePath As String, Content As String)
+		Dim WWrite As Boolean, Compt As integer
+		WWrite = False
+		Compt = 0
+		If FileExists(FilePath) Then
+			While WWrite = False AND Compt<5
+				On Error Resume Next
+				fileNum = FreeFile()
+				Open FilePath For Output As #fileNum
+				Print #fileNum, Content
+				Close #fileNum
+				errNum = Err
+				On Error GoTo 0
+				Select Case errNum
+					Case 0
+					WWrite = True
+					Case 70
+					WWrite = False
+					Case Else
+					WWrite = False
+				End Select
+				Compt = Compt + 1
+			Wend
+		Else
+			Set fso = CreateObject("Scripting.FileSystemObject")
+			Set oFile = fso.CreateTextFile(FilePath)
+			oFile.WriteLine Content
+			oFile.Close
+		End If
+	End Function

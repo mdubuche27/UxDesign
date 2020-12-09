@@ -1,0 +1,55 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Forms;
+
+namespace PcVueSpyWPF.Helpers
+{
+    public class GetSizeScreen
+    {
+        public static int GetSizeScreenHeight()
+        {
+            int height = 0;
+            if (System.Windows.Application.Current.MainWindow.Left >= Screen.PrimaryScreen.WorkingArea.Width && System.Windows.Application.Current.MainWindow.Left < 0 && System.Windows.Application.Current.MainWindow.Top >= Screen.PrimaryScreen.WorkingArea.Height && System.Windows.Application.Current.MainWindow.Top < 0)
+            {
+                try
+                {
+                    height = Screen.AllScreens.Where(s => s.Primary == false).Single().WorkingArea.Height;
+                }
+                catch
+                {
+
+                }
+
+            }
+            else
+            {
+                height = Screen.AllScreens.Where(s => s.Primary == true).Single().WorkingArea.Height;
+            }
+            return height;
+        }
+        public static int GetSizeScreenWidth()
+        {
+            int width = 0;
+            if (System.Windows.Application.Current.MainWindow.Left >= Screen.PrimaryScreen.WorkingArea.Width && System.Windows.Application.Current.MainWindow.Left < 0 && System.Windows.Application.Current.MainWindow.Top >= Screen.PrimaryScreen.WorkingArea.Height && System.Windows.Application.Current.MainWindow.Top < 0)
+            {
+                try
+                {
+                    width = Screen.AllScreens.Where(s => s.Primary == false).Single().WorkingArea.Width;
+                }
+                catch
+                {
+
+                }
+            }
+            else
+            {
+                width = Screen.AllScreens.Where(s => s.Primary == true).Single().WorkingArea.Width;
+            }
+            return width;
+        }
+    }
+}

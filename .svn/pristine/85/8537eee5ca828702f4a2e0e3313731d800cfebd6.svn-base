@@ -1,0 +1,112 @@
+﻿
+	Function ChangeInfos(Syn As String, User As String, PathDir As String, NameFile As String)
+		Dim PathFile As String, Line As String, PathFileCopy As String
+		PathFile = PathDir + NameFile
+		PathFileCopy = PathDir + NameFileCopy
+		Line = AnonymInfos(Syn, User, PathDir)
+		WriteContentInFile PathFile, Line
+	End Function
+
+	Function ChangeInfoScreen(Screen As String, PathDir As String, NameFile As String)
+		Dim PathFile As String, PathFileCopy As String
+		PathFile = PathDir + NameFile
+		PathFileCopy = PathDir + NameFileCopy
+		WriteContentInFile PathFile, Screen
+	End Function
+
+	Function AnonymInfos(Syn As String, User As String, PathDir As String) As String
+		Dim CsvFileSynContent As Variant, CsvFileUserContent As Variant, PathFileSyn As String, PathFileUser As String, SynID As Integer, UserID As Integer
+		PathFileSyn = PathDir + "\InfosSyn.csv"
+		PathFileUser = PathDir + "\InfosUser.csv"
+		CsvFileSynContent = GetCsvValue(PathFileSyn)
+		CsvFileUserContent = GetCsvValue(PathFileUser)
+		SynID = TabContains(Syn, CsvFileSynContent, PathFileSyn, PathDir)
+		UserID = TabContains(User, CsvFileUserContent, PathFileUser, PathDir)
+		AnonymInfos = ";" + Cstr(SynID) + ";" + Cstr(UserID)
+	End Function
+
+	Function AnonymUser(User As String, PathDir As String) As String
+		Dim CsvFileUserContent As Variant, PathFileUser As String, UserID As Integer
+		PathFileUser = PathDir + "\InfosUser.csv"
+		CsvFileUserContent = GetCsvValue(PathFileUser)
+		UserID = TabContains(User, CsvFileUserContent, PathFileUser, PathDir)
+		AnonymUser = Cstr(UserID)
+	End Function
+
+	Function AnonymSyn(Syn As String, PathDir As String) As String
+		Dim CsvFileSynContent As Variant, PathFileSyn As String, SynID As Integer
+		PathFileSyn = PathDir + "\InfosSyn.csv"
+		CsvFileSynContent = GetCsvValue(PathFileSyn)
+		SynID = TabContains(Syn, CsvFileSynContent, PathFileSyn, PathDir)
+		AnonymSyn = Cstr(SynID)
+	End Function
+
+	Function AnonymProj(Proj As String, PathDir As String) As String
+		Dim CsvFileProjContent As Variant, PathFileProj As String, ProjID As Integer
+		PathFileProj = PathDir + "\InfosProj.csv"
+		CsvFileProjContent = GetCsvValue(PathFileProj)
+		ProjID = TabContains(Proj, CsvFileProjContent, PathFileProj, PathDir)
+		AnonymProj = Cstr(ProjID)
+	End Function
+
+	Function AnonymAlarme(Alarme As String, PathDir As String) As String
+		Dim CsvFileAlarmeContent As Variant, PathFileAlarme As String, AlarmeID As Integer
+		PathFileAlarme = PathDir + "\InfosAlarme.csv"
+		CsvFileAlarmeContent = GetCsvValue(PathFileAlarme)
+		AlarmeID = TabContains(Alarme, CsvFileAlarmeContent, PathFileAlarme, PathDir)
+		AnonymAlarme = Cstr(AlarmeID)
+	End Function
+
+	Function AnonymSymbol(Symbol As String, PathDir As String) As String
+		Dim CsvFileSymbolContent As Variant, PathFileSymbol As String, SymbolID As Integer
+		PathFileSymbol = PathDir + "\InfosSymbol.csv"
+		CsvFileSymbolContent = GetCsvValue(PathFileSymbol)
+		SymbolID = TabContains(Symbol, CsvFileSymbolContent, PathFileSymbol, PathDir)
+		AnonymSymbol = Cstr(SymbolID)
+	End Function
+
+	Function GetCsvValue(PathFile As String) As Variant
+		Dim TabCsvValue() As String, row_number As Integer
+		If FileExists(PathFile) Then
+			Open PathFile For Input As #1
+			row_number = 0
+			Do Until EOF(1)
+				Line Input #1, LineFromFile
+				LineItems = Split(LineFromFile, ";")
+				Redim Preserve TabCsvValue(row_number)
+				TabCsvValue(row_number) = LineItems(0)
+				row_number = row_number + 1
+			Loop
+			Close #1
+			GetCsvValue = TabCsvValue
+		End If
+	End Function
+
+	Function TabContains(Value As String, Tableau As Variant, PathFile As String, PathDir As String) As Integer
+		Dim LastRow As Long, LineContent As String, v As Long
+		If IsEmpty(Tableau) = True Then
+			If Dir(PathDir, vbDirectory) <> vbNullString Then
+				If FileExists(PathFile) = False Then
+					LineContent = ";0;"
+					Set fs = CreateObject("Scripting.FileSystemObject")
+					Set a = fs.CreateTextFile(PathFile, True)
+					a.WriteLine(LineContent)
+					a.close
+				End If
+			End If
+		Else
+			For v = 0 To Ubound(Tableau)
+				If Tableau(v) = Value Then
+					TabContains = v
+					v = UBound(Tableau) + 1
+				ElseIf v = UBound(Tableau) Then
+					LineContent = Value + ";" + Cstr(v+1) + ";"
+					Set fs = CreateObject("Scripting.FileSystemObject")
+					Set a = fs.OpenTextFile(PathFile, 8, 0)
+					a.WriteLine(LineContent)
+					a.Close
+					TabContains = v + 1
+				End If
+			Next
+		End If
+	End Function

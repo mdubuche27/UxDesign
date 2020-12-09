@@ -1,0 +1,20 @@
+DEF_DI = lib + addr + module
+DEF_DAS = lib + addr log + Module
+DEF_Fct = Lib + addr
+
+Chubb_DI
+Chubb_DAS
+Chubb_Fct
+
+Siemens_DI
+Siemens_DAS
+Siemens_Fct
+
+Esser_DI
+Esser_DAS
+Esser_Fct
+
+Finsecur_DI
+Finsecur_Voie
+Finsecur_MDLO
+Finsecur_Fct

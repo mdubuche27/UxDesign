@@ -1,0 +1,1128 @@
+﻿using PcVueSpyLog;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+namespace PcVueSpyLog
+{
+    /// <summary>
+    /// Cette classe permet de générer le script Visual Basic pour chaque Synoptique dans un projet pour activer la traçabilité de l'utilisateur
+    /// </summary>
+    public class VBAScriptGenerator
+    {
+        #region Public Members
+        /// <summary>
+        /// Chemin d'accès vers la racine du dossier du projet
+        /// </summary>
+        public string ProjectPath { get; private set; }
+
+        /// <summary>
+        /// Nom du projet
+        /// </summary>
+        public string ProjectName
+        {
+            get
+            {
+                string[] Folders = ProjectPath.Split('\\');
+                return Folders[Folders.Length - 1];
+            }
+        }
+
+        /// <summary>
+        /// Liste des Synoptiques ASCII dans un projet
+        /// </summary>
+        public List<Synoptic> ASCIISynoptics { get; } = new List<Synoptic>();
+        #endregion
+
+        #region Public Classes
+        public class Synoptic
+        {
+            #region Public Members
+            /// <summary>
+            /// Chemin d'accès vers le fichier Synoptique
+            /// </summary>
+            public string FilePath { get; private set; }
+
+            /// <summary>
+            /// Nom du fichier
+            /// </summary>
+            public string Filename
+            {
+                get
+                {
+                    string[] Folders = FilePath.Split('\\');
+                    return Folders[Folders.Length - 1];
+                }
+            }
+
+            /// <summary>
+            /// Titre de la fenêtre Synoptique
+            /// </summary>
+            public string Caption { get { return GetSynopticCaption(); } }
+
+            /// <summary>
+            /// Récupère le nom d'un Synoptique
+            /// </summary>
+            public string Mimic { get; set; }
+
+            /// <summary>
+            /// Retourne la liste des éléments cliquables dans un Synoptique
+            /// </summary>
+            public List<ClickableObject> ClickableElements { get { return GetObjectsClickable(); } }
+
+            /// <summary>
+            /// Retourne la liste des objets d'un Synoptique
+            /// </summary>
+            public List<String> ListObjects { get { return GetListObjects(); } }
+
+            /// <summary>
+            /// Retourne la liste des alarmes d'un Synoptique
+            /// </summary>
+            public List<String> ListAlarms { get { return GetListAlarms(); } }
+
+            /// <summary>
+            /// Retourne la liste des symboles d'un Synoptique
+            /// </summary>
+            public List<SymbolObject> ListSymbols { get { return GetListSymbols(); } }
+
+            /// <summary>
+            /// Retourne la liste des groupes
+            /// </summary>
+            public List<String> ListGroups { get { return GetListGroups(); } }
+
+            #endregion
+
+            #region Private Classes
+            private class ObjectCoords
+            {
+                #region Internal Members
+                internal string Name { get; private set; }
+                internal string FontText { get; private set; }
+                internal string Type { get; private set; }
+                internal int X1 { get; private set; }
+                internal int X2 { get; private set; }
+                internal int Y1 { get; private set; }
+                internal int Y2 { get; private set; }
+
+                #endregion
+
+                #region Constructor
+
+                /// <summary>
+                /// Constructeur par défaut
+                /// </summary>
+                /// <param name="obj">Objet d'un Synoptique</param>
+                internal ObjectCoords(string obj)
+                {
+                    string[] Params = obj.Split(',');
+                    this.X1 = Int32.Parse(Params[5]);
+                    this.Y1 = Int32.Parse(Params[6]);
+                    this.X2 = Int32.Parse(Params[7]);
+                    this.Y2 = Int32.Parse(Params[8]);
+
+                    // Mise en ordre des paramètres
+                    if (this.X1 > this.X2)
+                    {
+                        int temp = this.X1;
+                        this.X1 = this.X2;
+                        this.X2 = temp;
+                    }
+
+                    if (this.Y1 > this.Y2)
+                    {
+                        int temp = this.Y1;
+                        this.Y1 = this.Y2;
+                        this.Y2 = temp;
+                    }
+
+                    this.Type = obj.Split(',')[2];
+                    this.Name = obj.Split(',')[3].Replace("\"", String.Empty);
+
+                    int Index = Name.IndexOf("\r\n\t");
+                    if (Index != -1)
+                        this.Name = Name.Substring(0, Index);
+
+                    string BeginsWith = "FONT,";
+                    string EndsWith = "O,END";
+
+                    // Test de l'existence du texte
+                    if (obj.IndexOf(BeginsWith, 0) == -1)
+                    {
+                        this.FontText = null;
+                    }
+                    else
+                    {
+                        int StartIndex = obj.IndexOf(BeginsWith, 0);
+                        int EndIndex = obj.IndexOf(EndsWith, StartIndex) + EndsWith.Length;
+
+                        if (StartIndex == -1 || EndIndex == -1)
+                        {
+                            this.FontText = null;
+                        }
+                        else
+                        {
+                            string Result = obj.Substring(StartIndex, EndIndex - StartIndex);
+                            this.FontText = Result.Split(',')[2].Replace("\"", String.Empty);
+                        }
+                    }
+                }
+
+                #endregion
+            }
+            #endregion
+
+            #region Public Classes
+            public class ClickableObject
+            {
+                #region Public Members
+                /// <summary>
+                /// Retourne l'objet cliquable
+                /// </summary>
+                public string Object { get; private set; }
+
+                /// <summary>
+                /// Retourne l'objet d'origine ( avec ou sans VBA )
+                /// </summary>
+                public string OriginalObject { get; private set; }
+
+                /// <summary>
+                /// Retourne le texte associé à un objet cliquable
+                /// </summary>
+                public string Text { get; private set; }
+
+                /// <summary>
+                /// Définit un code personnalisé pour les groupes
+                /// </summary>
+                public string CustomGroupCode { get; private set; }
+                #endregion
+
+                #region Constructor
+
+                /// <summary>
+                /// Constructeur par défaut
+                /// </summary>
+                /// <param name="Object">Objet dans un Synoptique</param>
+                /// <param name="Text">Texte lié à l'objet si il existe</param>
+                /// <param name="CustomGroupCode">Code customisé à mettre si c'est un groupe</param>
+                internal ClickableObject(string Object, string Text, string CustomGroupCode)
+                {
+                    if (String.IsNullOrWhiteSpace(CustomGroupCode))
+                        this.CustomGroupCode = null;
+                    else
+                        this.CustomGroupCode = " " + CustomGroupCode;
+
+                    this.OriginalObject = Object;
+                    string[] Temp = Object.Split(',');
+
+                    // Code VBA Activé
+                    Temp[16] = "1";
+
+                    string Res = "";
+                    foreach (string str in Temp)
+                    {
+                        Res += str + ",";
+                    }
+
+                    Res = Res.Remove(Res.Length - 1, 1);
+                    this.Object = Res;
+                    this.Text = Text;
+                }
+
+                #endregion
+            }
+
+            public class SymbolObject
+            {
+                #region Public Members
+                /// <summary>
+                /// Correspond à l'objet original
+                /// </summary>
+                public string OriginalObject { get; private set; }
+
+                /// <summary>
+                /// Correspond à l'objet modifié pour accepter le code Visual Basic
+                /// </summary>
+                public string Object { get; private set; }
+
+                /// <summary>
+                /// Nom du symbole
+                /// </summary>
+                public string Name { get; private set; }
+
+                #endregion
+
+                #region Constructor
+                /// <summary>
+                /// Constructeur par défaut
+                /// </summary>
+                /// <param name="Object">Objet correpondant à un Symbole</param>
+                public SymbolObject(string Object)
+                {
+                    this.OriginalObject = Object;
+                    string[] Temp = Object.Split(',');
+
+                    this.Name = Temp[3].Replace("\"", String.Empty);
+                    int Index = this.Name.IndexOf("\r\n\t");
+                    if (Index != -1)
+                        this.Name = this.Name.Substring(0, Index);
+
+                    // Flag code VBA
+                    Temp[16] = "1";
+
+                    string Res = "";
+                    foreach (string str in Temp)
+                    {
+                        Res += str + ",";
+                    }
+
+                    Res = Res.Remove(Res.Length - 1, 1);
+                    this.Object = Res;
+                }
+                #endregion
+            }
+
+            #endregion
+
+            #region Private Methods
+
+            /// <summary>
+            /// Récupère la liste de tous les objets d'un Synoptique
+            /// </summary>
+            /// <returns></returns>
+            private List<String> GetListObjects()
+            {
+                string Text = File.ReadAllText(FilePath, Encoding.Default);
+                string BeginsWith = "O,BEGIN,";
+                string EndsWith = "\r\nO,END";
+
+                // Récupération des objets du Synoptique
+                List<String> Objects = new List<String>();
+                int StartIndex = 0;
+                int EndIndex = 0;
+
+                while (StartIndex != -1 || EndIndex != -1)
+                {
+                    StartIndex = Text.IndexOf(BeginsWith, EndIndex);
+                    if (StartIndex == -1)
+                        break;
+
+                    EndIndex = Text.IndexOf(EndsWith, StartIndex) + EndsWith.Length;
+                    Objects.Add(Text.Substring(StartIndex, EndIndex - StartIndex));
+                }
+
+                return Objects;
+            }
+
+            /// <summary>
+            /// Retourne la liste des éléments cliquables dans un Synoptique
+            /// </summary>
+            private List<ClickableObject> GetObjectsClickable()
+            {
+                List<String> ObjectsClickable = new List<String>();
+                Dictionary<string, string> ObjectsInsideGroupsClickable = new Dictionary<string, string>();
+                List<Dictionary<string, string>> Groups = new List<Dictionary<string, string>>();
+
+                foreach (String Object in ListGroups)
+                {
+                    Groups.Add(GetObjectsInsideGroup(Object, 0));
+                }
+
+                foreach (String Object in ListObjects)
+                {
+                    if (HasAnimationClickable(Object))
+                        ObjectsClickable.Add(Object);
+                }
+
+                foreach (Dictionary<string, string> Dictionary in Groups)
+                {
+                    foreach (KeyValuePair<string, string> KVP in Dictionary)
+                        // Si l'objet clé est cliquable, alors il y a une mise en place du log
+                        if (HasAnimationClickable(KVP.Key))
+                        {
+                            // Détection des doublons et ajout d'un AND pour déclarer un doublon
+                            if (!ObjectsInsideGroupsClickable.ContainsKey(KVP.Key))
+                                ObjectsInsideGroupsClickable.Add(KVP.Key, KVP.Value);
+                            else
+                                ObjectsInsideGroupsClickable[KVP.Key] += " + \" AND \" " + KVP.Value;
+                        }
+                }
+
+                // Récupération des textes associés aux éléments cliquables
+                List<ClickableObject> Elements = new List<ClickableObject>();
+
+                foreach (string ObjectClickable in ObjectsClickable)
+                    Elements.Add(new ClickableObject(ObjectClickable, GetTextForObject(ObjectClickable), null));
+
+                foreach (KeyValuePair<string, string> ObjectClickable in ObjectsInsideGroupsClickable)
+                    Elements.Add(new ClickableObject(ObjectClickable.Key, GetTextForObject(ObjectClickable.Key), ObjectClickable.Value));
+
+                return Elements;
+            }
+
+            /// <summary>
+            /// Récupère la liste des objets de type Alarme d'un Synoptique
+            /// </summary>
+            /// <returns></returns>
+            private List<String> GetListAlarms()
+            {
+                List<String> Alarms = new List<String>();
+
+                foreach (String Object in ListObjects)
+                {
+                    if (IsAlarm(Object))
+                        Alarms.Add(Object);
+                }
+
+                return Alarms;
+            }
+
+            /// <summary>
+            /// Récupère la liste des groupes
+            /// </summary>
+            /// <returns></returns>
+            private List<String> GetListGroups()
+            {
+                List<String> Groups = new List<String>();
+
+                foreach (String Object in ListObjects)
+                {
+                    if (IsGroup(Object))
+                        Groups.Add(Object);
+                }
+                return Groups;
+            }
+
+            /// <summary>
+            /// Vérifie si l'objet correspond à une alarme
+            /// </summary>
+            /// <param name="Object"></param>
+            /// <returns></returns>
+            private bool IsAlarm(String Object)
+            {
+                return Object.Split(',')[2] == "ALM";
+            }
+
+            /// <summary>
+            /// Vérifie si l'objet correspond à un groupe
+            /// </summary>
+            /// <param name="Object"></param>
+            /// <returns></returns>
+            private bool IsGroup(String Object)
+            {
+                return Object.Split(',')[2] == "GRP";
+            }
+
+            private List<SymbolObject> GetListSymbols()
+            {
+                List<SymbolObject> Symbols = new List<SymbolObject>();
+
+                foreach (String Object in ListObjects)
+                {
+                    if (IsSymbol(Object))
+                        Symbols.Add(new SymbolObject(Object));
+                }
+
+                return Symbols;
+            }
+
+            /// <summary>
+            /// Vérifie si l'objet correspond à un symbol
+            /// </summary>
+            /// <param name="Object"></param>
+            /// <returns></returns>
+            private bool IsSymbol(String Object)
+            {
+                return Object.Split(',')[2] == "S";
+            }
+
+            /// <summary>
+            /// Vérifie si un objet contient au moins une animation cliquable
+            /// </summary>
+            /// <param name="Object"></param>
+            /// <returns></returns>
+            private bool HasAnimationClickable(String Object)
+            {
+                string BeginsWith = "A,BEGIN,";
+                string EndsWith = "A,END";
+
+                List<String> Animations = new List<String>();
+                int StartIndex = 0;
+                int EndIndex = 0;
+
+                // Test de l'existence d'animations
+                if (Object.IndexOf(BeginsWith, 0) == -1)
+                    return false;
+
+                // Si il existe des animations, alors on les liste
+                while (StartIndex != -1 || EndIndex != -1)
+                {
+                    StartIndex = Object.IndexOf(BeginsWith, EndIndex);
+                    if (StartIndex == -1)
+                        break;
+
+                    EndIndex = Object.IndexOf(EndsWith, StartIndex) + EndsWith.Length;
+                    Animations.Add(Object.Substring(StartIndex, EndIndex - StartIndex));
+                }
+
+                // Tri des animations cliquables
+                List<String> AnimationsClickable =
+                    Animations.Where(s => s.Contains(BeginsWith + ConstsClickable.APPLICATION)
+                                       || s.Contains(BeginsWith + ConstsClickable.LANGUAGE)
+                                       || s.Contains(BeginsWith + ConstsClickable.LINKCLOSE)
+                                       || s.Contains(BeginsWith + ConstsClickable.LINKNOTE)
+                                       || s.Contains(BeginsWith + ConstsClickable.LINKOPEN)
+                                       || s.Contains(BeginsWith + ConstsClickable.MACRO)
+                                       || s.Contains(BeginsWith + ConstsClickable.PROGRAM)
+                                       || s.Contains(BeginsWith + ConstsClickable.RECIPE)
+                                       || s.Contains(BeginsWith + ConstsClickable.SECURITYUSER)
+                                       || s.Contains(BeginsWith + ConstsClickable.SENDBIT)
+                                       || s.Contains(BeginsWith + ConstsClickable.SENDBITWITHCOLOR)
+                                       || s.Contains(BeginsWith + ConstsClickable.SENDDOUBLEBIT)
+                                       || s.Contains(BeginsWith + ConstsClickable.SENDREGION)
+                                       || s.Contains(BeginsWith + ConstsClickable.TEXT)
+                                       || s.Contains(BeginsWith + ConstsClickable.TIMETABLE)
+                                       || s.Contains(BeginsWith + ConstsClickable.VBA_PROCEDURE)).ToList();
+
+                return AnimationsClickable.Count > 0;
+            }
+
+            /// <summary>
+            /// Récupère le titre de la fenêtre d'un Synoptique
+            /// </summary>
+            /// <returns></returns>
+            private String GetSynopticCaption()
+            {
+                string Text = File.ReadAllText(FilePath, Encoding.Default);
+                string BeginsWith = "W,BEGIN,";
+                string EndsWith = "W,END";
+
+                // Test de l'existence de la structure contenant le titre
+                if (Text.IndexOf(BeginsWith, 0) == -1)
+                    return null;
+
+                int StartIndex = Text.IndexOf(BeginsWith, 0);
+                int EndIndex = Text.IndexOf(EndsWith, StartIndex) + EndsWith.Length;
+
+                if (StartIndex == -1 || EndIndex == -1)
+                    return null;
+
+                string Result = Text.Substring(StartIndex, EndIndex - StartIndex);
+                string Title = "TITLE,";
+
+                int TitleIndex = Result.IndexOf(Title, 0);
+                if (TitleIndex == -1)
+                    return null;
+
+                string[] ToSplit = Result.Substring(TitleIndex, Result.Length - TitleIndex).Split(',');
+                return ToSplit[2].Replace("\"", String.Empty);
+            }
+
+            /// <summary>
+            /// Récupère le nom d'un Synoptique
+            /// </summary>
+            private String GetSynopticMimic()
+            {
+                string Text = File.ReadAllText(FilePath, Encoding.Default);
+                string BeginsWith = "W,BEGIN,";
+                string EndsWith = "W,END";
+
+                // Test de l'existence de la structure contenant le titre
+                if (Text.IndexOf(BeginsWith, 0) == -1)
+                    return null;
+
+                int StartIndex = Text.IndexOf(BeginsWith, 0);
+                int EndIndex = Text.IndexOf(EndsWith, StartIndex) + EndsWith.Length;
+
+                if (StartIndex == -1 || EndIndex == -1)
+                    return null;
+
+                string Result = Text.Substring(StartIndex, EndIndex - StartIndex);
+
+                int MimicIndex = Result.IndexOf(BeginsWith, 0);
+                if (MimicIndex == -1)
+                    return null;
+
+                string[] ToSplit = Result.Substring(MimicIndex, Result.Length - MimicIndex).Split(',');
+                return ToSplit[3].Replace("\"", String.Empty);
+            }
+
+            /// <summary>
+            /// Permet de récupérer la fonction d'un élément cliquable avec le code Visual Basic inséré
+            /// </summary>
+            /// <returns></returns>
+            private string GetVBAFunction(ref string FileText, string Element, string Text, string CustomGroupCode)
+            {
+                string BeginsWith = "\r\n\tPrivate Sub " + Element + "_Click()";
+                string EndsWith = "\r\n\tEnd Sub";
+
+                // Détecter si le code existe déjà et insérer la fonction sinon écrire le code complet
+                if (Element == "CLOSED")
+                {
+                    BeginsWith = "\r\n\tPrivate Function Mimic_BeforeClose() As Boolean";
+                    EndsWith = "\r\n\tEnd Function";
+                }
+                else if (Element == "OPENED")
+                {
+                    BeginsWith = "\r\n\tPrivate Sub Mimic_Open()";
+                    EndsWith = "\r\n\tEnd Sub";
+                }
+
+                int StartIndex = FileText.IndexOf(BeginsWith, 0);
+                if (StartIndex == -1)
+                    return BeginsWith + GetVBACode(Element, Text, CustomGroupCode) + EndsWith;
+
+                int EndIndex = FileText.IndexOf(EndsWith, StartIndex) + EndsWith.Length;
+                string Function = FileText.Substring(StartIndex, EndIndex - StartIndex);
+
+                // Suppression de la fonction
+                FileText = FileText.Remove(StartIndex, EndIndex - StartIndex);
+
+                // Si le code n'existe pas, alors on l'insère
+                if (!Function.Contains(GetVBACode(Element, Text, CustomGroupCode)))
+                    return Function.Insert(BeginsWith.Length, GetVBACode(Element, Text, CustomGroupCode));
+                // Sinon, on retourne juste le texte
+                else
+                    return Function;
+            }
+
+            /// <summary>
+            /// Permet de récupérer la fonction Visual Basic d'une alarme
+            /// </summary>
+            /// <param name="FileText"></param>
+            /// <param name="Element"></param>
+            /// <returns></returns>
+            private string GetVBAlarmFunction(ref string FileText, string Element)
+            {
+                string BeginsWith = "\r\n\tPrivate Sub " + Element + "_OnLineSelect(ByVal cx As Integer, ByVal cy As Integer, ByVal handle As String, ByVal selected As Boolean)";
+                string EndsWith = "\r\n\tEnd Sub";
+
+                int StartIndex = FileText.IndexOf(BeginsWith, 0);
+                if (StartIndex == -1)
+                    return BeginsWith + GetAlarmCode(Element) + EndsWith;
+
+                int EndIndex = FileText.IndexOf(EndsWith, StartIndex) + EndsWith.Length;
+                string Function = FileText.Substring(StartIndex, EndIndex - StartIndex);
+
+                // Suppression de la fonction
+                FileText = FileText.Remove(StartIndex, EndIndex - StartIndex);
+
+                // Si le code n'existe pas, alors on l'insère
+                if (!Function.Contains(GetAlarmCode(Element)))
+                    return Function.Insert(BeginsWith.Length, GetAlarmCode(Element));
+                // Sinon, on retourne juste le texte
+                else
+                    return Function;
+            }
+
+            /// <summary>
+            /// Permet de récupérer la fonction Visual Basic d'un symbol
+            /// </summary>
+            /// <param name="FileText"></param>
+            /// <param name="Object"></param>
+            /// <returns></returns>
+            private string GetVBASymbolFunction(ref string FileText, string Object)
+            {
+                string Element = Object.Split(',')[3].Replace("\"", String.Empty);
+                int Index = Element.IndexOf("\r\n\t");
+                if (Index != -1)
+                    Element = Element.Substring(0, Index);
+
+                // Récupération du nom et de la branche
+                Index = Object.IndexOf("PP,");
+                string Name = String.Empty;
+                string Branch = String.Empty;
+
+                if (Index != -1)
+                {
+                    string Temp = Object.Substring(Index, Object.Length - Index);
+                    Name = Temp.Split(',')[1].Replace("\"", String.Empty);
+                    Branch = Temp.Split(',')[2].Replace("\"", String.Empty);
+                }
+
+                string BeginsWith = "\r\n\tPrivate Sub " + Element + "_Click()";
+                string EndsWith = "\r\n\tEnd Sub";
+
+                int StartIndex = FileText.IndexOf(BeginsWith, 0);
+                if (StartIndex == -1)
+                    return BeginsWith + GetSymbolCode(Element, Name, Branch) + EndsWith;
+
+                int EndIndex = FileText.IndexOf(EndsWith, StartIndex) + EndsWith.Length;
+                string Function = FileText.Substring(StartIndex, EndIndex - StartIndex);
+
+                // Suppression de la fonction
+                FileText = FileText.Remove(StartIndex, EndIndex - StartIndex);
+
+                // Si le code n'existe pas, alors on l'insère
+                if (!Function.Contains(GetSymbolCode(Element, Name, Branch)))
+                    return Function.Insert(BeginsWith.Length, GetSymbolCode(Element, Name, Branch));
+                // Sinon, on retourne juste le texte
+                else
+                    return Function;
+            }
+
+            /// <summary>
+            /// permet de recuperer la fonction visual basic d'une zone non définie 
+            /// </summary>
+            /// <param name="FileText"></param>
+            /// <returns></returns>
+            private string GetVBAFileFunction(ref string FileText)
+            {
+                string BeginsWith = "";
+                string EndsWith = "";
+
+                int StartIndex = FileText.IndexOf(BeginsWith, 0);
+                if (StartIndex == -1)
+                    return BeginsWith + GetFileFunction() + GetChoseFileFunction() + EndsWith;
+
+                int EndIndex = FileText.IndexOf(EndsWith, StartIndex) + EndsWith.Length;
+                string Function = FileText.Substring(StartIndex, EndIndex - StartIndex);
+
+                // Suppression de la fonction
+                FileText = FileText.Remove(StartIndex, EndIndex - StartIndex);
+
+                // Si le code n'existe pas, alors on l'insère
+                if (!Function.Contains(GetFileFunction()) || !Function.Contains(GetChoseFileFunction()))
+                    return Function.Insert(BeginsWith.Length, GetFileFunction() + GetChoseFileFunction());
+                // Sinon, on retourne juste le texte
+                else
+                    return Function;
+            }
+            /// <summary>
+            /// Permet de récupérer le code Visual Basic à insérer dans une fonction pour un élément cliquable dans un Synoptique
+            /// </summary>
+            /// <param name="Element"></param>
+            /// <returns></returns>
+            private string GetVBACode(string Element, string Text, string CustomGroupCode)
+            {
+                if (Element == "CLOSED")
+                    return "\r\n\t\tChoseFile \"[\" + Format(Now, \"dd/MM/yyyy HH:mm:ss:\") + Right(Format(Timer, \"#0.00\"),2) + \"0\" + \"]\" + \";\"  + AnonymSyn(\"" + Mimic + "\", \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + AnonymUser(Application.ActiveProject.UserName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + \"" + ConstsType.OUVERTURE_FERMETURE + "\" + \";\" + AnonymProj(Application.ActiveProject.ProjectName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + " + "\"1;\", \"" + ComputerInfos.InstallFolderBin + "\"";
+                else if (Element == "OPENED")
+                {
+                    return "\r\n\t\tChoseFile \"[\" + Format(Now, \"dd/MM/yyyy HH:mm:ss:\") + Right(Format(Timer, \"#0.00\"),2) + \"0\" + \"]\" + \";\"  + AnonymSyn(\"" + Mimic + "\", \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + AnonymUser(Application.ActiveProject.UserName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + \"" + ConstsType.OUVERTURE_FERMETURE + "\" + \";\" + AnonymProj(Application.ActiveProject.ProjectName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + " + "\"0;\" + Cstr(Application.ActiveWindow.Height) + \";\" + Cstr(Application.ActiveWindow.Width) + \";\" + Cstr(Application.ActiveWindow.Top) + \";\" + Cstr(Application.ActiveWindow.Left) + \";\", \"" + ComputerInfos.InstallFolderBin + "\"" +
+                           "\r\n\t\tChangeInfos \"" + Mimic + "\", Application.ActiveProject.UserName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\", \"\\Infos.txt\"" +
+                           "\r\n\t\tScreenSize = Cstr(Application.ActiveWindow.Height) + \";\" + Cstr(Application.ActiveWindow.Width) + \";\" + Cstr(Application.ActiveWindow.Top) + \";\" + Cstr(Application.ActiveWindow.Left) + \";\"" +
+                           "\r\n\t\tChangeInfoScreen Cstr(ScreenSize), \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\", \"\\InfoScreen.txt\"";
+                }
+                return "\r\n\t\tChoseFile \"[\" + Format(Now, \"dd/MM/yyyy HH:mm:ss:\") + Right(Format(Timer, \"#0.00\"),2) + \"0\"  + \"]\" + \";\" + AnonymSyn(\"" + Mimic + "\", \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + AnonymUser(Application.ActiveProject.UserName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + \"" + ConstsType.FENETRE + "\" + \";\" + AnonymProj(Application.ActiveProject.ProjectName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\")" + " + \";\" + " + " + \"" + Element + "\"" + CustomGroupCode + " + \";\" + \"" + Text + "\" + \";\", \"" + ComputerInfos.InstallFolderBin + "\"" +
+                       "\r\n\t\tChangeInfos \"" + Mimic + "\", Application.ActiveProject.UserName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs" + "\", \"\\Infos.txt\"" +
+                       "\r\n\t\tScreenSize = Cstr(Application.ActiveWindow.Height) + \";\" + Cstr(Application.ActiveWindow.Width) + \";\" + Cstr(Application.ActiveWindow.Top) + \";\" + Cstr(Application.ActiveWindow.Left) + \";\"" +
+                       "\r\n\t\tChangeInfoScreen Cstr(ScreenSize), \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\", \"\\InfoScreen.txt\"";
+            }
+
+            /// <summary>
+            /// Permet de récupérer le code Visual Basic d'une alarme
+            /// </summary>
+            /// <returns></returns>
+            private string GetAlarmCode(string Element)
+            {
+                return "\r\n\t\tChoseFile \"[\" + Format(Now, \"dd/MM/yyyy HH:mm:ss:\") + Right(Format(Timer, \"#0.00\"),2) + \"0\"  + \"]\" + \";\" + AnonymUser(Application.ActiveProject.UserName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + " + "AnonymSyn(\"" + Mimic + "\", \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\")  + \";\" + \"" + ConstsType.ALARME + "\" + \";\"+ AnonymProj(Application.ActiveProject.ProjectName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\")" + " + \";\" + " + "AnonymAlarme(\"" + Element + "\", \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\")" + " + \";\" + handle + \";\" + CStr(selected) + \";\", \"" + ComputerInfos.InstallFolderBin + "\"";
+            }
+
+            /// <summary>
+            /// Permet de récupérer le code Visual Basic d'un symbole
+            /// </summary>
+            /// <param name="Element"></param>
+            /// <param name="Name"></param>
+            /// <param name="Branch"></param>
+            /// <returns></returns>
+            private string GetSymbolCode(string Element, string Name, string Branch)
+            {
+                return "\r\n\t\tChoseFile \"[\" + Format(Now, \"dd/MM/yyyy HH:mm:ss:\") + Right(Format(Timer, \"#0.00\"),2) + \"0\"  + \"]\" + \";\" + AnonymUser(Application.ActiveProject.UserName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + " + "AnonymSyn(\"" + Mimic + "\", \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\") + \";\" + \"" + ConstsType.SYMBOLE + "\" + \";\" + AnonymProj(Application.ActiveProject.ProjectName, \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\")" + " + \";\" + " + " AnonymSymbol(\"" + Name + "\", \"" + ComputerInfos.InstallFolderBin + "\\ActemiumLogs\")" + " + \";" + Element + ";\" + \"" + Branch + "\" + \";\", \"" + ComputerInfos.InstallFolderBin + "\"";
+            }
+
+            /// <summary>
+            /// envoi au vba la fonction qui verifie si un fichier est deja ouvert!
+            /// </summary>
+            /// <returns></returns>
+            private string GetFileFunction()
+            {
+                string VBAFileFuntion = Properties.FileFunctionVBA.FileFunction + "\r\n";
+                return VBAFileFuntion;
+            }
+            private string GetChoseFileFunction()
+            {
+                string VBAChoseFileFuntion = Properties.FileFunctionVBA.FunctionVBAChoseFile + "\r\n" + Properties.FileFunctionVBA.ChangeInfos + "\r\n";
+                return VBAChoseFileFuntion;
+            }
+
+            /// <summary>
+            /// Vérifie si l'objet a un texte associé
+            /// </summary>
+            private String GetTextForObject(string Object)
+            {
+                // Récupération des positions de l'objet cliquable
+                ObjectCoords objectCoords = new ObjectCoords(Object);
+
+                // Création d'une liste pour comparaison
+                List<ObjectCoords> listObjects = new List<ObjectCoords>();
+
+                foreach (String _Object in ListObjects)
+                {
+                    listObjects.Add(new ObjectCoords(_Object));
+                }
+
+                ObjectCoords obj = listObjects.Where(s => s.X1 >= objectCoords.X1 && s.X1 <= objectCoords.X2
+                                           && s.X2 >= objectCoords.X1 && s.X2 <= objectCoords.X2
+                                           && s.Y1 >= objectCoords.Y1 && s.Y1 <= objectCoords.Y2
+                                           && s.Y2 >= objectCoords.Y1 && s.Y2 <= objectCoords.Y2
+                                           && s.Type == "T" && !String.IsNullOrWhiteSpace(s.FontText)).FirstOrDefault();
+
+                // Retour du texte
+                return obj?.FontText;
+            }
+
+            #endregion
+
+            #region Public Methods
+
+            /// <summary>
+            /// Retourne la liste des éléments dans un groupe avec leurs log à écrire
+            /// </summary>
+            public Dictionary<string, string> GetObjectsInsideGroup(String Object, int ChildDeepth)
+            {
+                if (IsGroup(Object))
+                {
+                    string BeginsWith = "\r\n\t";
+                    string EndsWith = "\r\n\t";
+                    string ToReplace = "\r\n\t";
+                    string ToReplaceChild = "\r\n\t\t";
+
+                    for (int i = 0; i < ChildDeepth; i++)
+                    {
+                        BeginsWith += "\t";
+                        EndsWith += "\t";
+                        ToReplace += "\t";
+                        ToReplaceChild += "\t";
+                    }
+
+                    BeginsWith += "O,BEGIN";
+                    EndsWith += "O,END";
+                    ToReplace += "B";
+                    ToReplaceChild += "B";
+
+                    if (Object.IndexOf(BeginsWith, 0) == -1)
+                        return null;
+
+                    int StartIndex = 0;
+                    int EndIndex = 0;
+                    List<String> Objects = new List<String>();
+
+                    // Liste des objets du groupe
+                    while (StartIndex != -1 || EndIndex != -1)
+                    {
+                        StartIndex = Object.IndexOf(BeginsWith, EndIndex);
+                        if (StartIndex == -1)
+                            break;
+
+                        EndIndex = Object.IndexOf(EndsWith, StartIndex) + EndsWith.Length;
+                        Objects.Add(Object.Substring(StartIndex, EndIndex - StartIndex));
+                    }
+
+                    Dictionary<string, string> ObjectsInsideGroup = new Dictionary<string, string>();
+
+                    // Récupération du nom du groupe actuel
+                    string ObjectName = Object.Split(',')[3].Replace("\"", String.Empty).Replace(ToReplace, String.Empty);
+
+                    // Ajout de la liste des objets du groupe dans le log
+                    // Exemple : ObjectName INSIDE GroupName
+                    // Si il y a récursivité des groupes c'est à dire des groupes dans des groupes : ObjectName INSIDE Group1 INSIDE Group2
+                    foreach (String Obj in Objects)
+                    {
+                        if (IsGroup(Obj))
+                        {
+                            // Récupération de la liste des objets dans le groupe du groupe
+                            // GROUPE_1
+                            //   GROUPE_2
+                            //     LISTE_DES_OBJETS
+                            Dictionary<string, string> results = GetObjectsInsideGroup(Obj, ChildDeepth + 1);
+                            foreach (KeyValuePair<string, string> res in results)
+                            {
+                                // Détection des doublons possibles pour éviter que le logiciel crashe lors de l'injection du code VB
+                                if (!ObjectsInsideGroup.Keys.Contains(res.Key))
+                                {
+                                    // Ajout du dictionnaire récupéré dans notre dictionnaire principal en ajout à la fin INSIDE GroupName
+                                    ObjectsInsideGroup.Add(res.Key, res.Value + " + \" INSIDE \" + " + "\"" + ObjectName + "\"");
+                                }
+                            }
+                        }
+
+                        ObjectsInsideGroup.Add(Obj, "+ \" INSIDE \" + " + "\"" + ObjectName + "\"");
+                    }
+
+                    return ObjectsInsideGroup;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            /// <summary>
+            /// Permet de générer le script Visual Basic automatiquement sur tous les éléments cliquables d'un Synoptique
+            /// </summary>
+            public bool GenerateVBAScript()
+            {
+                string Text = File.ReadAllText(FilePath, Encoding.Default);
+
+                int BeginIndex = Text.IndexOf("W,BEGIN,");
+
+                if (BeginIndex != -1)
+                {
+                    int EndIndex = Text.IndexOf("\r\n", BeginIndex);
+                    string BeginningOfFile = Text.Substring(BeginIndex, EndIndex - BeginIndex);
+                    string[] InformationsOfFile = BeginningOfFile.Split(',');
+
+                    // Utilisé pour éviter les erreurs de nom dans le log
+                    if (InformationsOfFile != null && InformationsOfFile.Length >= 5)
+                    {
+                        Text = Text.Replace($"{InformationsOfFile[3]},{InformationsOfFile[4]}", $"{InformationsOfFile[2]},{InformationsOfFile[4]}");
+                    }
+
+                    Mimic = InformationsOfFile[2].Replace("\"", String.Empty);
+                }
+
+                string VBA_HOSTPROJECT_BEGIN = "\r\nVBA_HOSTPROJECT,BEGIN";
+                string VBA_HOSTPROJECT_END = "\r\nVBA_HOSTPROJECT,END";
+
+                int StartIndex = Text.IndexOf(VBA_HOSTPROJECT_BEGIN, 0);
+
+                // Test de l'existence de code
+                if (StartIndex != -1)
+                {
+                    string Function = GetVBAFunction(ref Text, "OPENED", String.Empty, null);
+                    int EndIndex = Text.IndexOf(VBA_HOSTPROJECT_END, 0);
+                    Text = Text.Insert(EndIndex, Function);
+
+                    Function = GetVBAFunction(ref Text, "CLOSED", String.Empty, null);
+                    EndIndex = Text.IndexOf(VBA_HOSTPROJECT_END, 0);
+                    Text = Text.Insert(EndIndex, Function);
+
+                    // On insère les fonctions
+                    foreach (ClickableObject Element in ClickableElements.OrderByDescending(s => s.Object))
+                    {
+                        string ElementName = Element.Object.Split(',')[3].Replace("\"", String.Empty);
+                        int Index = ElementName.IndexOf("\r\n\t");
+                        if (Index != -1)
+                            ElementName = ElementName.Substring(0, Index);
+
+                        string VBAFunction = GetVBAFunction(ref Text, ElementName, Element.Text, Element.CustomGroupCode);
+                        EndIndex = Text.IndexOf(VBA_HOSTPROJECT_END, 0);
+                        Text = Text.Insert(EndIndex, VBAFunction);
+                        Text = Text.Replace(Element.OriginalObject, Element.Object);
+                    }
+
+                    // On insère le code pour les alarmes
+                    foreach (String Alarm in ListAlarms.OrderByDescending(s => s))
+                    {
+                        string ElementName = Alarm.Split(',')[3].Replace("\"", String.Empty);
+                        int Index = ElementName.IndexOf("\r\n\t");
+                        if (Index != -1)
+                            ElementName = ElementName.Substring(0, Index);
+
+                        string VBAFunction = GetVBAlarmFunction(ref Text, ElementName);
+                        EndIndex = Text.IndexOf(VBA_HOSTPROJECT_END, 0);
+                        Text = Text.Insert(EndIndex, VBAFunction);
+                    }
+
+                    // On insère le code pour les symboles
+                    foreach (SymbolObject Symbol in ListSymbols.OrderByDescending(s => s.Object))
+                    {
+                        string VBAFunction = GetVBASymbolFunction(ref Text, Symbol.Object);
+                        EndIndex = Text.IndexOf(VBA_HOSTPROJECT_END, 0);
+                        Text = Text.Insert(EndIndex, VBAFunction);
+                        Text = Text.Replace(Symbol.OriginalObject, Symbol.Object);
+                    }
+
+                    string VBANullFunction = GetVBAFileFunction(ref Text);
+                    EndIndex = Text.IndexOf(VBA_HOSTPROJECT_END, 0);
+                    Text = Text.Insert(EndIndex, VBANullFunction);
+
+                    File.WriteAllText(FilePath, Text, Encoding.Default);
+                }
+                else
+                {
+                    string BeginsWith = "W,END";
+                    StartIndex = Text.IndexOf(BeginsWith, 0);
+                    bool IsSymbol = false;
+
+                    if (StartIndex == -1)
+                    {
+                        string cr = "\r\n";
+                        StartIndex = Text.IndexOf(cr, 0);
+                        IsSymbol = true;
+                    }
+                    else
+                    {
+                        // On met l'index à la position du texte où il doit écrire
+                        StartIndex += BeginsWith.Length;
+                    }
+
+                    // On insère le texte pour ajouter du code
+                    Text = Text.Insert(StartIndex, VBA_HOSTPROJECT_BEGIN + VBA_HOSTPROJECT_END);
+
+                    // On insère les fonctions
+                    foreach (ClickableObject Element in ClickableElements.OrderByDescending(s => s.Object))
+                    {
+                        string ElementName = Element.Object.Split(',')[3].Replace("\"", String.Empty);
+                        int Index = ElementName.IndexOf("\r\n\t");
+                        if (Index != -1)
+                            ElementName = ElementName.Substring(0, Index);
+
+                        string VBAFunction = GetVBAFunction(ref Text, ElementName, Element.Text, Element.CustomGroupCode);
+                        Text = Text.Insert(StartIndex + VBA_HOSTPROJECT_BEGIN.Length, VBAFunction);
+                        Text = Text.Replace(Element.OriginalObject, Element.Object);
+                    }
+
+                    if (!IsSymbol)
+                    {
+                        string Function = GetVBAFunction(ref Text, "OPENED", String.Empty, null);
+                        Text = Text.Insert(StartIndex + VBA_HOSTPROJECT_BEGIN.Length, Function);
+
+                        Function = GetVBAFunction(ref Text, "CLOSED", String.Empty, null);
+                        Text = Text.Insert(StartIndex + VBA_HOSTPROJECT_BEGIN.Length, Function);
+                    }
+
+                    // On insère le code pour les alarmes
+                    foreach (String Alarm in ListAlarms.OrderByDescending(s => s))
+                    {
+                        string ElementName = Alarm.Split(',')[3].Replace("\"", String.Empty);
+                        int Index = ElementName.IndexOf("\r\n\t");
+                        if (Index != -1)
+                            ElementName = ElementName.Substring(0, Index);
+
+                        string VBAFunction = GetVBAlarmFunction(ref Text, ElementName);
+                        Text = Text.Insert(StartIndex + VBA_HOSTPROJECT_BEGIN.Length, VBAFunction);
+                    }
+
+                    // On insère le code pour les symboles
+                    foreach (SymbolObject Symbol in ListSymbols.OrderByDescending(s => s.Object))
+                    {
+                        string VBAFunction = GetVBASymbolFunction(ref Text, Symbol.Object);
+                        Text = Text.Insert(StartIndex + VBA_HOSTPROJECT_BEGIN.Length, VBAFunction);
+                        Text = Text.Replace(Symbol.OriginalObject, Symbol.Object);
+                    }
+
+                    string VBAFileFunction = GetVBAFileFunction(ref Text);
+                    Text = Text.Insert(StartIndex + VBA_HOSTPROJECT_BEGIN.Length, VBAFileFunction);
+
+                    File.WriteAllText(FilePath, Text, Encoding.Default);
+                }
+                return true;
+            }
+
+            #endregion
+
+            #region Constructor
+            /// <summary>
+            /// Constructeur par défaut
+            /// </summary>
+            /// <param name="SynopticFilePath">Chemin d'accès vers le fichier Synoptique</param>
+            internal Synoptic(String SynopticFilePath)
+            {
+                this.FilePath = SynopticFilePath;
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Constructor
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        /// <param name="ProjectPath">Chemin d'accès vers le projet PcVue</param>
+        public VBAScriptGenerator(String ProjectPath)
+        {
+            this.ProjectPath = ProjectPath;
+            string[] Synoptiques = null;
+            string[] Symboles = null;
+            string[] Templates = null;
+            string[] Directories = null;
+
+            // Remplir la liste des Synoptiques
+            if (Directory.Exists(ProjectPath + "\\W\\"))
+                Synoptiques = Directory.GetFiles(ProjectPath + "\\W\\");
+
+            if (Directory.Exists(ProjectPath + "\\S\\"))
+                Symboles = Directory.GetFiles(ProjectPath + "\\S\\");
+
+            if (Directory.Exists(ProjectPath + "\\WT\\"))
+                Templates = Directory.GetFiles(ProjectPath + "\\WT\\");
+
+            if (Directory.Exists(ProjectPath + "\\LIB\\"))
+                Directories = Directory.GetDirectories(ProjectPath + "\\LIB\\");
+
+            string ASCII32 = "ASCII32";
+
+            if (Synoptiques != null)
+            {
+                foreach (string Filename in Synoptiques)
+                {
+                    string Text = File.ReadAllText(Filename);
+                    if (Text.Substring(0, ASCII32.Length) == ASCII32)
+                        ASCIISynoptics.Add(new Synoptic(Filename));
+                }
+            }
+
+            if (Symboles != null)
+            {
+                foreach (string Filename in Symboles)
+                {
+                    string Text = File.ReadAllText(Filename);
+                    if (Text.Substring(0, ASCII32.Length) == ASCII32)
+                        ASCIISynoptics.Add(new Synoptic(Filename));
+                }
+            }
+
+            if (Templates != null)
+            {
+                foreach (string Filename in Templates)
+                {
+                    string Text = File.ReadAllText(Filename);
+                    if (Text.Substring(0, ASCII32.Length) == ASCII32)
+                        ASCIISynoptics.Add(new Synoptic(Filename));
+                }
+            }
+
+            if (Directories != null)
+            {
+                foreach (string _Directory in Directories)
+                {
+                    if (Directory.Exists(_Directory + "\\W\\"))
+                        Synoptiques = Directory.GetFiles(_Directory + "\\W\\");
+                    else
+                        Synoptiques = null;
+
+                    if (Directory.Exists(_Directory + "\\S\\"))
+                        Symboles = Directory.GetFiles(_Directory + "\\S\\");
+                    else
+                        Symboles = null;
+
+                    if (Synoptiques != null)
+                    {
+                        foreach (string Filename in Synoptiques)
+                        {
+                            string Text = File.ReadAllText(Filename);
+                            if (Text.Substring(0, ASCII32.Length) == ASCII32)
+                                ASCIISynoptics.Add(new Synoptic(Filename));
+                        }
+                    }
+
+                    if (Symboles != null)
+                    {
+                        foreach (string Filename in Symboles)
+                        {
+                            string Text = File.ReadAllText(Filename);
+                            if (Text.Substring(0, ASCII32.Length) == ASCII32)
+                                ASCIISynoptics.Add(new Synoptic(Filename));
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+    }
+}

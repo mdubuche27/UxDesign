@@ -1,0 +1,196 @@
+﻿using PcVueSpyLog;
+using PcVueSpyLog.Entities;
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace PcVueSpy
+{
+    public partial class Main : Form
+    {
+        private static bool IsHooked { get; set; }
+
+        public static FileLog FileLog { get; set; }
+
+        // Déclaration des variables pour l'IHM des logs
+        private PcVueSpy.Log Alarme = new Log(Log.TITRE_ALARME, PcVueSpyLog.ConstsType.ALARME, "Date & Heure", "Nom du projet", "Nom du synoptique", "Titre du synoptique", "Nom de l'alarme", "Handle", "Sélectionné", "Nom d'utilisateur");
+        private PcVueSpy.Log Clavier = new Log(Log.TITRE_CLAVIER, PcVueSpyLog.ConstsType.CLAVIER, "Date & Heure", "Touche");
+        private PcVueSpy.Log Fenetre = new Log(Log.TITRE_FENETRE, PcVueSpyLog.ConstsType.FENETRE, "Date & Heure", "Nom du projet", "Nom du synoptique", "Titre du synoptique", "Action", "Text", "Nom d'utilisateur");
+        private PcVueSpy.Log OuvertureFermeture = new Log(Log.TITRE_OUVERTURE_FERMETURE, PcVueSpyLog.ConstsType.OUVERTURE_FERMETURE, "Date & Heure", "Nom du projet", "Nom du synoptique", "Titre du synoptique", "Action", "Nom d'utilisateur");
+        private PcVueSpy.Log Souris = new Log(Log.TITRE_SOURIS, PcVueSpyLog.ConstsType.SOURIS, "Date & Heure", "Type de clic", "Point X", "Point Y");
+        private PcVueSpy.Log Symbole = new Log(Log.TITRE_SYMBOLE, PcVueSpyLog.ConstsType.SYMBOLE, "Date & Heure", "Nom du projet", "Nom du synoptique", "Titre du synoptique", "Action", "Nom", "Branche", "Nom d'utilisateur");
+
+        public static void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            // Touche appuyée
+            if (!String.IsNullOrWhiteSpace(ComputerInfos.InstallFolderBin))
+            {
+                string line = "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + "]" + ";" + ConstsType.CLAVIER + ";" + e.KeyData + "\r\n";
+                File.AppendAllText(ComputerInfos.InstallFolderBin + "\\ActemiumLog_" + DateTime.Now.ToString("yyyy-MM-dd") + ".log", line, Encoding.Unicode);
+            }
+        }
+
+        public static void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            // Touche relachée
+        }
+
+        public static void OnClick(object sender, MouseEventArgs e)
+        {
+            // Clic droit ou gauche
+            if (!String.IsNullOrWhiteSpace(ComputerInfos.InstallFolderBin))
+            {
+                string line = "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + "]" + ";" + ConstsType.SOURIS + ";" + (e.Button == MouseButtons.Right ? "D" : "G") + ";" + e.X + ";" + e.Y + "\r\n";
+                File.AppendAllText(ComputerInfos.InstallFolderBin + "\\ActemiumLog_" + DateTime.Now.ToString("yyyy-MM-dd") + ".log", line, Encoding.Unicode);
+            }
+        }
+
+        public Main()
+        {
+            InitializeComponent();
+            IsHooked = false;
+        }
+
+        private void Form_Closing(object sender, FormClosingEventArgs e)
+        {
+            if (IsHooked)
+            {
+                MouseHook.StopMouseHook();
+                KeyboardHook.StopKeyHook();
+            }
+        }
+
+        private void StartHooksToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ( String.IsNullOrWhiteSpace(ComputerInfos.InstallFolderBin))
+            {
+                MessageBox.Show("Veuillez séléctionner le répertoire Bin de l'installation de PcVue avant de pouvoir exécuter les Hooks");
+            }
+            else
+            {
+                if (!IsHooked)
+                {
+                    MouseHook.StartMouseHook();
+                    KeyboardHook.StartKeyHook();
+                    IsHooked = true;
+                }
+            }
+        }
+
+        private void StopHooksToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (IsHooked)
+            {
+                MouseHook.StopMouseHook();
+                KeyboardHook.StopKeyHook();
+                IsHooked = false;
+            }
+        }
+
+        private void SetInstallPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog Folder = new FolderBrowserDialog
+            {
+                Description = "Veuillez séléctionner le répertoire Bin du dossier d'installation de PcVue."
+            };
+
+            if (Folder.ShowDialog() == DialogResult.OK)
+            {
+                string[] res = Folder.SelectedPath.Split('\\');
+                if (res[res.Length - 1].Equals("Bin"))
+                {
+                    ComputerInfos.InstallFolderBin = Folder.SelectedPath;
+                    MessageBox.Show("Répertoire enregistré avec succès.");
+                }
+                else
+                {
+                    MessageBox.Show("Veuillez séléctionner le répertoire Bin du dossier d'installation de PcVue.");
+                    SetInstallPathToolStripMenuItem_Click(sender, e);
+                }
+            }
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog Folder = new FolderBrowserDialog
+            {
+                Description = "Veuillez séléctionner le dossier de votre projet."
+            };
+
+            if (Folder.ShowDialog() == DialogResult.OK)
+            {
+                VBAScriptGenerator vBAScriptGenerator = new VBAScriptGenerator(Folder.SelectedPath);
+                foreach (VBAScriptGenerator.Synoptic Synoptic in vBAScriptGenerator.ASCIISynoptics)
+                    Synoptic.GenerateVBAScript();
+                MessageBox.Show("Script généré avec succès sur " + vBAScriptGenerator.ASCIISynoptics.Count + " Synoptique(s)");
+            }
+        }
+
+        private void LoadFilelogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = ComputerInfos.InstallFolderBin,
+                Filter = "Fichier log|ActemiumLog_*.log"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // Instance du fichier .log
+                FileLog = new FileLog(openFileDialog.FileName);
+
+                MessageBox.Show("Fichier chargé");
+            }
+        }
+
+        private void OuvertureFermetureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (LogContext.Context.Logs.Where(s => s.Type == ConstsType.OUVERTURE_FERMETURE).Count() > 0)
+                OuvertureFermeture.Show();
+            else
+                MessageBox.Show("La base de données ne contient pas de log d'ouverture et de fermeture");
+        }
+
+        private void AlarmeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (LogContext.Context.Logs.Where(s => s.Type == ConstsType.ALARME).Count() > 0)
+                Alarme.Show();
+            else
+                MessageBox.Show("La base de données ne contient pas de log d'alarme");
+        }
+
+        private void ClavierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (LogContext.Context.Logs.Where(s => s.Type == ConstsType.CLAVIER).Count() > 0)
+                Clavier.Show();
+            else
+                MessageBox.Show("La base de données ne contient pas de log clavier");
+        }
+
+        private void FenetreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (LogContext.Context.Logs.Where(s => s.Type == ConstsType.FENETRE).Count() > 0)
+                Fenetre.Show();
+            else
+                MessageBox.Show("La base de données ne contient pas de log fenêtre");
+        }
+
+        private void SourisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (LogContext.Context.Logs.Where(s => s.Type == ConstsType.SOURIS).Count() > 0)
+                Souris.Show();
+            else
+                MessageBox.Show("La base de données ne contient pas de log souris");
+        }
+
+        private void SymboleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (LogContext.Context.Logs.Where(s => s.Type == ConstsType.SYMBOLE).Count() > 0)
+                Symbole.Show();
+            else
+                MessageBox.Show("La base de données ne contient pas de log symbole");
+        }
+    }
+}

@@ -1,0 +1,5 @@
+Siemens/FONCTION	Parametres	V/Libelle	V/ParentDescription	V/AdresseModBus
+FONCTION_0000	/Siemens/FONCTION/mou_test/FCT	 ZC1 Compartimentage TOUS NIVEAUX MOUNIER	 Zone de Compartimentage	 0
+
+Siemens/FONCTION_UGA	Parametres	V/Libelle	V/ParentLibelle	V/AdresseModBus
+FONCTION_UGA_0	/Siemens/FONCTION/mou_test/FCTUGA	 UGA pour ERP BATIMENT MOUNIER	 Zone Alarme ERP	 0

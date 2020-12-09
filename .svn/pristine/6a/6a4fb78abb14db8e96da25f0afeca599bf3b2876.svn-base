@@ -1,0 +1,64 @@
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PcVueSpyLog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace PcVueSpy.Tests
+{
+    [TestClass()]
+    public class VBAScriptGeneratorTests
+    {
+        private VBAScriptGenerator VBAScriptGenerator { get; set; }
+        private VBAScriptGenerator.Synoptic Synoptic { get; set; }
+
+        public VBAScriptGeneratorTests()
+        {
+            VBAScriptGenerator = new VBAScriptGenerator(Environment.CurrentDirectory + @"\..\..\Test");
+            Synoptic = VBAScriptGenerator.ASCIISynoptics.Where(s => s.Filename == "test").FirstOrDefault();
+        }
+
+        [TestMethod()]
+        public void SynopticASCIIGetClickableElements()
+        {
+            Assert.AreEqual(2, Synoptic.ClickableElements.Count);
+        }
+
+        [TestMethod()]
+        public void SynopticASCIIGetTitle()
+        {
+            Assert.AreEqual("Synoptique1", Synoptic.Caption);
+        }
+
+        [TestMethod()]
+        public void ProjectGetSynopticsList()
+        {
+            // Liste attendue
+            List<String> ExpectedList = new List<String>
+            {
+                "test",
+                "test2",
+                "test3"
+            };
+
+            // Liste réelle
+            List<String> ActualList = new List<String>();
+            foreach (VBAScriptGenerator.Synoptic Syno in VBAScriptGenerator.ASCIISynoptics)
+                ActualList.Add(Syno.Filename);
+
+            CollectionAssert.AreEqual(ExpectedList, ActualList);
+        }
+
+        [TestMethod()]
+        public void SynopticASCIIGetName()
+        {
+            Assert.AreEqual("Mimic1", Synoptic.Mimic);
+        }
+
+        [TestMethod()]
+        public void SynopticGenerateVBAScript()
+        {
+            Assert.AreEqual(true, Synoptic.GenerateVBAScript());
+        }
+    }
+}

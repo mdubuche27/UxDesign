@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Tobii.Research;
+
+namespace TestET2
+{
+    class MainViewModel
+    {
+
+        public ICommand pasteque { get; set; }
+
+        public void Pasteque()
+        {
+            EyeTrackerCollection Tobii = EyeTrackingOperations.FindAllEyeTrackers();
+            Calib(Tobii[0]);
+        }
+
+        private static async System.Threading.Tasks.Task Calib(IEyeTracker eyeTracker)
+        {
+
+            var calibration = new ScreenBasedCalibration(eyeTracker);
+
+            await calibration.EnterCalibrationModeAsync();
+
+            var pointsToCalibrate = new NormalizedPoint2D[] {
+                new NormalizedPoint2D(0.5f, 0.5f),
+                new NormalizedPoint2D(0.1f, 0.1f),
+                new NormalizedPoint2D(0.1f, 0.9f),
+                new NormalizedPoint2D(0.9f, 0.1f),
+                new NormalizedPoint2D(0.9f, 0.9f),
+            };
+            foreach (var point in pointsToCalibrate)
+            {
+                System.Threading.Thread.Sleep(700);
+                CalibrationStatus status = await calibration.CollectDataAsync(point);
+                if (status != CalibrationStatus.Success)
+                {
+                    await calibration.CollectDataAsync(point);
+                }
+            }
+            CalibrationResult calibrationResult = await calibration.ComputeAndApplyAsync();
+            calibration.DiscardData(new NormalizedPoint2D(0.1f, 0.1f));
+            await calibration.CollectDataAsync(new NormalizedPoint2D(0.1f, 0.1f));
+            calibrationResult = await calibration.ComputeAndApplyAsync();
+            await calibration.LeaveCalibrationModeAsync();
+        }
+
+        public MainViewModel()
+        {
+            pasteque = new RelayCommand(Pasteque);
+        }
+    }
+}

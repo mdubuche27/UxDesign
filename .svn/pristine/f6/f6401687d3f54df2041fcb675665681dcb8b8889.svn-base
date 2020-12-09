@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Security.Principal;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PcVueSpyLog.Entities
+{
+    public class Utilisateur
+    {
+        /// <summary>
+        /// SID de l'utilisateur
+        /// </summary>
+        [Key]
+        [StringLength(184)]
+        public String SID { get; private set; }
+
+        /// <summary>
+        /// Nom de l'utilisateur
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// Permet d'indiquer si on trace ou pas l'utilisateur
+        /// </summary>
+        public bool Trace { get; set; }
+
+        /// <summary>
+        /// Niveau de l'utilisateur
+        /// </summary>
+        public int NiveauUtilisateur { get; set; }
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        public Utilisateur()
+        {
+            this.SID = ComputerInfos.USER_SID;
+            this.UserName = ComputerInfos.USERNAME;
+            this.Trace = false;
+            this.NiveauUtilisateur = 0;
+        }
+    }
+}

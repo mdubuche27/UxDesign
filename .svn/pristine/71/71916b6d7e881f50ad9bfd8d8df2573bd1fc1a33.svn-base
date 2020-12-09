@@ -1,0 +1,16 @@
+﻿	Function IsFileOpen(filename As String) As Boolean
+		Dim filenum As Integer, Errnum As Integer
+		On Error Resume Next
+		filenum = FreeFile()
+		Open filename For Input Lock Read As #filenum
+		Close filenum
+		{0}
+		Errnum = Err
+		On Error GoTo 0
+		Select Case Errnum
+			Case 0
+				IsFileOpen = True
+			Case 70
+				IsFileOpen = False
+		End Select
+	End Function

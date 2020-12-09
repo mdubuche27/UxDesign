@@ -1,0 +1,4 @@
+Esser/CP	Parameters	V/Numero	V/Panel	V/Description	V/adress_MB
+CP_00302	/Esser/CP/EDP_test	302	2	302	369
+CP_00303	/Esser/CP/EDP_test	303	2	303	370
+CP_00310	/Esser/CP/EDP_test	310	2	310	371

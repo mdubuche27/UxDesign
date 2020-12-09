@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.Entity;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PcVueSpyLog
+{
+    public class Souris : Log
+    {
+        [Column("TypeClic")]
+        public String TypeClic { get; private set; }
+
+        [Column("PointX")]
+        public int PointX { get; private set; }
+
+        [Column("PointY")]
+        public int PointY { get; private set; }
+
+        /// <summary>
+        /// Constructeur privé sans paramètres pour EntityFramework
+        /// </summary>
+        private Souris() : base()
+        {
+
+        }
+
+        internal Souris(String Line) : base(Line)
+        {
+            string[] Split = Line.Split(';');
+            TypeClic = Split[2];
+            PointX = int.Parse(Split[3]);
+            PointY = int.Parse(Split[4]);
+        }
+    }
+}

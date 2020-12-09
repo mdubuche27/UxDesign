@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="backup" xml:space="preserve">
+    <value>Voulez-vous créer un nouveau fichier de backup et donc supprimer l'ancien fichier ?</value>
+  </data>
+  <data name="Chubb" xml:space="preserve">
+    <value>Chubb</value>
+  </data>
+  <data name="DAS" xml:space="preserve">
+    <value>DAS</value>
+  </data>
+  <data name="DEF" xml:space="preserve">
+    <value>DEF</value>
+  </data>
+  <data name="DI" xml:space="preserve">
+    <value>DI</value>
+  </data>
+  <data name="Eappvalide" xml:space="preserve">
+    <value>Vous devez séléctionner une application valide!</value>
+  </data>
+  <data name="EAutocad" xml:space="preserve">
+    <value>une erreur est survenue avec l'ouverture du fichier Autocad</value>
+  </data>
+  <data name="EConf1" xml:space="preserve">
+    <value>une erreur est survenue avec l'ouverture du fichier Configuration 1</value>
+  </data>
+  <data name="EConf2" xml:space="preserve">
+    <value>une erreur est survenue avec l'ouverture du fichier Configuration 2</value>
+  </data>
+  <data name="EDASChubb" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du DAS DEF</value>
+  </data>
+  <data name="EDASDEF" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du DAS DEF</value>
+  </data>
+  <data name="EDASEsser" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du DAS Esser</value>
+  </data>
+  <data name="EDASSiemens" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du DAS Siemens</value>
+  </data>
+  <data name="EDIChubb" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du DI Chubb</value>
+  </data>
+  <data name="EDIDEF" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du DI DEF</value>
+  </data>
+  <data name="EDIEsser" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du DI Esser</value>
+  </data>
+  <data name="EDIFinsecur" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du DI Finsecur</value>
+  </data>
+  <data name="EDISiemens" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du DI Siemens</value>
+  </data>
+  <data name="Efile" xml:space="preserve">
+    <value>Une erreur est survenue avec l'ouverture du fichier</value>
+  </data>
+  <data name="EFoncChubb" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération de la fonction</value>
+  </data>
+  <data name="EFoncDEF" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération de la fonction DEF</value>
+  </data>
+  <data name="EFoncEsser" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du Fct Esser</value>
+  </data>
+  <data name="EFoncFinsecur" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération de la fonction Finsecur</value>
+  </data>
+  <data name="EfoncSiemens" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération de la fonction Siemens</value>
+  </data>
+  <data name="EMDLOFinsecur" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération du MDLO Finsecur</value>
+  </data>
+  <data name="Enb" xml:space="preserve">
+    <value>Veuillez renseigner un nombre</value>
+  </data>
+  <data name="Esser" xml:space="preserve">
+    <value>Esser</value>
+  </data>
+  <data name="EUGADEF" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération de la fonction UGA DEF</value>
+  </data>
+  <data name="EUGAFinsecur" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération de la fonction UGA Finsecur</value>
+  </data>
+  <data name="EUGASiemens" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération de la fonction UGA Siemens</value>
+  </data>
+  <data name="EVoieFinsecur" xml:space="preserve">
+    <value>Une erreur est survenue avec la génération de la voie Finsecur</value>
+  </data>
+  <data name="Finsecur" xml:space="preserve">
+    <value>Finsecur</value>
+  </data>
+  <data name="Fonc" xml:space="preserve">
+    <value>Fonction</value>
+  </data>
+  <data name="importok" xml:space="preserve">
+    <value>Fichiers bien importer!</value>
+  </data>
+  <data name="MDLO" xml:space="preserve">
+    <value>MDLO</value>
+  </data>
+  <data name="no" xml:space="preserve">
+    <value>NO</value>
+  </data>
+  <data name="Panorama" xml:space="preserve">
+    <value>Panorama</value>
+  </data>
+  <data name="PcVue" xml:space="preserve">
+    <value>PcVue</value>
+  </data>
+  <data name="SelMAJ" xml:space="preserve">
+    <value>Séléctioné le fichier a mettre à jours!</value>
+  </data>
+  <data name="Siemens" xml:space="preserve">
+    <value>Siemens</value>
+  </data>
+  <data name="test" xml:space="preserve">
+    <value />
+  </data>
+  <data name="uga" xml:space="preserve">
+    <value>UGA</value>
+  </data>
+  <data name="Voie" xml:space="preserve">
+    <value>Voie</value>
+  </data>
+</root>

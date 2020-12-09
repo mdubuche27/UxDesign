@@ -1,0 +1,10 @@
+Esser/Loop	Parameters	V/Numero	V/Panel	V/Description	V/adress_MB
+Loop_00113	/Esser/Loop/EDP_test	113	1		13
+Loop_00121	/Esser/Loop/EDP_test	121	1	4203_RDC	14
+Loop_00122	/Esser/Loop/EDP_test	122	1	4203_1er_ETAGE	15
+Loop_00123	/Esser/Loop/EDP_test	123	1	4203_OI_AET	16
+Loop_00131	/Esser/Loop/EDP_test	131	1	4203_1er_ATEC	17
+Loop_00132	/Esser/Loop/EDP_test	132	1		18
+Loop_00321	/Esser/Loop/EDP_test	321	3		382
+Loop_00322	/Esser/Loop/EDP_test	322	3	batiment_4414_BUS_322	383
+Loop_00323	/Esser/Loop/EDP_test	323	3		384

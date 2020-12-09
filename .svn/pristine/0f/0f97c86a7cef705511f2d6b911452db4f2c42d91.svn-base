@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.Entity;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PcVueSpyLog
+{
+    public class Clavier : Log
+    {
+        [Column("KeyData")]
+        public String KeyData { get; private set; }
+
+        /// <summary>
+        /// Constructeur privé sans paramètres pour EntityFramework
+        /// </summary>
+        private Clavier() : base()
+        {
+
+        }
+
+        internal Clavier(String Line) : base(Line)
+        {
+            string[] Split = Line.Split(';');
+            this.KeyData = Split[2];
+        }
+    }
+}

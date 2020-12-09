@@ -1,0 +1,7 @@
+Esser/BUS	Parameters	V/Numero	V/Libelle
+BUS_1_1	/Esser/BUS/AIR_FRANCE_CARGO/1.1	1.1	BusEma_
+BUS_1_2	/Esser/BUS/AIR_FRANCE_CARGO/1.2	1.2	BusEma_
+BUS_1_3	/Esser/BUS/AIR_FRANCE_CARGO/1.3	1.3	BusEma_
+BUS_2_1	/Esser/BUS/AIR_FRANCE_CARGO/2.1	2.1	BusEma_
+BUS_3_1	/Esser/BUS/AIR_FRANCE_CARGO/3.1	3.1	BusEma_
+BUS_4_1	/Esser/BUS/AIR_FRANCE_CARGO/4.1	4.1	BusEma_

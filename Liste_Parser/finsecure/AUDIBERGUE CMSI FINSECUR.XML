@@ -1,0 +1,1688 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="Configuration.css" type="text/css"?>
+<!DOCTYPE configuration SYSTEM "configuration.dtd">
+<configuration >
+<Centrale>
+<Titre>CONFIGURATION ECS</Titre>
+<NomCentrale>ECS  1 : ECS-AUDIBERGUE</NomCentrale>
+<ListeZones>
+<Zone>
+<Name>Zone n° 1</Name>
+<Prop>
+<Label>ZD1 DM SOUS SOL</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 2</Name>
+<Prop>
+<Label>ZD2 DM RDC</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 3</Name>
+<Prop>
+<Label>ZD3 DI LOCAUX RDC</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 4</Name>
+<Prop>
+<Label>ZD4 DM 1er INTERMEDIAIRE</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 5</Name>
+<Prop>
+<Label>ZD5 DM N+1</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 6</Name>
+<Prop>
+<Label>ZD6 DM N+2</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 7</Name>
+<Prop>
+<Label>ZD7 DM N+3</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 8</Name>
+<Prop>
+<Label>ZD8 DM 2eme INTERMEDIAIRE</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 9</Name>
+<Prop>
+<Label>ZD9 DM 3eme INTERMEDIAIRE</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 10</Name>
+<Prop>
+<Label>ZD10 DM N+4</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 11</Name>
+<Prop>
+<Label>ZD11 DM N+5</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 12</Name>
+<Prop>
+<Label>ZD12 DM N+6</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+<Zone>
+<Name>Zone n° 13</Name>
+<Prop>
+<Label>ZD13 DM N+7</Label>
+<Option Nom= "Type">Temporisée</Option>
+<Option Nom= "Groupe de Blocage">Inactif</Option>
+</Prop>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+<Item>Fonction  2-1 : PCF</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Uga">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+</Zone>
+</ListeZones>
+</Centrale>
+<Centrale>
+<Titre>CONFIGURATION CMSI</Titre>
+<NomCentrale>CMSI  1 : CMSI-AUDIBERGUE</NomCentrale>
+<ListeBus>
+<Bus>
+<Name>Bus n° 1</Name>
+<Mda4>
+<Name>MDA4 n° 1</Name>
+<Voie>
+<Name>Voie n° 1</Name>
+<Prop>
+<Label>Surveillance AES UAE</Label>
+<Option Nom = "Type">Entrée Systeme</Option>
+<Option Nom= "ModBus">0</Option>
+<Option Nom= "Mode">Surveillance Alim (MEAE)</Option>
+<Option Nom= "Type d' Adresse">mdlo</Option>
+<Option Nom= "Nb d'Adresse">1</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Entrée">NF</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Adresse n° 1  Voie n° 1</Label>
+<Option Nom= "ModBus">1</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 2</Name>
+<Prop>
+<Label>ISS</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">1</Option>
+<Option Nom= "Mode">Relais</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">rupture</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 3</Name>
+<Prop>
+<Label>EVACUATION GENERAL</Label>
+<Option Nom = "Type">Sortie Systeme</Option>
+<Option Nom= "ModBus">2</Option>
+<Option Nom= "Mode">Actif sur Veille Restreinte</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 4</Name>
+<Prop></Prop>
+</Voie>
+<Voie>
+<Name>Voie n° 5</Name>
+<Prop>
+<Label>Surveillance AES CMSI</Label>
+<Option Nom = "Type">Entrée Systeme</Option>
+<Option Nom= "ModBus">4</Option>
+<Option Nom= "Mode"></Option>
+<Option Nom= "Type d' Adresse">meae</Option>
+<Option Nom= "Nb d'Adresse">1</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Entrée">NF</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Adresse n° 1  Voie n° 5</Label>
+<Option Nom= "ModBus">0</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+</Mda4>
+<Mda4>
+<Name>MDA4 n° 2</Name>
+<Voie>
+<Name>Voie n° 1</Name>
+<Prop>
+<Label>DS sous sol</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">5</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 2</Name>
+<Prop>
+<Label>DS RDC  hall</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">6</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 3</Name>
+<Prop>
+<Label>DS RDC droit</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">7</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 4</Name>
+<Prop></Prop>
+</Voie>
+<Voie>
+<Name>Voie n° 5</Name>
+<Prop></Prop>
+</Voie>
+</Mda4>
+<Mda4>
+<Name>MDA4 n° 3</Name>
+<Voie>
+<Name>Voie n° 1</Name>
+<Prop>
+<Label>PCF RDC Couloir EST</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">10</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">3</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entrée Coté Accueil</Label>
+<Option Nom= "ModBus">42</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Circulation Coté Skydom</Label>
+<Option Nom= "ModBus">43</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°3</Name>
+<Prop>
+<Label>Circulation vers Sortie</Label>
+<Option Nom= "ModBus">44</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 2</Name>
+<Prop>
+<Label>PCF RDC Couloir OUEST</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">11</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">4</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entrée Couloir Coté Salle 47</Label>
+<Option Nom= "ModBus">38</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Imprimante 1</Label>
+<Option Nom= "ModBus">39</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°3</Name>
+<Prop>
+<Label>Imprimante 2</Label>
+<Option Nom= "ModBus">40</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°4</Name>
+<Prop>
+<Label>Entrée Coté Accueil</Label>
+<Option Nom= "ModBus">41</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 3</Name>
+<Prop></Prop>
+</Voie>
+<Voie>
+<Name>Voie n° 4</Name>
+<Prop></Prop>
+</Voie>
+<Voie>
+<Name>Voie n° 5</Name>
+<Prop></Prop>
+</Voie>
+</Mda4>
+</Bus>
+<Bus>
+<Name>Bus n° 2</Name>
+<Mda4>
+<Name>MDA4 n° 1</Name>
+<Voie>
+<Name>Voie n° 1</Name>
+<Prop>
+<Label>PCF R+1</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">45</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">6</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Imprimante Hall Ascenseur</Label>
+<Option Nom= "ModBus">33</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Imprimante Bulle C</Label>
+<Option Nom= "ModBus">34</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°3</Name>
+<Prop>
+<Label>Entrée Bulle C</Label>
+<Option Nom= "ModBus">35</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°4</Name>
+<Prop>
+<Label>Depôt Hall Ascenseur</Label>
+<Option Nom= "ModBus">36</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°5</Name>
+<Prop>
+<Label>Entrée Bulle B</Label>
+<Option Nom= "ModBus">37</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°6</Name>
+<Prop>
+<Label>Entrée Bulle A</Label>
+<Option Nom= "ModBus">45</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 2</Name>
+<Prop>
+<Label>DS N+1/T13  CENTRE + BULLE A</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">46</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 3</Name>
+<Prop>
+<Label>DS N+1/T13 BULLE B </Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">47</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 4</Name>
+<Prop>
+<Label>DS N+1/T13 BULLE C</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">48</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 5</Name>
+<Prop></Prop>
+</Voie>
+</Mda4>
+<Mda4>
+<Name>MDA4 n° 2</Name>
+<Voie>
+<Name>Voie n° 1</Name>
+<Prop>
+<Label>PCF N+2 BULLE A</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">15</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">1</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entrée Bulle</Label>
+<Option Nom= "ModBus">28</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 2</Name>
+<Prop>
+<Label>PCF N+2 BULLE B + centre</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">16</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">2</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Depôt Hall Ascenseur</Label>
+<Option Nom= "ModBus">29</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Entrée Bulle</Label>
+<Option Nom= "ModBus">30</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 3</Name>
+<Prop>
+<Label>PCF N+2 BULLE C</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">17</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">2</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entrée Bulle</Label>
+<Option Nom= "ModBus">31</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Archives</Label>
+<Option Nom= "ModBus">32</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 4</Name>
+<Prop>
+<Label>DS N+2</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">18</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 5</Name>
+<Prop></Prop>
+</Voie>
+</Mda4>
+<Mda4>
+<Name>MDA4 n° 3</Name>
+<Voie>
+<Name>Voie n° 1</Name>
+<Prop>
+<Label>PCF R+3</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">20</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">6</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entrée Bulle A</Label>
+<Option Nom= "ModBus">22</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Entrée Bulle B</Label>
+<Option Nom= "ModBus">23</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°3</Name>
+<Prop>
+<Label>Archives Bulle B</Label>
+<Option Nom= "ModBus">24</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°4</Name>
+<Prop>
+<Label>Imprimante Hall Ascenseur</Label>
+<Option Nom= "ModBus">25</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°5</Name>
+<Prop>
+<Label>Entrée Bulle C</Label>
+<Option Nom= "ModBus">26</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°6</Name>
+<Prop>
+<Label>Archives Bulle C</Label>
+<Option Nom= "ModBus">27</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 2</Name>
+<Prop>
+<Label>DS N+3/T26 BULLE A</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">21</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 3</Name>
+<Prop>
+<Label>DS N+3/T26 BULLE B + centre</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">22</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 4</Name>
+<Prop>
+<Label>DS N+3/T26 BULLE C</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">23</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 5</Name>
+<Prop></Prop>
+</Voie>
+</Mda4>
+<Mda4>
+<Name>MDA4 n° 4</Name>
+<Voie>
+<Name>Voie n° 1</Name>
+<Prop>
+<Label>PCF N+4 BULLE A </Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">25</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">2</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entrée Bulle</Label>
+<Option Nom= "ModBus">15</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Archives</Label>
+<Option Nom= "ModBus">16</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 2</Name>
+<Prop>
+<Label>PCF N+4 BULLE B</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">26</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">2</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entrée Bulle</Label>
+<Option Nom= "ModBus">17</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Archives</Label>
+<Option Nom= "ModBus">18</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 3</Name>
+<Prop>
+<Label>PCF N+4 BULLE C</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">27</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">3</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entrée Bulle</Label>
+<Option Nom= "ModBus">19</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Archives</Label>
+<Option Nom= "ModBus">20</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°3</Name>
+<Prop>
+<Label>Local Imprimante</Label>
+<Option Nom= "ModBus">21</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 4</Name>
+<Prop>
+<Label>DS N+4</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">28</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 5</Name>
+<Prop></Prop>
+</Voie>
+</Mda4>
+<Mda4>
+<Name>MDA4 n° 5</Name>
+<Voie>
+<Name>Voie n° 1</Name>
+<Prop>
+<Label>PCF N+5 BULLE A </Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">30</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">3</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entre Bulle </Label>
+<Option Nom= "ModBus">8</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Local Imprimante</Label>
+<Option Nom= "ModBus">9</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°3</Name>
+<Prop>
+<Label>Archives </Label>
+<Option Nom= "ModBus">10</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 2</Name>
+<Prop>
+<Label>PCF N+5 BULLE B</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">31</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">2</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entre Bulle</Label>
+<Option Nom= "ModBus">11</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Archives</Label>
+<Option Nom= "ModBus">12</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 3</Name>
+<Prop>
+<Label>PCF N+5 BULLE C</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">32</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">2</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entre Bulle</Label>
+<Option Nom= "ModBus">13</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Archives</Label>
+<Option Nom= "ModBus">14</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 4</Name>
+<Prop>
+<Label>DS N+5</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">33</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 5</Name>
+<Prop></Prop>
+</Voie>
+</Mda4>
+<Mda4>
+<Name>MDA4 n° 6</Name>
+<Voie>
+<Name>Voie n° 1</Name>
+<Prop>
+<Label>PCF N+6 BULLE A </Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">35</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">2</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entre Bulle</Label>
+<Option Nom= "ModBus">2</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Archives </Label>
+<Option Nom= "ModBus">3</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 2</Name>
+<Prop>
+<Label>PCF N+6 BULLE B</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">36</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">2</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entre Bulle </Label>
+<Option Nom= "ModBus">4</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Archives </Label>
+<Option Nom= "ModBus">5</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 3</Name>
+<Prop>
+<Label>PCF N+6 BULLE C</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">37</Option>
+<Option Nom= "Mode">DAS</Option>
+<Option Nom= "Type d' Adresse">mdlonocp</Option>
+<Option Nom= "Nb d'Adresse">2</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">impulsionnel</Option>
+</Prop>
+<ListeMdlo>
+<Adresse>
+<Name>MDLO N°1</Name>
+<Prop>
+<Label>Entre Bulle </Label>
+<Option Nom= "ModBus">6</Option>
+</Prop>
+</Adresse>
+<Adresse>
+<Name>MDLO N°2</Name>
+<Prop>
+<Label>Archives </Label>
+<Option Nom= "ModBus">7</Option>
+</Prop>
+</Adresse>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 4</Name>
+<Prop>
+<Label>DS N+6 + N+7</Label>
+<Option Nom = "Type">Sortie</Option>
+<Option Nom= "ModBus">38</Option>
+<Option Nom= "Mode">Sirène</Option>
+<Option Nom= "Type d' Adresse">collectif</Option>
+<Option Nom= "Nb d'Adresse">0</Option>
+<Option Nom= "Filtrage">0</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= "Retard à l'activation">0</Option>
+<Option Nom= "Mode Alimentation">emission</Option>
+</Prop>
+<ListeMdlo>
+</ListeMdlo>
+</Voie>
+<Voie>
+<Name>Voie n° 5</Name>
+<Prop></Prop>
+</Voie>
+</Mda4>
+</Bus>
+<Bus>
+<Name>Bus n° 3</Name>
+</Bus>
+<Bus>
+<Name>Bus n° 4</Name>
+</Bus>
+</ListeBus>
+<ListeRack>
+<Rack>
+<Name>Rack n° 0</Name>
+<Fonction>
+<Name>Fonction n° 1</Name>
+<Prop>
+<Label>ISS</Label>
+<Option Nom= "ModBus">2</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+<Scenario Nom="Entrée" Objet="Zone">
+<Item>ECS 1  Zone 1 : ZD1 DM SOUS SOL</Item>
+<Item>ECS 1  Zone 2 : ZD2 DM RDC</Item>
+<Item>ECS 1  Zone 3 : ZD3 DI LOCAUX RDC</Item>
+<Item>ECS 1  Zone 4 : ZD4 DM 1er INTERMEDIAIRE</Item>
+<Item>ECS 1  Zone 5 : ZD5 DM N+1</Item>
+<Item>ECS 1  Zone 6 : ZD6 DM N+2</Item>
+<Item>ECS 1  Zone 7 : ZD7 DM N+3</Item>
+<Item>ECS 1  Zone 8 : ZD8 DM 2eme INTERMEDIAIRE</Item>
+<Item>ECS 1  Zone 9 : ZD9 DM 3eme INTERMEDIAIRE</Item>
+<Item>ECS 1  Zone 10 : ZD10 DM N+4</Item>
+<Item>ECS 1  Zone 11 : ZD11 DM N+5</Item>
+<Item>ECS 1  Zone 12 : ZD12 DM N+6</Item>
+<Item>ECS 1  Zone 13 : ZD13 DM N+7</Item>
+</Scenario>
+<Scenario Nom="Entrée" Objet="UGA">
+<Item>UGA 1-1 : ZA BATIMENT</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Voie">
+<Item>BUS 1  MDA4 1  Voie 2 : ISS</Item>
+</Scenario>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 2</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">3</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 3</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">4</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 4</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">5</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 5</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">6</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 6</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">7</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 7</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">8</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 8</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">9</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 9</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">10</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 10</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">11</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 11</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">12</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 12</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">13</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 13</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">14</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 14</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">15</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 15</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">16</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 16</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">17</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 17</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">18</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 18</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">19</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 19</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">20</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 20</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">21</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 21</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">22</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 22</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">23</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 23</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">24</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 24</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">25</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 25</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">26</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 26</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">27</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 27</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">28</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 28</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">29</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 29</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">30</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 30</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">31</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 31</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">32</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+<Fonction>
+<Name>Fonction n° 32</Name>
+<Prop>
+<Label>Fonction</Label>
+<Option Nom= "ModBus">33</Option>
+<Option Nom= "Type">Masquée</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+</Fonction>
+</Rack>
+<Rack>
+<Name>Rack n° 1</Name>
+<UGA>
+<Name>UGA n°  1</Name>
+<Prop>
+<Label>ZA BATIMENT</Label>
+<Option Nom= "ModBus">0</Option>
+<Option Nom= "Type">UGA</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">300</Option>
+<Option Nom= " Temporisation d'alarme restreinte">300</Option>
+</Prop>
+<Scenario Nom="Entrée" Objet="Zone">
+<Item>ECS 1  Zone 13 : ZD13 DM N+7</Item>
+<Item>ECS 1  Zone 1 : ZD1 DM SOUS SOL</Item>
+<Item>ECS 1  Zone 2 : ZD2 DM RDC</Item>
+<Item>ECS 1  Zone 3 : ZD3 DI LOCAUX RDC</Item>
+<Item>ECS 1  Zone 4 : ZD4 DM 1er INTERMEDIAIRE</Item>
+<Item>ECS 1  Zone 5 : ZD5 DM N+1</Item>
+<Item>ECS 1  Zone 6 : ZD6 DM N+2</Item>
+<Item>ECS 1  Zone 7 : ZD7 DM N+3</Item>
+<Item>ECS 1  Zone 8 : ZD8 DM 2eme INTERMEDIAIRE</Item>
+<Item>ECS 1  Zone 9 : ZD9 DM 3eme INTERMEDIAIRE</Item>
+<Item>ECS 1  Zone 10 : ZD10 DM N+4</Item>
+<Item>ECS 1  Zone 11 : ZD11 DM N+5</Item>
+<Item>ECS 1  Zone 12 : ZD12 DM N+6</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Voie">
+<Item>BUS 1  MDA4 2  Voie 1 : DS sous sol</Item>
+<Item>BUS 1  MDA4 2  Voie 2 : DS RDC  hall</Item>
+<Item>BUS 1  MDA4 2  Voie 3 : DS RDC droit</Item>
+<Item>BUS 2  MDA4 1  Voie 2 : DS N+1/T13  CENTRE + BULLE A</Item>
+<Item>BUS 2  MDA4 1  Voie 3 : DS N+1/T13 BULLE B </Item>
+<Item>BUS 2  MDA4 1  Voie 4 : DS N+1/T13 BULLE C</Item>
+<Item>BUS 2  MDA4 2  Voie 4 : DS N+2</Item>
+<Item>BUS 2  MDA4 3  Voie 2 : DS N+3/T26 BULLE A</Item>
+<Item>BUS 2  MDA4 3  Voie 3 : DS N+3/T26 BULLE B + centre</Item>
+<Item>BUS 2  MDA4 3  Voie 4 : DS N+3/T26 BULLE C</Item>
+<Item>BUS 2  MDA4 4  Voie 4 : DS N+4</Item>
+<Item>BUS 2  MDA4 5  Voie 4 : DS N+5</Item>
+<Item>BUS 2  MDA4 6  Voie 4 : DS N+6 + N+7</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Fonction">
+<Item>Fonction  0-1 : ISS</Item>
+</Scenario>
+</UGA>
+</Rack>
+<Rack>
+<Name>Rack n° 2</Name>
+<Fonction>
+<Name>Fonction n° 1</Name>
+<Prop>
+<Label>PCF</Label>
+<Option Nom= "ModBus">1</Option>
+<Option Nom= "Type">Emission Sans Cont.Pos</Option>
+<Option Nom= "Numéro d'interdiction">0</Option>
+<Option Nom= "Synthèse">Non</Option>
+<Option Nom= "Durée d'activation">0</Option>
+<Option Nom= " Retard à l'activation">0</Option>
+</Prop>
+<Scenario Nom="Entrée" Objet="Zone">
+<Item>ECS 1  Zone 1 : ZD1 DM SOUS SOL</Item>
+<Item>ECS 1  Zone 2 : ZD2 DM RDC</Item>
+<Item>ECS 1  Zone 3 : ZD3 DI LOCAUX RDC</Item>
+<Item>ECS 1  Zone 4 : ZD4 DM 1er INTERMEDIAIRE</Item>
+<Item>ECS 1  Zone 5 : ZD5 DM N+1</Item>
+<Item>ECS 1  Zone 6 : ZD6 DM N+2</Item>
+<Item>ECS 1  Zone 7 : ZD7 DM N+3</Item>
+<Item>ECS 1  Zone 8 : ZD8 DM 2eme INTERMEDIAIRE</Item>
+<Item>ECS 1  Zone 9 : ZD9 DM 3eme INTERMEDIAIRE</Item>
+<Item>ECS 1  Zone 10 : ZD10 DM N+4</Item>
+<Item>ECS 1  Zone 11 : ZD11 DM N+5</Item>
+<Item>ECS 1  Zone 12 : ZD12 DM N+6</Item>
+<Item>ECS 1  Zone 13 : ZD13 DM N+7</Item>
+</Scenario>
+<Scenario Nom="Sortie" Objet="Voie">
+<Item>BUS 1  MDA4 3  Voie 1 : PCF RDC Couloir EST</Item>
+<Item>BUS 1  MDA4 3  Voie 2 : PCF RDC Couloir OUEST</Item>
+<Item>BUS 2  MDA4 1  Voie 1 : PCF R+1</Item>
+<Item>BUS 2  MDA4 2  Voie 1 : PCF N+2 BULLE A</Item>
+<Item>BUS 2  MDA4 2  Voie 2 : PCF N+2 BULLE B + centre</Item>
+<Item>BUS 2  MDA4 2  Voie 3 : PCF N+2 BULLE C</Item>
+<Item>BUS 2  MDA4 3  Voie 1 : PCF R+3</Item>
+<Item>BUS 2  MDA4 4  Voie 1 : PCF N+4 BULLE A </Item>
+<Item>BUS 2  MDA4 4  Voie 2 : PCF N+4 BULLE B</Item>
+<Item>BUS 2  MDA4 4  Voie 3 : PCF N+4 BULLE C</Item>
+<Item>BUS 2  MDA4 5  Voie 1 : PCF N+5 BULLE A </Item>
+<Item>BUS 2  MDA4 5  Voie 2 : PCF N+5 BULLE B</Item>
+<Item>BUS 2  MDA4 5  Voie 3 : PCF N+5 BULLE C</Item>
+<Item>BUS 2  MDA4 6  Voie 1 : PCF N+6 BULLE A </Item>
+<Item>BUS 2  MDA4 6  Voie 2 : PCF N+6 BULLE B</Item>
+<Item>BUS 2  MDA4 6  Voie 3 : PCF N+6 BULLE C</Item>
+</Scenario>
+</Fonction>
+</Rack>
+</ListeRack>
+</Centrale>
+</configuration>

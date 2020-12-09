@@ -1,0 +1,33 @@
+﻿using PcVueSpyLog;
+using PropertyChanged;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PcVueSpyWPF
+{
+    public class InfosViewModel : BaseViewModel
+    {
+        /// <summary>
+        /// Nom du PC
+        /// </summary>
+        public string COMPUTER_NAME { get => ComputerInfos.COMPUTER_NAME; }
+
+        /// <summary>
+        /// Adresse MAC
+        /// </summary>
+        public string MAC_ADDRESS { get => ComputerInfos.MAC_ADDRESS; }
+
+        /// <summary>
+        /// Version de PcVue
+        /// </summary>
+        public string VERSION_PC_VUE { get => ComputerInfos.VERSION_PC_VUE; }
+
+        /// <summary>
+        /// Nom d'utilisateur
+        /// </summary>
+        public string USERNAME { get => ComputerInfos.USERNAME; }
+    }
+}

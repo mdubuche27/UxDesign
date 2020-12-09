@@ -1,0 +1,36 @@
+﻿namespace PcVueSpyLog
+{
+    /// <summary>
+    /// Classe contenant toutes les constantes correspondantes à des animations cliquables lors de l'exécution d'un Synoptique
+    /// </summary>
+    public static class ConstsClickable
+    {
+        #region Envoi
+        public const string SENDBIT = "SB";
+        public const string SENDDOUBLEBIT = "SB2";
+        public const string SENDBITWITHCOLOR = "SR";
+        public const string TEXT = "ST";
+        public const string RECIPE = "REC";
+        public const string TIMETABLE = "TT";
+        public const string SENDREGION = "SRE";
+        public const string LANGUAGE = "LA";
+        #endregion
+
+        #region Execution
+        public const string PROGRAM = "RP";
+        public const string MACRO = "RS";
+        public const string APPLICATION = "RA";
+        public const string VBA_PROCEDURE = "RV";
+        #endregion
+
+        #region Chainages
+        public const string LINKCLOSE = "LC";
+        public const string LINKOPEN = "LO";
+        public const string LINKNOTE = "LN";
+        #endregion
+
+        #region Securite
+        public const string SECURITYUSER = "USER";
+        #endregion
+    }
+}

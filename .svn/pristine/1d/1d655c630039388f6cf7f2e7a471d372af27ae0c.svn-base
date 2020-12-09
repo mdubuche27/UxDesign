@@ -1,0 +1,93 @@
+﻿using PcVueSpyLog.Entities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PcVueSpy
+{
+    public partial class Symbole : Form
+    {
+        private int CurrentMouseOverRow { get; set; }
+        private int CurrentMouseOverColumn { get; set; } 
+        
+        private List<PcVueSpyLog.Symbole> Symboles { get; set; }
+
+        public Symbole()
+        {
+            InitializeComponent();
+
+            Symboles = LogContext.Context.Symboles.ToList();
+
+            if ( Symboles != null)
+            {
+                foreach (PcVueSpyLog.Symbole Symbole in Symboles)
+                {
+                    dataGridView1.Rows.Add
+                    (
+                        Symbole.DateTime.ToString(),
+                        Symbole.NomProjet,
+                        Symbole.NomSynoptique,
+                        Symbole.TitreSynoptique,
+                        Symbole.Action,
+                        Symbole.Nom,
+                        Symbole.Branche,
+                        Symbole.NomUtilisateur
+                    );
+                }
+            }
+        }
+
+        public Symbole(PcVueSpyLog.Symbole _Symbole)
+        {
+            InitializeComponent();
+
+            voirLesRelationsToolStripMenuItem.Visible = false;
+            this.Text = "Filtre sur les actions des symboles";
+            Symboles = PcVueSpyLog.Log.GetLogsWithSameKey(_Symbole).Cast<PcVueSpyLog.Symbole>().ToList();
+
+            foreach (PcVueSpyLog.Symbole Symbole in Symboles)
+            {
+                dataGridView1.Rows.Add
+                (
+                    Symbole.DateTime.ToString(),
+                    Symbole.NomProjet,
+                    Symbole.NomSynoptique,
+                    Symbole.TitreSynoptique,
+                    Symbole.Action,
+                    Symbole.Nom,
+                    Symbole.Branche,
+                    Symbole.NomUtilisateur
+                );
+            }
+        }
+
+        private void DataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if ( e.Button == MouseButtons.Right)
+            {
+                CurrentMouseOverRow = dataGridView1.HitTest(e.X, e.Y).RowIndex;
+                CurrentMouseOverColumn = dataGridView1.HitTest(e.X, e.Y).ColumnIndex;
+
+                if ( CurrentMouseOverRow != -1 && CurrentMouseOverColumn != -1 )
+                    contextMenuStrip1.Show(dataGridView1, new Point(e.X, e.Y));
+            }
+        }
+
+        private void CopierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(dataGridView1.Rows[CurrentMouseOverRow].Cells[CurrentMouseOverColumn].Value);
+        }
+
+        private void VoirLesRelationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Symbole symbole = new Symbole(Symboles[CurrentMouseOverRow]);
+            symbole.Show();
+        }
+    }
+}

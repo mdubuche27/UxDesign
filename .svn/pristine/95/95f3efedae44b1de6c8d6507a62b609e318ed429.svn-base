@@ -1,0 +1,286 @@
+﻿using System;
+using System.ComponentModel;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.Windows.Threading;
+using System.Collections.Generic;
+using System.Diagnostics;
+
+namespace PcVueSpyLog
+{
+    public class MouseHook
+    {
+        [StructLayout(LayoutKind.Sequential)]
+        private class POINT
+        {
+            /// <summary>
+            /// Coordonnée X. 
+            /// </summary>
+            public int x;
+            /// <summary>
+            /// Coordonnée Y.
+            /// </summary>
+            public int y;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private class MouseHookStruct
+        {
+            /// <summary>
+            /// Structure POINT pour les coordonnée 
+            /// </summary>
+            public POINT pt;
+            /// <summary>
+            /// Handle de la window
+            /// </summary>
+            public int hwnd;
+            /// <summary>
+            /// Specifies the hit-test value. For a list of hit-test values, see the description of the WM_NCHITTEST message. 
+            /// </summary>
+            public int wHitTestCode;
+            /// <summary>
+            /// Specifies extra information associated with the message. 
+            /// </summary>
+            public int dwExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private class MouseLLHookStruct
+        {
+            /// <summary>
+            /// Structure POINT.
+            /// </summary>
+            public POINT pt;
+            public int mouseData;
+            public int flags;
+            public int time;
+            public int dwExtraInfo;
+        }
+
+        private static bool connect = false;
+
+        private static int MouseHookId = 0;
+        private static HookImport.HookProc MouseHookProcedure;
+        private static DispatcherTimer timer;
+        private static MouseEventArgs _mouseEventArgs { get; set; }
+        private static int OldMouseX { get; set; }
+        private static int OldMouseY { get; set; }
+
+        /// <summary>
+        /// Listes des user du projet
+        /// </summary>
+        public static List<string> ListUser = new List<string>();
+
+        /// <summary>
+        /// demarre le tracking de la souris
+        /// </summary>
+        public static void StartMouseHook()
+        {
+            // Faire une instance de HookProc.
+            MouseHookProcedure = new HookImport.HookProc(MouseHookProc);
+
+            GC.KeepAlive(MouseHookProcedure);
+
+            timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            timer.Tick += Timer_Tick;
+
+            var mar = HookImport.LoadWin32Library("user32.dll");
+
+            //installer le hook
+            MouseHookId = HookImport.SetWindowsHookEx(
+                    ConstsHook.WH_MOUSE_LL,
+                    MouseHookProcedure,
+                    mar,
+                    0);
+
+            //Si hook est a 0, donc la fonction SetWindowsHookEx a échoué
+            if (MouseHookId == 0)
+            {
+                //Retourn le code d'erreur 
+                int errorCode = Marshal.GetLastWin32Error();
+                //Lance une exception du type Win32 
+                throw new Win32Exception(errorCode);
+            }
+        }
+
+        /// <summary>
+        /// arrete le tracking de la souris 
+        /// </summary>
+        public static void StopMouseHook()
+        {
+            MouseHookProcedure = null;
+            HookImport.UnhookWindowsHookEx(MouseHookId);
+        }
+
+        public static void OnMouseActivity(object sender, MouseEventArgs e)
+        {
+            _mouseEventArgs = e;
+            timer.Stop();
+            timer.Start();
+        }
+
+        private static void Timer_Tick(object sender, EventArgs e)
+        {
+            timer.Stop();
+        }
+
+        /// <summary>
+        /// lorsqu'on clic génére un log de clic avec les infos de clic
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public static void OnClick(object sender, MouseEventArgs e)
+        {
+            // Clic droit ou gauche
+            if (!String.IsNullOrWhiteSpace(ComputerInfos.InstallFolderBin))
+            {
+                string line = "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss:ff0") + "];" + ConstsType.SOURIS + ";" + (e.Button == MouseButtons.Right ? "D" : "G") + ";" + GetX(e.X) + ";" + GetY(e.Y) + ";\r\n";
+                ChoseFile.ChoseFileLog(DateTime.Now, line);
+            }
+            else
+            {
+                string Content = File.ReadAllText(ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\Infos.txt");
+                string[] ContenTab = Content.Split(';');
+
+                if (ContenTab.Length >= 2)
+                {
+                    if (ListUser.Contains(ContenTab[1]) == false)
+                    {
+                        ListUser.Add(ContenTab[1]);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// lorsque l'on quitte PcVue génére un log Sup
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void TestOnClick(object sender, MouseEventArgs e)
+        {
+            Process[] Processes = Process.GetProcesses();
+            List<string> StrProcesses= new List<string>();
+
+            foreach (Process proc in Processes)
+            {
+                StrProcesses.Add(proc.ProcessName);
+            }
+
+            // pour chaque Process qui tourne Sur l'ordi on verfie que sa ne soit pas PcVue
+            foreach (string StrProc in StrProcesses)
+            {
+                if (StrProcesses.Contains("sv32") == false && connect == true)
+                {
+                    string line = "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss:ff0") + "];Sup;\r\n";
+                    ChoseFile.ChoseFileLog(DateTime.Now, line);
+                    File.WriteAllText(ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\infos.txt",";0;0");
+                    File.WriteAllText(ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\infoScreen.txt", Screen.PrimaryScreen.WorkingArea.Height + ";" + Screen.PrimaryScreen.WorkingArea.Width + ";0;0;");
+                    connect = false;
+                }
+                if(StrProcesses.Contains("sv32") && StrProc.Length != 0 && connect == false)
+                {
+                    connect = true;
+                }
+            }
+        }
+
+        private static int MouseHookProc(int nCode, int wParam, IntPtr lParam)
+        {
+            bool processNextHook = true;
+
+            // Verifions si nCode est different de 0 et que nos evenements sont bien attachés
+            if (nCode >= 0)
+            {
+                //Remplissage de la structure MouseLLHookStruct a partir d'un pointeur
+                MouseLLHookStruct mouseHookStruct = (MouseLLHookStruct)Marshal.PtrToStructure(lParam, typeof(MouseLLHookStruct));
+
+                //Detection du bouton clicker
+                MouseButtons button = MouseButtons.None;
+                switch (wParam)
+                {
+                    case ConstsHook.WM_LBUTTONDOWN:
+                        button = MouseButtons.Left;
+                        break;
+                    case ConstsHook.WM_RBUTTONDOWN:
+                        button = MouseButtons.Right;
+                        break;
+                }
+
+                //parametre de notre event 
+                MouseEventArgs e = new MouseEventArgs(
+                                                   button,
+                                                   1,
+                                                   mouseHookStruct.pt.x,
+                                                   mouseHookStruct.pt.y,
+                                                   0);
+
+                if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
+                    //On appelle notre event si le click est détecté
+                    OnClick(null, e);
+                    TestOnClick(null, e);
+
+                OnMouseActivity(null, e);
+            }
+            //Si processNextHook == true alors on transmet le click au destinataire, sinon, on le garde pour nous
+            if (processNextHook == true)
+            {
+                return HookImport.CallNextHookEx(MouseHookId, nCode, wParam, lParam);
+            }
+            else
+                return 1;
+        }
+        /// <summary>
+        /// transforme X en un pourcentage de la fenetre avec seulement 3 chiffre derriere la virgule
+        /// </summary>
+        /// <param name="X"></param>
+        /// <returns></returns>
+        public static double GetX(double X)
+        {
+            string FilePath = ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\InfoScreen.txt";
+            if (File.Exists(FilePath))
+            {
+                try
+                {
+                    string FileContent = File.ReadAllText(FilePath);
+                    string[] FileContentSplit = FileContent.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    X = (X - Convert.ToDouble(FileContentSplit[3])) / Convert.ToDouble(FileContentSplit[1]);
+                    X = Math.Round(X, 3);
+                    return X;
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+            X = Math.Round(X, 3);
+            return X;
+        }
+        /// <summary>
+        /// transforme Y en un pourcentage de la fenetre avec seulement 3 chiffre derriere la virgule
+        /// </summary>
+        /// <param name="Y"></param>
+        /// <returns></returns>
+        public static double GetY(double Y)
+        {
+            string FilePath = ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\InfoScreen.txt";
+            if (File.Exists(FilePath))
+            {
+                try
+                {
+                    string FileContent = File.ReadAllText(FilePath);
+                    string[] FileContentSplit = FileContent.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    Y = (Y - Convert.ToDouble(FileContentSplit[2])) / Convert.ToDouble(FileContentSplit[0]);
+                    Y = Math.Round(Y, 3);
+                    return Y;
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+            Y = Math.Round(Y, 3);
+            return Y;
+        }
+    }
+}

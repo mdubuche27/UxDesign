@@ -1,0 +1,81 @@
+﻿<Window x:Class="EyeTracker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EyeTracker"
+        mc:Ignorable="d"
+        MinWidth="750"
+        MinHeight="450"
+        Title="EyeTracking" Height="450" Width="750">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3.5*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3.5*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.ColumnSpan="9" Grid.RowSpan="2" VerticalAlignment="center" HorizontalAlignment="Center" FontSize="25" Content="Acceuil Eye Tracking"/>
+
+        <!-- Point de refernce pour calibrer l'EyeTracker (rouge) -->
+        <Grid Margin="0,0,-12.5,-12.5" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding VisiblePoint1}"  >
+            <Ellipse  VerticalAlignment="Center" HorizontalAlignment="center" Height="25" Width="25" Fill="Red" Stroke="DarkRed" StrokeThickness="2.5" />
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="1" Foreground="Silver"/>
+        </Grid>
+        <Grid Margin="0,-12.5,-12.5,0" Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="{Binding VisiblePoint2}"  >
+            <Ellipse  VerticalAlignment="Center" HorizontalAlignment="center" Height="25" Width="25" Fill="Red" Stroke="DarkRed" StrokeThickness="2.5" />
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="2" Foreground="Silver"/>
+        </Grid>
+        <Grid Margin="0,0,0,0" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisiblePoint3}"  >
+            <Ellipse  VerticalAlignment="Center" HorizontalAlignment="center" Height="25" Width="25" Fill="Red" Stroke="DarkRed" StrokeThickness="2.5" />
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="3" Foreground="Silver"/>
+        </Grid>
+        <Grid Margin="-12.5,0,0,-12.5" Grid.Row="0" Grid.Column="4" VerticalAlignment="Bottom" HorizontalAlignment="Left" Visibility="{Binding VisiblePoint4}"  >
+            <Ellipse  VerticalAlignment="Center" HorizontalAlignment="center" Height="25" Width="25" Fill="Red" Stroke="DarkRed" StrokeThickness="2.5" />
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="4" Foreground="Silver"/>
+        </Grid>
+        <Grid Margin="-12.5,-12.5,0,0" Grid.Row="4" Grid.Column="4" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="{Binding VisiblePoint5}"  >
+            <Ellipse  VerticalAlignment="Center" HorizontalAlignment="center" Height="25" Width="25" Fill="Red" Stroke="DarkRed" StrokeThickness="2.5" />
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="5" Foreground="Silver"/>
+        </Grid>
+        <!-- Fin -->
+        
+        <!-- Point illustrant les coordonées de votre regard -->
+        <Grid Margin="{Binding PointMargin1}" Visibility="{Binding PointGreen}" Height="25" Width="25" >
+            <Ellipse  VerticalAlignment="Center" HorizontalAlignment="center" Height="25" Width="25" Fill="Green" Stroke="YellowGreen" StrokeThickness="2.5" />
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="1" Foreground="Silver"/>
+        </Grid>
+        <Grid Margin="{Binding PointMargin2}" Visibility="{Binding PointGreen}" Height="25" Width="25" >
+            <Ellipse  VerticalAlignment="Center" HorizontalAlignment="center" Height="25" Width="25" Fill="Green" Stroke="YellowGreen" StrokeThickness="2.5" />
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="2" Foreground="Silver"/>
+        </Grid>
+        <Grid Margin="{Binding PointMargin3}" Visibility="{Binding PointGreen}" Height="25" Width="25" >
+            <Ellipse  VerticalAlignment="Center" HorizontalAlignment="center" Height="25" Width="25" Fill="Green" Stroke="YellowGreen" StrokeThickness="2.5" />
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="3" Foreground="Silver"/>
+        </Grid>
+        <Grid Margin="{Binding PointMargin4}" Visibility="{Binding PointGreen}" Height="25" Width="25" >
+            <Ellipse  VerticalAlignment="Center" HorizontalAlignment="center" Height="25" Width="25" Fill="Green" Stroke="YellowGreen" StrokeThickness="2.5" />
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="4" Foreground="Silver"/>
+        </Grid>
+        <Grid Margin="{Binding PointMargin5}" Visibility="{Binding PointGreen}" Height="25" Width="25" >
+            <Ellipse  VerticalAlignment="Center" HorizontalAlignment="center" Height="25" Width="25" Fill="Green" Stroke="YellowGreen" StrokeThickness="2.5" />
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="5" Foreground="Silver"/>
+        </Grid>
+        <!-- Fin -->
+        <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding AppState}" Foreground="{Binding ColorAppState}" FontSize="17" />
+
+        <Button Content="Calibrer" Grid.Column="1" Grid.Row="2"  Command="{Binding Calibrate}"/>
+        <Button Content="Arret/Marche" Grid.Column="3" Grid.Row="2"  Command="{Binding EyeTrack}"/>
+
+    </Grid>
+</Window>

@@ -1,0 +1,56 @@
+﻿namespace PcVueSpyLog
+{
+    /// <summary>
+    /// Contient toutes les constantes nécéssaires aux hooks
+    /// </summary>
+    public static class ConstsHook
+    {
+        //Valeurs issues de Winuser.h du SDK de Microsoft.
+        /// <summary>
+        /// Windows NT/2000/XP: Installe un hook pour la souris
+        /// </summary>
+        public const int WH_MOUSE_LL = 14;
+        /// <summary>
+        /// Windows NT/2000/XP: Installe un hook pour le clavier
+        /// </summary>
+        public const int WH_KEYBOARD_LL = 13;
+        public const int WH_MOUSE = 7;
+        public const int WH_KEYBOARD = 2;
+        /// <summary>
+        /// Le message WM_MOUSEMOVE est envoyé quand la souris bouge
+        /// </summary>
+        public const int WM_MOUSEMOVE = 0x200;
+        /// <summary>
+        /// Le message WM_LBUTTONDOWN est envoyé lorsque le bouton gauche est pressé
+        /// </summary>
+        public const int WM_LBUTTONDOWN = 0x201;
+        /// <summary>
+        /// Le message WM_RBUTTONDOWN est envoyé lorsque le bouton droit est pressé
+        /// </summary>
+        public const int WM_RBUTTONDOWN = 0x204;
+        /// <summary>
+        /// Le message WM_MBUTTONDOWN est envoyé lorsque le bouton central est pressé
+        /// </summary>
+        public const int WM_MBUTTONDOWN = 0x207;
+        /// <summary>
+        /// Le message WM_LBUTTONUP est envoyé lorsque le bouton gauche est relevé
+        /// </summary>
+        public const int WM_LBUTTONUP = 0x202;
+        /// <summary>
+        /// Le message WM_RBUTTONUP est envoyé lorsque le bouton droit est relevé 
+        /// </summary>
+        public const int WM_RBUTTONUP = 0x205;
+        public const int WM_MBUTTONUP = 0x208;
+        public const int WM_LBUTTONDBLCLK = 0x203;
+        public const int WM_RBUTTONDBLCLK = 0x206;
+        public const int WM_MBUTTONDBLCLK = 0x209;
+        public const int WM_MOUSEWHEEL = 0x020A;
+        public const int WM_KEYDOWN = 0x100;
+        public const int WM_KEYUP = 0x101;
+        public const int WM_SYSKEYDOWN = 0x104;
+        public const int WM_SYSKEYUP = 0x105;
+        public const byte VK_SHIFT = 0x10;
+        public const byte VK_CAPITAL = 0x14;
+        public const byte VK_NUMLOCK = 0x90;
+    }
+}

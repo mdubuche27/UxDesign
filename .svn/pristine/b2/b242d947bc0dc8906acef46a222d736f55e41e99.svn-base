@@ -1,0 +1,528 @@
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows;
+using Tobii.Research;
+using PcVueSpyLog;
+using System.Threading;
+
+namespace EyeTracker
+{
+    public class MainViewModel : BaseViewModel
+    {
+
+        #region Public Properties
+
+        private Visibility _visiblePoint1 = Visibility.Visible;
+        private Visibility _visiblePoint2 = Visibility.Visible;
+        private Visibility _visiblePoint3 = Visibility.Visible;
+        private Visibility _visiblePoint4 = Visibility.Visible;
+        private Visibility _visiblePoint5 = Visibility.Visible;
+
+        private Visibility _PointGreen = Visibility.Visible;
+        private Thickness _PointMargin1 = new Thickness(-500, 0, 0, 500);
+        private Thickness _PointMargin2 = new Thickness(-500, 0, 0, 500);
+        private Thickness _PointMargin3 = new Thickness(-500, 0, 0, 500);
+        private Thickness _PointMargin4 = new Thickness(-500, 0, 0, 500);
+        private Thickness _PointMargin5 = new Thickness(-500, 0, 0, 500);
+
+        private string _AppState = "Désactiver";
+        private string _ColorAppState = "Red";
+
+        /// <summary>
+        /// création des VisiblePoint pour appliquer le converter
+        /// </summary>
+        public Visibility VisiblePoint1
+        {
+            get
+            {
+                return _visiblePoint1;
+            }
+            set
+            {
+                if (value != _visiblePoint1)
+                {
+                    _visiblePoint1 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint1));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint2
+        {
+            get { return _visiblePoint2; }
+            set
+            {
+                if (value != _visiblePoint2)
+                {
+                    _visiblePoint2 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint2));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint3
+        {
+            get { return _visiblePoint3; }
+            set
+            {
+                if (value != _visiblePoint3)
+                {
+                    _visiblePoint3 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint3));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint4
+        {
+            get { return _visiblePoint4; }
+            set
+            {
+                if (value != _visiblePoint4)
+                {
+                    _visiblePoint4 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint4));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint5
+        {
+            get { return _visiblePoint5; }
+            set
+            {
+                if (value != _visiblePoint5)
+                {
+                    _visiblePoint5 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint5));
+                }
+            }
+        }
+
+        public Visibility PointGreen
+        {
+            get { return _PointGreen; }
+            set
+            {
+                if (value != _PointGreen)
+                {
+                    _PointGreen = value;
+                    NotifyPropertyChanged(nameof(PointGreen));
+                }
+            }
+        }
+
+        public Thickness PointMargin1
+        {
+            get { return _PointMargin1; }
+            set
+            {
+                if (value != _PointMargin1)
+                {
+                    _PointMargin1 = value;
+                    NotifyPropertyChanged(nameof(PointMargin1));
+                }
+            }
+        }
+
+        public Thickness PointMargin2
+        {
+            get { return _PointMargin2; }
+            set
+            {
+                if (value != _PointMargin2)
+                {
+                    _PointMargin2 = value;
+                    NotifyPropertyChanged(nameof(PointMargin2));
+                }
+            }
+        }
+
+        public Thickness PointMargin3
+        {
+            get { return _PointMargin3; }
+            set
+            {
+                if (value != _PointMargin3)
+                {
+                    _PointMargin3 = value;
+                    NotifyPropertyChanged(nameof(PointMargin3));
+                }
+            }
+        }
+
+        public Thickness PointMargin4
+        {
+            get { return _PointMargin4; }
+            set
+            {
+                if (value != _PointMargin4)
+                {
+                    _PointMargin4 = value;
+                    NotifyPropertyChanged(nameof(PointMargin4));
+                }
+            }
+        }
+
+        public Thickness PointMargin5
+        {
+            get { return _PointMargin5; }
+            set
+            {
+                if (value != _PointMargin5)
+                {
+                    _PointMargin5 = value;
+                    NotifyPropertyChanged(nameof(PointMargin5));
+                }
+            }
+        }
+        public string AppState
+        {
+            get { return _AppState; }
+            set
+            {
+                if (value != _AppState)
+                {
+                    _AppState = value;
+                    NotifyPropertyChanged(nameof(AppState));
+                }
+            }
+        }
+
+        public string ColorAppState
+        {
+            get { return _ColorAppState; }
+            set
+            {
+                if (value != _ColorAppState)
+                {
+                    _ColorAppState = value;
+                    NotifyPropertyChanged(nameof(ColorAppState));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Commande permettant de démarrer ou stoper le suivi du regard
+        /// </summary>
+        public ICommand EyeTrack { get; set; }
+
+        /// <summary>
+        /// Commande permantant de calibrer Tobii
+        /// </summary>
+        public ICommand Calibrate { get; set; }
+
+        /// <summary>
+        /// Verfie si l'appareil a été calibré avant de le démarrer
+        /// </summary>
+        public bool CalibrateState = false ;
+
+        ///<summary>
+        ///bool indicant si L'eyeTracker fonctionne ou pas .
+        ///</summary>
+        public bool EyeTracker = false;
+
+        /// <summary>
+        /// Liste des points du regard apres avoir fais fonctionner l'eye tracker au moins une fois!
+        /// </summary>
+        public static List<GazeDataEventArgs> ListeEyeGaze = new List<GazeDataEventArgs>();
+        #endregion
+
+        #region Command Methods
+
+        /// <summary>
+        /// Démarre ou stop le suivi du regard
+        /// </summary>
+        public void DoEyeTrack()
+        {
+            ///connection aux appareils de eye tracking 
+            EyeTrackerCollection Tobii = EyeTrackingOperations.FindAllEyeTrackers(); //.FirstOrDefault();
+
+            ///verifie qu'il est bien connécté et le bon model et que la calibration est faite
+            if (CalibrateState == true)
+            {
+                if (Tobii.Count >= 1)
+                { 
+                    if (AppState == "Activer")
+                    { 
+                        GazeDataOff(Tobii[0]);
+                        AppState = "Désactiver";
+                        ColorAppState = "Red";
+                    }
+                    else 
+                    { 
+                        GazeDataOn(Tobii[0]);
+                        AppState = "Activer";
+                        ColorAppState = "Green";
+                    }
+
+                    //appel des fonctions créant les logs
+                    //LogGazeRegular(ListeEyeGaze, ListeEyeGazeDate);
+                    //LogGazeVanishingPoint(ListeEyeGaze, ListeEyeGazeDate);
+                    //LogGazeStatic(ListeEyeGaze, ListeEyeGazeDate);
+                }
+                else { System.Windows.MessageBox.Show("Vous devez avoir un appareil de connecté !"); }
+            }
+            else { System.Windows.MessageBox.Show("Vous devez avoir calibré Tobii Nano Pro pour le démarrer !"); }
+        }
+
+        /// <summary>
+        /// affiche dans le fichier Logs les logs du regard regulier tous les (0.5s)
+        /// </summary>
+
+        public static void LogGazeRegular(GazeDataEventArgs EyeGaze, DateTime EyeGazeTime)
+        {
+
+            double X = EyeGaze.LeftEye.GazePoint.PositionInUserCoordinates.X;
+            double Y = EyeGaze.LeftEye.GazePoint.PositionInUserCoordinates.Y;
+
+            if (double.IsNaN(X) == false & double.IsNaN(Y) == false)
+            {
+                string LogRegular = "[" + EyeGazeTime.ToString("dd/MM/yyyy HH:mm:ss") + "]" + ";" + "ETR" + ";" + X + ";" + Y + "\r\n";
+                //relier avec ComputerInfos.InstallFolderBin
+                //File.AppendAllText(ComputerInfos.InstallFolderBin + "ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd") + ".log", LogRegular, Encoding.Unicode);
+                File.AppendAllText("C:/Users/maxence.dubuche/Desktop/EyeTracker/TestLogs/" + "ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd") + ".log", LogRegular, Encoding.Unicode);
+
+            }
+
+        }
+
+        /// <summary>
+        /// affiche dans le fichier Logs les logs des points de fuites
+        /// </summary>
+        public static void LogGazeVanishingPoint(GazeDataEventArgs EyeGaze, DateTime EyeGazeTime, List<GazeDataEventArgs> ListeEyeGaze)
+        {
+
+            if (ListeEyeGaze.Count > 21)
+            {
+                double X = EyeGaze.LeftEye.GazePoint.PositionInUserCoordinates.X;
+                double Y = EyeGaze.LeftEye.GazePoint.PositionInUserCoordinates.Y;
+                double X_1 = ListeEyeGaze[ListeEyeGaze.Count - 20].LeftEye.GazePoint.PositionInUserCoordinates.X;
+                double Y_1 = ListeEyeGaze[ListeEyeGaze.Count - 20].LeftEye.GazePoint.PositionInUserCoordinates.Y;
+
+                if (double.IsNaN(X) | double.IsNaN(Y))
+                {
+                    if (double.IsNaN(X_1) == false & double.IsNaN(Y_1) == false)
+                    {
+                        string LogVanishingPoint = "[" + EyeGazeTime.ToString("dd/MM/yyyy HH:mm:ss") + "]" + ";" + "ETF" + ";" + X_1 + ";" + Y_1 + "\r\n";
+                        //relier avec ComputerInfos.InstallFolderBin
+                        //File.AppendAllText(ComputerInfos.InstallFolderBin + "ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd") + ".log", LogVanishingPoint, Encoding.Unicode);
+                        File.AppendAllText("C:/Users/maxence.dubuche/Desktop/EyeTracker/TestLogs/" + "ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd") + ".log", LogVanishingPoint, Encoding.Unicode);
+
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// affiche dans le fichier Logs les logs du regard statique tous les (0.5s)
+        /// </summary>
+        public static void LogGazeStatic(GazeDataEventArgs EyeGaze, DateTime EyeGazeTime, List<GazeDataEventArgs> ListeEyeGaze)
+        {
+            if (ListeEyeGaze.Count > 21)
+            {
+                double X = EyeGaze.LeftEye.GazePoint.PositionInUserCoordinates.X;
+                double Y = EyeGaze.LeftEye.GazePoint.PositionInUserCoordinates.Y;
+                int P = ListeEyeGaze.Count;
+
+                if (ListeEyeGaze[P - 20].LeftEye.GazePoint.PositionInUserCoordinates.X + 20 >= X & X >= ListeEyeGaze[P - 20].LeftEye.GazePoint.PositionInUserCoordinates.X - 20)
+                {
+                    if (ListeEyeGaze[P - 20].LeftEye.GazePoint.PositionInUserCoordinates.Y + 20 >= Y & Y >= ListeEyeGaze[P - 20].LeftEye.GazePoint.PositionInUserCoordinates.Y - 20)
+                    {
+                        //si le regard n'a pas bouger de plus de 20pxs en 0.5 seconde
+
+                        string LogStatic = "[" + EyeGazeTime.ToString("dd/MM/yyyy HH:mm:ss") + "]" + ";" + "ETS" + ";" + X + ";" + Y + "\r\n";
+                        //relier avec ComputerInfos.InstallFolderBin
+                        //File.AppendAllText(ComputerInfos.InstallFolderBin + "ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd") + ".log", LogStatic, Encoding.Unicode);
+                        File.AppendAllText("C:/Users/maxence.dubuche/Desktop/EyeTracker/TestLogs/" + "ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd") + ".log", LogStatic, Encoding.Unicode);
+                    }
+                }
+            }
+        }
+
+        private static void GazeDataOn (IEyeTracker Tracker)
+        {
+            //debut de l'ecoute de gazedata
+            Tracker.GazeDataReceived += _GazeDataReceived;
+        }
+
+        private static void GazeDataOff (IEyeTracker Tracker)
+        {
+            //fin de l'ecoute de gazedata
+            Tracker.GazeDataReceived -= _GazeDataReceived;
+        }
+
+        private static void _GazeDataReceived(object sender, GazeDataEventArgs e)
+        {
+            //pour chaque repetition on enregistre les coordonée du regard(e) dans listeeyegaze et on créer les logs adapté
+            DateTime LogTime = DateTime.Now;
+            ListeEyeGaze.Add(e);
+            LogGazeRegular(e, LogTime);
+            LogGazeVanishingPoint(e, LogTime, ListeEyeGaze);
+            LogGazeStatic(e, LogTime, ListeEyeGaze );
+        }
+
+        /// <summary>
+        /// Calibre Tobii
+        /// </summary>
+
+        public void DoCalibrate()
+        {
+
+            //definition des variables 
+            string TobiiNanoPro = "Tobii Pro Nano";
+            ///connection aux appareils de eye tracking 
+            EyeTrackerCollection Tobii = EyeTrackingOperations.FindAllEyeTrackers();
+
+            ///verifie qu'il est bien connécté et le bon model et qu ela calibration est faite
+            if (Tobii.Count >= 1) {
+                for (int x = 0; x < Tobii.Count; x++) {
+                    if (Tobii[x].Model == TobiiNanoPro)
+                    {
+                        var Calibration = new ScreenBasedCalibration(Tobii[0]);
+
+                        //obliger d'entrer en mode calibration pour calibré l'appareil
+                        Calibration.EnterCalibrationMode();
+
+                        var PointsToCalibrate = new NormalizedPoint2D[] {
+                            new NormalizedPoint2D(0.5f, 0.5f),
+                            new NormalizedPoint2D(0.1f, 0.9f),
+                            new NormalizedPoint2D(0.1f, 0.1f),
+                            new NormalizedPoint2D(0.9f, 0.1f),
+                            new NormalizedPoint2D(0.9f, 0.9f)
+                        };
+
+                        var compt = 0;
+
+                        //on recuperer les coordoné points par points 
+                        foreach (var P in PointsToCalibrate)
+                        {
+                            compt++;
+
+                            Thread.Sleep(500);   //wait(500);
+
+                            CalibrationStatus CalibStatus = Calibration.CollectData(P);
+
+                            if (CalibStatus != CalibrationStatus.Success)
+                            {
+                                Calibration.CollectData(P);
+                            }
+                        }
+
+                        CalibrationResult Result = Calibration.ComputeAndApply();
+
+                        Calibration.LeaveCalibrationMode();
+
+
+                        //si le resultat est positif
+                        if (Result.Status.ToString() == "Success" & Result.CalibrationPoints.Count == 5)
+                        {
+
+                            for (int P = 0; P < Result.CalibrationPoints.Count; P++)
+                            {
+                                //multiplier par la taille de l'ecran !
+                                var X = Result.CalibrationPoints[P].CalibrationSamples[0].LeftEye.PositionOnDisplayArea.X ;
+                                var Y = Result.CalibrationPoints[P].CalibrationSamples[0].LeftEye.PositionOnDisplayArea.Y ;
+
+                                if (P == 0)
+                                {
+                                    _PointMargin1 = new Thickness(X, 0, 0, -Y);
+                                }
+                                else if (P == 1)
+                                {
+                                    _PointMargin2 = new Thickness(X, 0, 0, -Y);
+                                }
+                                else if (P == 2)
+                                {
+                                    _PointMargin3 = new Thickness(X, 0, 0, -Y);
+                                }
+                                else if (P == 3)
+                                {
+                                    _PointMargin4 = new Thickness(X, 0, 0, -Y);
+                                }
+                                else if (P == 4)
+                                {
+                                    _PointMargin5 = new Thickness(X, 0, 0, -Y);
+                                }
+                            }
+
+                            var resultBox = System.Windows.MessageBox.Show("Vous avez reussi a calibré tous les points verfier qu'il soit bien au niveau des marqueurs", "Form Closing",
+                                                         MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                            switch (resultBox)
+                            {
+                                case MessageBoxResult.Yes:
+                                    if (Result.Status.ToString() == "Success")
+                                    {
+                                        if ( CalibrateState == false ) { CalibrateState = true; }
+                                    }
+                                    break;
+                                case MessageBoxResult.No:
+                                    DoCalibrate();
+                                    break;
+                            }
+                        }
+                        
+                        //si le resultat est négatif
+                        else
+                        {
+                            var resultBox = System.Windows.MessageBox.Show("Vous n'avez pas reussi a calibré tous les points! nous allons donc vous faire recommencer pour plus de précison !", "Form Closing",
+                            MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                            switch (resultBox)
+                            {
+                                case MessageBoxResult.Yes:
+                                    DoCalibrate();
+                                    break;
+                                case MessageBoxResult.No:
+                                    break;
+                            }
+                        }
+                    }
+                    else { System.Windows.MessageBox.Show("Vous devais avoir un appreil Tobii Nano Pro de connécté !"); }
+                }
+            }
+            else { System.Windows.MessageBox.Show("Vous devais avoir un appreil de connécté !"); }
+        }
+
+        /// <summary>
+        /// permet de wait sans impacter l'UI
+        /// </summary>
+        /// <param name="milliseconds"></param>
+        public void wait(int milliseconds)
+        {
+            System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+            if (milliseconds == 0 || milliseconds < 0) return;
+            timer1.Interval = milliseconds;
+            timer1.Enabled = true;
+            timer1.Start();
+            timer1.Tick += (s, e) =>
+            {
+                timer1.Enabled = false;
+                timer1.Stop();
+
+            };
+            while (timer1.Enabled)
+            {
+                //Application.DoEvents();
+            }
+        }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Constructeur de MainViewModel
+        /// </summary>
+
+        public MainViewModel()
+        {
+            EyeTrack = new RelayCommand(DoEyeTrack);
+            Calibrate = new RelayCommand(DoCalibrate);
+        }
+        #endregion
+    }
+}

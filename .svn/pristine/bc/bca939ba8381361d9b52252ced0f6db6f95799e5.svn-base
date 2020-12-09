@@ -1,0 +1,95 @@
+﻿using System;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Security.Principal;
+
+namespace PcVueSpyLog
+{
+    /// <summary>
+    /// Permet de récupérer les informations de la machine
+    /// </summary>
+    public static class ComputerInfos
+    {
+        #region Private Properties
+        /// <summary>
+        /// Instance du fichier .ini
+        /// </summary>
+        private static IniFile MyIni = new IniFile(".\\Settings");
+
+        /// <summary>
+        /// Constante du fichier .ini pour le dossier Bin de PcVue
+        /// </summary>
+        private const string PCVUEINSTALLFOLDERBIN = "PCVUEINSTALLFOLDERBIN";
+
+        #endregion
+
+        #region Public Properties
+        /// <summary>
+        /// Nom du PC
+        /// </summary>
+        public static string COMPUTER_NAME { get { return Environment.MachineName; } }
+
+        /// <summary>
+        /// Adresse MAC
+        /// </summary>
+        public static string MAC_ADDRESS { get { return GetMacAddress(); } }
+
+        /// <summary>
+        /// Version de PcVue
+        /// </summary>
+        public static string VERSION_PC_VUE { get { return GetPcVueVersion(); } }
+
+        /// <summary>
+        /// Nom d'utilisateur
+        /// </summary>
+        public static string USERNAME { get { return Environment.UserName; } }
+
+        /// <summary>
+        /// SID de l'utilisateur
+        /// </summary>
+        public static String USER_SID { get { return WindowsIdentity.GetCurrent().User.ToString(); } }
+
+        /// <summary>
+        /// Dossier d'installation de PcVue
+        /// </summary>
+        public static string InstallFolderBin
+        {
+            get
+            {
+                if (!MyIni.KeyExists(PCVUEINSTALLFOLDERBIN))
+                    MyIni.Write(PCVUEINSTALLFOLDERBIN, String.Empty);
+                return MyIni.Read(PCVUEINSTALLFOLDERBIN);
+            }
+            set
+            {
+                MyIni.Write(PCVUEINSTALLFOLDERBIN, value);
+            }
+        }
+
+        #endregion
+
+        #region Private Functions
+        /// <summary>
+        /// Récupère l'adresse MAC active du PC
+        /// </summary>
+        /// <returns></returns>
+        private static string GetMacAddress()
+        {
+            return NetworkInterface.GetAllNetworkInterfaces()
+                        .Where(nic => nic.OperationalStatus == OperationalStatus.Up && nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                        .Select(nic => nic.GetPhysicalAddress().ToString())
+                        .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Récupère la version de PcVue où le dossier Bin pointe
+        /// </summary>
+        /// <returns></returns>
+        private static string GetPcVueVersion()
+        {
+            string[] Path = InstallFolderBin.Split('\\');
+            return String.IsNullOrEmpty(InstallFolderBin) ? "INCONNUE" : Path[Path.Length - 2];
+        }
+        #endregion
+    }
+}

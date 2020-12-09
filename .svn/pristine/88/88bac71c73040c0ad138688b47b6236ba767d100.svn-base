@@ -1,0 +1,83 @@
+﻿using PcVueSpyLog.Entities;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PcVueSpyLog
+{
+    /// <summary>
+    /// Cette classe permet de charger un fichier .log
+    /// </summary>
+    public class FileLog
+    {
+        #region Private Members
+        /// <summary>
+        /// Lignes du fichier .log
+        /// </summary>
+        private string[] Lines { get; set; }
+
+        #endregion
+
+        #region Public Members
+        /// <summary>
+        /// Chemin d'accès vers le fichier .log
+        /// </summary>
+        public string Filename { get; private set; }
+
+        #endregion
+
+        #region Public Methods
+        /// <summary>
+        /// Insert les logs en base de données
+        /// </summary>
+        public void InsertLogs()
+        {
+            Lines = File.ReadAllLines(Filename);
+
+            // Suppression des doublons avec la fonction Distinct()
+            // Remplissage de la liste de logs en fonction du fichier .log
+            foreach (string Line in Lines.Distinct())
+            {
+                try
+                {
+                    // On ajoute le log à la base de données
+                    LogContext.Context.Logs.Add(Log.Create(Line));
+
+                    // On enregistre le contexte dès qu'un fichier .log est chargé
+                    LogContext.Context.SaveChanges();
+                }
+                catch
+                {
+                    // En cas de doublon avec la clef composite, le code passe ici et continue
+                }
+            }
+        }
+
+        /// <summary>
+        /// Supprime les données du fichier
+        /// </summary>
+        public void EraseFileData()
+        {
+            // On vide le contenu du fichier .log
+            File.WriteAllText(Filename, String.Empty);
+        }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        /// <param name="Filename">Chemin d'accès vers le fichier</param>
+        public FileLog(string Filename)
+        {
+            this.Filename = Filename;
+        }
+
+        #endregion
+    }
+}

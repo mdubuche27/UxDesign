@@ -1,0 +1,210 @@
+﻿namespace PcVueSpy
+{
+    partial class Main
+    {
+        /// <summary>
+        /// Variable nécessaire au concepteur.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Nettoyage des ressources utilisées.
+        /// </summary>
+        /// <param name="disposing">true si les ressources managées doivent être supprimées ; sinon, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Code généré par le Concepteur Windows Form
+
+        /// <summary>
+        /// Méthode requise pour la prise en charge du concepteur - ne modifiez pas
+        /// le contenu de cette méthode avec l'éditeur de code.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.startHooksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopHooksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.setInstallPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadFilelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.informationslogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.alarmeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clavierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fenetreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ouvertureFermetureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sourisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.symboleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button1 = new System.Windows.Forms.Button();
+            this.toolStrip1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripDropDownButton1});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(496, 39);
+            this.toolStrip1.TabIndex = 2;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.startHooksToolStripMenuItem,
+            this.stopHooksToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.setInstallPathToolStripMenuItem,
+            this.loadFilelogToolStripMenuItem,
+            this.informationslogToolStripMenuItem});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(184, 36);
+            this.toolStripDropDownButton1.Text = "Configuration";
+            // 
+            // startHooksToolStripMenuItem
+            // 
+            this.startHooksToolStripMenuItem.Name = "startHooksToolStripMenuItem";
+            this.startHooksToolStripMenuItem.Size = new System.Drawing.Size(324, 38);
+            this.startHooksToolStripMenuItem.Text = "Start Hooks";
+            this.startHooksToolStripMenuItem.Click += new System.EventHandler(this.StartHooksToolStripMenuItem_Click);
+            // 
+            // stopHooksToolStripMenuItem
+            // 
+            this.stopHooksToolStripMenuItem.Name = "stopHooksToolStripMenuItem";
+            this.stopHooksToolStripMenuItem.Size = new System.Drawing.Size(324, 38);
+            this.stopHooksToolStripMenuItem.Text = "Stop Hooks";
+            this.stopHooksToolStripMenuItem.Click += new System.EventHandler(this.StopHooksToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(321, 6);
+            // 
+            // setInstallPathToolStripMenuItem
+            // 
+            this.setInstallPathToolStripMenuItem.Name = "setInstallPathToolStripMenuItem";
+            this.setInstallPathToolStripMenuItem.Size = new System.Drawing.Size(324, 38);
+            this.setInstallPathToolStripMenuItem.Text = "Set Install Path";
+            this.setInstallPathToolStripMenuItem.Click += new System.EventHandler(this.SetInstallPathToolStripMenuItem_Click);
+            // 
+            // loadFilelogToolStripMenuItem
+            // 
+            this.loadFilelogToolStripMenuItem.Name = "loadFilelogToolStripMenuItem";
+            this.loadFilelogToolStripMenuItem.Size = new System.Drawing.Size(324, 38);
+            this.loadFilelogToolStripMenuItem.Text = "Load File .log";
+            this.loadFilelogToolStripMenuItem.Click += new System.EventHandler(this.LoadFilelogToolStripMenuItem_Click);
+            // 
+            // informationslogToolStripMenuItem
+            // 
+            this.informationslogToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.alarmeToolStripMenuItem,
+            this.clavierToolStripMenuItem,
+            this.fenetreToolStripMenuItem,
+            this.ouvertureFermetureToolStripMenuItem,
+            this.sourisToolStripMenuItem,
+            this.symboleToolStripMenuItem});
+            this.informationslogToolStripMenuItem.Name = "informationslogToolStripMenuItem";
+            this.informationslogToolStripMenuItem.Size = new System.Drawing.Size(324, 38);
+            this.informationslogToolStripMenuItem.Text = "Informations .log";
+            // 
+            // alarmeToolStripMenuItem
+            // 
+            this.alarmeToolStripMenuItem.Name = "alarmeToolStripMenuItem";
+            this.alarmeToolStripMenuItem.Size = new System.Drawing.Size(367, 38);
+            this.alarmeToolStripMenuItem.Text = "Alarme";
+            this.alarmeToolStripMenuItem.Click += new System.EventHandler(this.AlarmeToolStripMenuItem_Click);
+            // 
+            // clavierToolStripMenuItem
+            // 
+            this.clavierToolStripMenuItem.Name = "clavierToolStripMenuItem";
+            this.clavierToolStripMenuItem.Size = new System.Drawing.Size(367, 38);
+            this.clavierToolStripMenuItem.Text = "Clavier";
+            this.clavierToolStripMenuItem.Click += new System.EventHandler(this.ClavierToolStripMenuItem_Click);
+            // 
+            // fenetreToolStripMenuItem
+            // 
+            this.fenetreToolStripMenuItem.Name = "fenetreToolStripMenuItem";
+            this.fenetreToolStripMenuItem.Size = new System.Drawing.Size(367, 38);
+            this.fenetreToolStripMenuItem.Text = "Fenêtre";
+            this.fenetreToolStripMenuItem.Click += new System.EventHandler(this.FenetreToolStripMenuItem_Click);
+            // 
+            // ouvertureFermetureToolStripMenuItem
+            // 
+            this.ouvertureFermetureToolStripMenuItem.Name = "ouvertureFermetureToolStripMenuItem";
+            this.ouvertureFermetureToolStripMenuItem.Size = new System.Drawing.Size(367, 38);
+            this.ouvertureFermetureToolStripMenuItem.Text = "Ouverture et Fermeture";
+            this.ouvertureFermetureToolStripMenuItem.Click += new System.EventHandler(this.OuvertureFermetureToolStripMenuItem_Click);
+            // 
+            // sourisToolStripMenuItem
+            // 
+            this.sourisToolStripMenuItem.Name = "sourisToolStripMenuItem";
+            this.sourisToolStripMenuItem.Size = new System.Drawing.Size(367, 38);
+            this.sourisToolStripMenuItem.Text = "Souris";
+            this.sourisToolStripMenuItem.Click += new System.EventHandler(this.SourisToolStripMenuItem_Click);
+            // 
+            // symboleToolStripMenuItem
+            // 
+            this.symboleToolStripMenuItem.Name = "symboleToolStripMenuItem";
+            this.symboleToolStripMenuItem.Size = new System.Drawing.Size(367, 38);
+            this.symboleToolStripMenuItem.Text = "Symbole";
+            this.symboleToolStripMenuItem.Click += new System.EventHandler(this.SymboleToolStripMenuItem_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(67, 88);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(355, 117);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Spy project";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            // 
+            // Main
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(496, 244);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.toolStrip1);
+            this.Name = "Main";
+            this.Text = "PcVueAnalyzer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Closing);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem startHooksToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stopHooksToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem setInstallPathToolStripMenuItem;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripMenuItem loadFilelogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem informationslogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem alarmeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clavierToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fenetreToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ouvertureFermetureToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sourisToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem symboleToolStripMenuItem;
+    }
+}
+

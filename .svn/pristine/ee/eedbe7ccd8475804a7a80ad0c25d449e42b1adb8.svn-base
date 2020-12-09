@@ -1,0 +1,64 @@
+ASCII32,19,4,2018,15:24,27
+W,BEGIN,"test3","Mimic3",""
+	TEMPLATE,"",0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0
+	POSITION,485,173
+	SIZE,680,350,680,577,0,0,0,2560,1440,650,275
+	BACKCOLOREX,240,240,240,0,0,0
+	TITLE,1,"Synoptique3",""
+	STYLE,1,1,1,1,0,1,0,1,1,1,1,1,1,0,0,0,0
+	GRIDEX,1,1,8,8,100,100,100,0,0,0
+	LAYERS,65535
+	RIGHTS,0,1,0.000000,64.000000,1,65535,0,0
+	INCLUDED,0,0,0,0,0
+	LINK,1,"","","",""
+	LINK,2,"","","",""
+	LINK,3,"","","",""
+	LINK,4,"","","",""
+	LINK,5,"","","",""
+	LINK,6,"","","",""
+	LINK,7,"","","",""
+	LINK,8,"","","",""
+	LINK,9,"","","",""
+	LINK,10,"","","",""
+	TABS,0,3,0,0,500,500,0,0,-1,3,16,16,0,FONT,1,FONT,1
+	NAV,0,0,0,100,100,0,0
+	BACKBMP,"",0,0
+	BACKOBJECT,"",0,0
+	BEFORE,"","","",""
+	EVENTS,1
+	BINOBJ,"test3.binary"
+W,END
+VBA_HOSTPROJECT,BEGIN
+	Private Sub Shape1_Click()
+	    Set fso = CreateObject("Scripting.FileSystemObject")
+	    Set f = fso.OpenTextFile(".\\log.txt", 8, True, -1)
+	    f.WriteLine "[" + Format(Now, "dd/MM/yyyy HH:mm:ss") + "]" + ";" + Shape1.Name + ";" + Name + ";" + Application.ActiveProject.ProjectName + ";" + Application.ActiveProject.UserName + ";" + Application.ActiveMimic.Caption
+	    f.Close
+	    Set fso = Nothing
+	    Set f = Nothing
+	    'doc https://msdn.microsoft.com/en-us/library/6tkce7xa(v=vs.84).aspx
+	    'C:\ARC Informatique\PcVue 11.2\Bin\log.txt
+	End Sub
+VBA_HOSTPROJECT,END
+VBA_REFERENCES,BEGIN
+	"stdole", 2, 0, "{00020430-0000-0000-C000-000000000046}"
+	"FrontVueEx", 2, 0, "{141E3228-8E65-44D3-9F4F-DD4799D613BB}"
+	"MimicControls", 1, 0, "{C959A51F-AAFE-40D5-A4A7-3A00A7AF76B4}"
+VBA_REFERENCES,END
+FONTS,BEGIN
+	FONT,1,20,9,700,0,0,"System",0,0
+	FONT,2,-21,0,400,0,0,"Arial",0,1
+FONTS,END
+COLORS,BEGIN
+	COLOREX,1,0,0,0,0,0,0
+	COLOREX,2,192,192,192,0,0,0
+COLORS,END
+O,BEGIN,R,"Shape1"
+	B,552,184,88,96,552,184,65535,0,6400,0,1,1,1,0,1
+	ST,0,1,COLOR,1,COLOR,1,0,0,COLOR,2,0,COLOR,2,0,COLOR,1,0,COLOR,1
+O,END
+O,BEGIN,T,"Text1"
+	B,256,128,380,152,256,128,65535,0,6400,0,1,1,1,0,1
+	ST,0,1,COLOR,1,COLOR,1,0,0,COLOR,2,0,COLOR,2,0,COLOR,1,0,COLOR,1
+	PP,1,256,128,0,0,FONT,2,"TEST CLIC",37,FONT,2,"OUVRIR S2",37
+O,END

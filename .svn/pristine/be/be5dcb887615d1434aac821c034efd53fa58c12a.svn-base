@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.Entity;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PcVueSpyLog
+{
+    public class OuvertureFermeture : Log
+    {
+        [Column("NomProjet")]
+        public String NomProjet { get; private set; }
+
+        [Column("NomSynoptique")]
+        public String NomSynoptique { get; private set; }
+
+        [Column("TitreSynoptique")]
+        public String TitreSynoptique { get; private set; }
+
+        [Column("Action")]
+        public String Action { get; private set; }
+
+        [Column("NomUtilisateur")]
+        public String NomUtilisateur { get; private set; }
+        
+        /// <summary>
+        /// Constructeur privé sans paramètres pour EntityFramework
+        /// </summary>
+        private OuvertureFermeture() : base()
+        {
+
+        }
+
+        internal OuvertureFermeture(String Line) : base(Line)
+        {
+            string[] Split = Line.Split(';');
+            this.NomProjet = Split[2];
+            this.NomSynoptique = Split[3];
+            this.TitreSynoptique = Split[4];
+            this.Action = Split[5];
+            this.NomUtilisateur = Split[6];
+        }
+    }
+}

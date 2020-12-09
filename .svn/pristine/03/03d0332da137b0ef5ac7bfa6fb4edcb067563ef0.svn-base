@@ -1,0 +1,81 @@
+﻿using PcVueSpyLog.Entities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PcVueSpy
+{
+    public partial class Clavier : Form
+    {
+        private int CurrentMouseOverRow { get; set; }
+        private int CurrentMouseOverColumn { get; set; } 
+        
+        private List<PcVueSpyLog.Clavier> Touches { get; set; }
+
+        public Clavier()
+        {
+            InitializeComponent();
+
+            Touches = LogContext.Context.Touches.ToList();
+
+            if (Touches != null)
+            {
+                foreach (PcVueSpyLog.Clavier Touche in Touches)
+                {
+                    dataGridView1.Rows.Add
+                    (
+                        Touche.DateTime.ToString(),
+                        Touche.KeyData
+                    );
+                }
+            }
+        }
+
+        public Clavier(PcVueSpyLog.Clavier _Clavier)
+        {
+            InitializeComponent();
+
+            voirLesRelationsToolStripMenuItem.Visible = false;
+            this.Text = "Filtre sur les actions des touches clavier";
+            Touches = PcVueSpyLog.Log.GetLogsWithSameKey(_Clavier).Cast<PcVueSpyLog.Clavier>().ToList();
+
+            foreach (PcVueSpyLog.Clavier Touche in Touches)
+            {
+                dataGridView1.Rows.Add
+                (
+                    Touche.DateTime.ToString(),
+                    Touche.KeyData
+                );
+            }
+        }
+
+        private void DataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if ( e.Button == MouseButtons.Right)
+            {
+                CurrentMouseOverRow = dataGridView1.HitTest(e.X, e.Y).RowIndex;
+                CurrentMouseOverColumn = dataGridView1.HitTest(e.X, e.Y).ColumnIndex;
+
+                if ( CurrentMouseOverRow != -1 && CurrentMouseOverColumn != -1 )
+                    contextMenuStrip1.Show(dataGridView1, new Point(e.X, e.Y));
+            }
+        }
+
+        private void CopierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(dataGridView1.Rows[CurrentMouseOverRow].Cells[CurrentMouseOverColumn].Value);
+        }
+
+        private void VoirLesRelationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clavier clavier = new Clavier(Touches[CurrentMouseOverRow]);
+            clavier.Show();
+        }
+    }
+}

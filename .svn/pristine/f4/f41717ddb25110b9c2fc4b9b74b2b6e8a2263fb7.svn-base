@@ -1,0 +1,255 @@
+﻿using PcVueSpyLog.Entities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PcVueSpy
+{
+    public partial class Log : Form
+    {
+        private bool Filtering { get; set; }
+        private int CurrentMouseOverRow { get; set; }
+        private int CurrentMouseOverColumn { get; set; }
+        private List<PcVueSpyLog.Log> Logs { get; set; }
+        private List<PcVueSpyLog.Log> CurrentLogs { get; set; }
+        private String Type { get; set; }
+        private List<String> Headers { get; set; }
+        private string FilterTitle
+        {
+            get
+            {
+                if (this.Text == TITRE_ALARME)
+                    return TITRE_FILTRE_ALARME;
+                else if (this.Text == TITRE_CLAVIER)
+                    return TITRE_FILTRE_CLAVIER;
+                else if (this.Text == TITRE_FENETRE)
+                    return TITRE_FILTRE_FENETRE;
+                else if (this.Text == TITRE_OUVERTURE_FERMETURE)
+                    return TITRE_FILTRE_OUVERTURE_FERMETURE;
+                else if (this.Text == TITRE_SOURIS)
+                    return TITRE_FILTRE_SOURIS;
+                else if (this.Text == TITRE_SYMBOLE)
+                    return TITRE_FILTRE_SYMBOLE;
+                else
+                    return String.Empty;
+            }
+        }
+
+        // Constantes pour les titres des fenêtres
+        public const string TITRE_ALARME = "Actions sur les alarmes";
+        public const string TITRE_CLAVIER = "Actions sur le clavier";
+        public const string TITRE_FENETRE = "Actions sur les synoptiques";
+        public const string TITRE_OUVERTURE_FERMETURE = "Actions sur les ouvertures et fermetures des synoptiques";
+        public const string TITRE_SOURIS = "Actions sur les clics";
+        public const string TITRE_SYMBOLE = "Actions sur les symboles";
+
+        // Constantes pour les titres des fenêtres filtrées
+        private const string TITRE_FILTRE_ALARME = "Filtre sur les actions des alarmes";
+        private const string TITRE_FILTRE_CLAVIER = "Filtre sur les actions du clavier";
+        private const string TITRE_FILTRE_FENETRE = "Filtre sur les actions des synoptiques";
+        private const string TITRE_FILTRE_OUVERTURE_FERMETURE = "Filtre sur les actions des ouvertures et fermetures des synoptiques";
+        private const string TITRE_FILTRE_SOURIS = "Filtre sur les actions des clics";
+        private const string TITRE_FILTRE_SYMBOLE = "Filtre sur les actions des symboles";
+
+        private Log()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// Instancie une nouvelle fenêtre de log
+        /// </summary>
+        /// <param name="Title"></param>
+        /// <param name="FiltreTitle"></param>
+        /// <param name="Type"></param>
+        /// <param name="Headers"></param>
+        public Log(string Title, string Type, params string[] Headers) : this()
+        {
+            // Mise en place du titre de la fenêtre
+            this.Text = Title;
+
+            // Pas de filtrage
+            this.Filtering = false;
+
+            // Enregistrement du type et des headers dans la classe
+            this.Type = Type;
+            this.Headers = Headers.ToList();
+            
+            // On récupère les logs en base de données associés au type qu'on souhaite afficher
+            Logs = LogContext.Context.Logs.Where(s => s.Type == Type).ToList();
+
+            // Si les logs existent, alors on fait des opérations pour afficher le tableau
+            if (Logs != null && Logs.Count > 0)
+            {
+                // Mise en place des titres des colonnes
+                foreach (string header in Headers)
+                {
+                    DataGridViewColumn c = new DataGridViewTextBoxColumn
+                    {
+                        AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill,
+                        DataPropertyName = header,
+                        HeaderText = header,
+                        Name = header,
+                        ReadOnly = true
+                    };
+
+                    this.dataGridView1.Columns.Add(c);
+                }
+
+                SetDataGridView(Logs);
+            }
+        }
+
+        private Log(string Title, List<String> Headers, PcVueSpyLog.Log Log) : this()
+        {
+            // Mise en place du titre de la fenêtre
+            this.Text = Title;
+
+            // Filtrage
+            this.Filtering = true;
+
+            // Enregistrement du type et des headers dans la classe
+            this.Type = Type;
+            this.Headers = Headers.ToList();
+
+            // On ne peut pas voir les références des références ( boucle infinie )
+            voirLesReferencesToolStripMenuItem.Visible = false;
+
+            // On récupère les logs en base de données associés au log
+            Logs = PcVueSpyLog.Log.GetLogsWithSameKey(Log).ToList();
+
+            // Si les logs existent, alors on fait des opérations pour afficher le tableau
+            if (Logs != null && Logs.Count > 0)
+            {
+                // Mise en place des titres des colonnes
+                foreach (string header in Headers)
+                {
+                    DataGridViewColumn c = new DataGridViewTextBoxColumn
+                    {
+                        AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill,
+                        DataPropertyName = header,
+                        HeaderText = header,
+                        Name = header,
+                        ReadOnly = true
+                    };
+
+                    this.dataGridView1.Columns.Add(c);
+                }
+
+                SetDataGridView(Logs);
+            }
+        }
+
+        /// <summary>
+        /// Permet de mettre les logs dans la DataGridView
+        /// </summary>
+        /// <param name="_Logs"></param>
+        private void SetDataGridView(List<PcVueSpyLog.Log> _Logs)
+        {
+            // Pour éviter les erreurs d'indexation, on réassigne l'attribut Logs avec celui qui est utilisé
+            this.CurrentLogs = _Logs;
+            dataGridView1.Rows.Clear();
+
+            if (_Logs != null &&_Logs.Count > 0)
+            {
+                // Récupération des propriétés du type de log
+                PropertyInfo[] Properties = _Logs[0].GetType().GetProperties();
+
+                // Remplissage du tableau
+                foreach (PcVueSpyLog.Log Log in _Logs)
+                {
+                    List<String> ListProperties = new List<String>();
+
+                    foreach (PropertyInfo PI in Properties)
+                    {
+                        // On ne met pas le type dans le tableau puisqu'on le connaît déjà
+                        if (PI.Name == "Type" || PI.Name == "HashKey" || PI.Name == "HashKeyCode")
+                            continue;
+
+                        if (PI.Name == "TypeClic")
+                        {
+                            ListProperties.Add(PI.GetValue(Log).ToString() == "G" ? "Gauche" : "Droit");
+                            continue;
+                        }
+
+                        if (PI.Name == "DateTime")
+                        {
+                            ListProperties.Insert(0, PI.GetValue(Log).ToString());
+                            continue;
+                        }
+
+                        ListProperties.Add(PI.GetValue(Log).ToString());
+                    }
+
+                    dataGridView1.Rows.Add(ListProperties.ToArray());
+                }
+            }
+        }
+
+        private void DataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                CurrentMouseOverRow = dataGridView1.HitTest(e.X, e.Y).RowIndex;
+                CurrentMouseOverColumn = dataGridView1.HitTest(e.X, e.Y).ColumnIndex;
+
+                if (CurrentMouseOverRow != -1 && CurrentMouseOverColumn != -1)
+                    contextMenuStrip1.Show(dataGridView1, new Point(e.X, e.Y));
+            }
+        }
+
+        private void CopierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(dataGridView1.Rows[CurrentMouseOverRow].Cells[CurrentMouseOverColumn].Value);
+        }
+
+        private void VoirLesReferencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Log(this.FilterTitle, this.Headers, CurrentLogs[CurrentMouseOverRow]).ShowFilter();
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            DateTime DateDebut = dateTimePicker1.Value.Date + dateTimePicker1Time.Value.TimeOfDay;
+            DateTime DateFin = dateTimePicker2.Value.Date + dateTimePicker2Time.Value.TimeOfDay;
+
+            SetDataGridView(Logs.Where(s => s.DateTime >= DateDebut && s.DateTime <= DateFin).ToList());
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            SetDataGridView(Logs);
+        }
+
+        private void Log_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!Filtering)
+            {
+                this.Visible = false;
+                e.Cancel = true;
+            }
+        }
+
+        public void ShowFilter()
+        {
+            base.Show();
+        }
+
+        public new void Show()
+        {
+            base.Show();
+
+            // On récupère les logs en base de données associés au type qu'on souhaite afficher
+            Logs = LogContext.Context.Logs.Where(s => s.Type == Type).ToList();
+
+            SetDataGridView(Logs);
+        }
+    }
+}

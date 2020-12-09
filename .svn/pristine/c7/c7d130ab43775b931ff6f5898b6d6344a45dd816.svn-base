@@ -1,0 +1,271 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Forms;
+using PcVueSpyLog;
+using System.IO;
+using System.Threading;
+
+namespace PcVueSpyWPF
+{
+    /// <summary>
+    /// ViewModel du contrôle utilisateur Home
+    /// </summary>
+    public class HomeViewModel : BaseViewModel
+    {
+        #region Private Members
+        private Home HomeWindow { get; set; }
+        #endregion
+
+        #region Public Properties
+        /// <summary>
+        /// Permet la mise à jour du label pour dire à l'utilisateur si l'écoute clavier/souris est active ou non
+        /// </summary>
+        public string HooksLabel { get; set; }
+
+        /// <summary>
+        /// Commande permettant d'injecter le code VBA dans un projet PcVue
+        /// </summary>
+        public ICommand SpyProject { get; set; }
+
+        /// <summary>
+        /// Commande permettant d'insérer les logs en base de données
+        /// </summary>
+        public ICommand InsertLogs { get; set; }
+
+        /// <summary>
+        /// Commande permettant de démarrer ou stopper l'écoute clavier/souris
+        /// </summary>
+        public ICommand ListeningWithHooks { get; set; }
+
+        /// <summary>
+        /// Créer les fichiers logs et le infos.xlsx
+        /// </summary>
+        public ICommand LogFile { get; set; }
+
+        /// <summary>
+        /// liste des synoptics du projet
+        /// </summary>
+        public List<string> ListSynoptic = new List<string>();
+
+        #endregion
+
+        #region Command Methods
+
+        /// <summary>
+        /// Démarre ou stoppe l'écoute sur la souris et le clavier
+        /// </summary>
+        public void DoListeningWithHooks()
+        {
+            if (String.IsNullOrWhiteSpace(ComputerInfos.InstallFolderBin))
+            {
+                HomeWindow.Hooks.IsChecked = false;
+                MessageBox.Show("Veuillez séléctionner le répertoire Bin de l'installation de PcVue avant de pouvoir exécuter l'écoute sur la souris et le clavier !");
+                if (GlobalSettings.SelectBinPath())
+                    HomeWindow.Hooks.IsChecked = true;
+
+            }
+
+            if (HomeWindow.Hooks.IsChecked)
+            {
+                HooksLabel = "Écoute active";
+                MouseHook.StartMouseHook();
+                KeyboardHook.StartKeyHook();
+                //EyeTrackingViewModel.DoEyeTrack();
+            }
+            else
+            {
+                HooksLabel = "Écoute inactive";
+                MouseHook.StopMouseHook();
+                KeyboardHook.StopKeyHook();
+                //EyeTrackingViewModel.DoEyeTrack();
+            }
+        }
+
+        /// <summary>
+        /// copie un dossier vers un path donnée.
+        /// </summary>
+        /// <param name="sourceDir"></param>
+        /// <param name="destDir"></param>
+        public static void CopyDir(string sourceDir, string destDir)
+        {
+            DirectoryInfo dir = new DirectoryInfo(sourceDir); if (dir.Exists)
+            {
+                string realDestDir;
+                if (dir.Root.Name != dir.Name)
+                {
+                    realDestDir = Path.Combine(destDir, dir.Name);
+                    if (!Directory.Exists(realDestDir))
+                        Directory.CreateDirectory(realDestDir);
+                }
+                else realDestDir = destDir;
+                foreach (string d in Directory.GetDirectories(sourceDir))
+                    CopyDir(d, realDestDir);
+                foreach (string file in Directory.GetFiles(sourceDir))
+                {
+                    string fileNameDest = Path.Combine(realDestDir, Path.GetFileName(file));
+                    if (!File.Exists(fileNameDest))
+                    {
+                        File.Copy(file, fileNameDest, true);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Injecte le code VBA dans un projet PcVue pour suivre les traces des utilisateurs
+        /// </summary>
+        public static void DoSpyProject()
+        {
+            FolderBrowserDialog Folder = new FolderBrowserDialog
+            {
+                Description = "Veuillez séléctionner le dossier de votre projet."
+            };
+
+            if (Folder.ShowDialog() == DialogResult.OK)
+            {
+                VBAScriptGenerator vBAScriptGenerator = new VBAScriptGenerator(Folder.SelectedPath);
+                CopyDir(Folder.SelectedPath, Folder.SelectedPath + "_temp");
+                string[] OldFilePath = Directory.GetDirectories(Folder.SelectedPath + "_temp");
+                Directory.Move(OldFilePath[0], Folder.SelectedPath + "_Backup");
+                Directory.Delete(Folder.SelectedPath + "_temp");
+
+                foreach (VBAScriptGenerator.Synoptic Synoptic in vBAScriptGenerator.ASCIISynoptics)
+                    Synoptic.GenerateVBAScript();
+
+                MessageBox.Show("Script généré avec succès sur " + vBAScriptGenerator.ASCIISynoptics.Count + " Synoptique(s)");
+            }
+        }
+
+        /// <summary>
+        /// Relie les Logs d'ouverture et de fermeture d'un même synoptique
+        /// </summary>
+        public static void DoLogFile()
+        {
+
+            string PathFileOF = ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\ActemiumLog_OF.csv";
+            string PathActemiumLogs = ComputerInfos.InstallFolderBin + "\\ActemiumLogs";
+
+            if (ComputerInfos.InstallFolderBin != "PCVUEINSTALLFOLDERBIN" && File.Exists(PathFileOF) == false)
+            {
+                if (Directory.Exists(PathActemiumLogs)) {
+                    string[] Directories = Directory.GetDirectories(PathActemiumLogs);
+                    File.AppendAllText(PathFileOF, "OPENED;CLOSED;\r\n");
+
+                    //on construit les listes qui stockerons les Logs O et F
+                    List<string> LogsOFOpen = new List<string>();
+                    List<string> LogsOFClose = new List<string>();
+                    List<string> LogsSup = new List<string>();
+
+                    foreach (string DirectoryPath in Directories)
+                    {
+                        string[] Files = Directory.GetFiles(DirectoryPath);
+
+                        foreach (string file in Files)
+                        {
+                            string FileContent = File.ReadAllText(file);
+                            string[] FileLogs = FileContent.Split("[".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+                            foreach (string LogComplet in FileLogs)
+                            {
+                                string[] FileLogsElement = LogComplet.Split(";".ToCharArray());
+                                if (FileLogsElement.Length >= 6 && FileLogsElement[3] == "OF" && FileLogsElement[5] == "0")
+                                {
+                                    //pour chaque Log avec un taille superieur a 6 qui est de type OF et qui est un log d'ouverture
+                                    LogsOFOpen.Add("[" + LogComplet);
+                                }
+                                if (FileLogsElement.Length >= 6 && FileLogsElement[3] == "OF" && FileLogsElement[5] == "1")
+                                {
+                                    //pour chaque Log avec un taille superieur a 6 qui est de type OF et qui est un log de fermeture
+                                    LogsOFClose.Add("[" + LogComplet);
+                                }
+                                if (FileLogsElement.Length >= 3 && FileLogsElement[3] == "Sup")
+                                {
+                                    //pour chaque Log avec un taille superieur a 3 qui est de type Sup
+                                    LogsSup.Add("[" + LogComplet);
+                                }
+                            }
+                        }
+                    }
+
+                    if (LogsSup.Count >= 1)
+                    {
+
+                        DateTime LogElementSupDateLast = DateTime.MinValue;
+                        foreach (string LogSup in LogsSup)
+                        {
+                            string[] LogElementSup = LogSup.Split(";".ToCharArray());
+                            DateTime LogElementSupDate = DateTime.ParseExact(LogElementSup[0], "[dd/MM/yyyy HH:mm:ss:fff]", null);
+
+                            foreach (string LogOFOpen in LogsOFOpen)
+                            {
+                                string[] LogOFElementOpen = LogOFOpen.Split(";".ToCharArray());
+                                DateTime LogOFElementOpenDate = DateTime.ParseExact(LogOFElementOpen[0], "[dd/MM/yyyy HH:mm:ss:fff]", null);
+                                string LogToPrint = "";
+                                string LogToRemove = "";
+
+                                if (LogElementSupDate > LogOFElementOpenDate && LogOFElementOpenDate > LogElementSupDateLast)
+                                {
+                                    foreach (string LogOFClose in LogsOFClose)
+                                    {
+                                        //on parcours pour chaque Log de fin de PcVue, pour chaque Ouverture, pour chaque fermeture  
+                                        string[] LogOFElementClose = LogOFClose.Split(";".ToCharArray());
+                                        DateTime LogOFElementCloseDate = DateTime.ParseExact(LogOFElementClose[0], "[dd/MM/yyyy HH:mm:ss:fff]", null);
+
+                                        //on selectionne Les O et F qui on le même ID et qui ont un horodatage valide
+                                        if (LogOFElementClose[1] == LogOFElementOpen[1] && LogElementSupDate > LogOFElementCloseDate && LogOFElementCloseDate > LogElementSupDateLast && LogOFElementOpenDate < LogOFElementCloseDate)
+                                        {
+                                            LogToPrint = LogOFOpen.Replace(",", ".").Replace(";", ",").Replace("\r\n", "") + ";" + LogOFClose.Replace(",", ".").Replace(";", ",").Replace("\r\n", "") + "\r\n";
+                                            LogToRemove = LogOFClose;
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            LogToPrint = LogOFOpen.Replace(",", ".").Replace(";", ",").Replace("\r\n", "") + ";\r\n";
+                                        }
+                                    }
+                                    LogsOFClose.Remove(LogToRemove);
+                                    File.AppendAllText(PathFileOF, LogToPrint);
+                                }
+                            }
+                            File.AppendAllText(PathFileOF, LogSup.Replace(",", ".").Replace(";", ",") + "\r\n");
+                            LogElementSupDateLast = LogElementSupDate;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("il semblerai que vous n'ayez jamais fermer PcVue ou que vous l'ayez mal fermer!");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Vous devez génerer des logs afin de pouvoir regrouper les OF!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vous devez supprimer le fichier Actemium_OF.csv pour en créer un nouveau!");
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        /// <param name="HomeWindow">Instance de la vue Home</param>
+        public HomeViewModel(Home HomeWindow)
+        {
+            this.HomeWindow = HomeWindow;
+            this.HooksLabel = "Écoute active";
+            DoListeningWithHooks();
+
+            // Instances des commandes
+            SpyProject = new RelayCommand(DoSpyProject);
+            LogFile = new RelayCommand(DoLogFile);
+            ListeningWithHooks = new RelayCommand(DoListeningWithHooks);
+        }
+    }
+}

@@ -1,0 +1,136 @@
+ASCII32,14,9,2018,13:23,56
+W,BEGIN,"test","Mimic1",""
+	TEMPLATE,"",0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0
+	POSITION,17,9
+	SIZE,1684,881,800,600,0,0,0,2560,1440,1654,806
+	BACKCOLOREX,240,240,240,0,0,0
+	TITLE,1,"Synoptique1",""
+	STYLE,1,1,1,1,0,1,0,1,1,1,1,1,1,0,0,0,0
+	GRIDEX,1,1,8,8,100,100,100,0,0,0
+	LAYERS,65535
+	RIGHTS,0,1,0.000000,64.000000,1,65535,0,0
+	INCLUDED,0,0,0,0,0
+	LINK,1,"","","",""
+	LINK,2,"","","",""
+	LINK,3,"","","",""
+	LINK,4,"","","",""
+	LINK,5,"","","",""
+	LINK,6,"","","",""
+	LINK,7,"","","",""
+	LINK,8,"","","",""
+	LINK,9,"","","",""
+	LINK,10,"","","",""
+	TABS,0,3,0,0,500,500,0,0,-1,3,16,16,0,FONT,1,FONT,1
+	NAV,0,0,0,100,100,0,0
+	BACKBMP,"",0,0
+	BACKOBJECT,"",0,0
+	BEFORE,"","","",""
+	EVENTS,1
+	BINOBJ,"test.binary"
+W,END
+VBA_HOSTPROJECT,BEGIN
+	Private Sub Mimic_Open()
+		Set fso = CreateObject("Scripting.FileSystemObject")
+		Set f = fso.OpenTextFile(".\\ActemiumLog_" + Format(Now, "yyyy-MM-dd") + ".log", 8, True, -1)
+		f.WriteLine "[" + Format(Now, "dd/MM/yyyy HH:mm:ss") + "]" + ";" + "OF" + ";" + Application.ActiveProject.ProjectName + ";" + "Mimic1" + ";" + "Synoptique1" + ";OPENED;" + Application.ActiveProject.UserName
+		f.Close
+		Set fso = Nothing
+		Set f = Nothing
+	End Sub
+	Private Function Mimic_BeforeClose() As Boolean
+		Set fso = CreateObject("Scripting.FileSystemObject")
+		Set f = fso.OpenTextFile(".\\ActemiumLog_" + Format(Now, "yyyy-MM-dd") + ".log", 8, True, -1)
+		f.WriteLine "[" + Format(Now, "dd/MM/yyyy HH:mm:ss") + "]" + ";" + "OF" + ";" + Application.ActiveProject.ProjectName + ";" + "Mimic1" + ";" + "Synoptique1" + ";CLOSED;" + Application.ActiveProject.UserName
+		f.Close
+		Set fso = Nothing
+		Set f = Nothing
+	End Function
+	Private Sub Shape2_Click()
+		Set fso = CreateObject("Scripting.FileSystemObject")
+		Set f = fso.OpenTextFile(".\\ActemiumLog_" + Format(Now, "yyyy-MM-dd") + ".log", 8, True, -1)
+		f.WriteLine "[" + Format(Now, "dd/MM/yyyy HH:mm:ss") + "]" + ";" + "F" + ";" + Application.ActiveProject.ProjectName + ";" + "Mimic1" + ";" + "Synoptique1" + ";" + Shape2.Name + ";" + "FERMER S2" + ";" + Application.ActiveProject.UserName
+		f.Close
+		Set fso = Nothing
+		Set f = Nothing
+	End Sub
+	Private Sub Shape1_Click()
+		Set fso = CreateObject("Scripting.FileSystemObject")
+		Set f = fso.OpenTextFile(".\\ActemiumLog_" + Format(Now, "yyyy-MM-dd") + ".log", 8, True, -1)
+		f.WriteLine "[" + Format(Now, "dd/MM/yyyy HH:mm:ss") + "]" + ";" + "F" + ";" + Application.ActiveProject.ProjectName + ";" + "Mimic1" + ";" + "Synoptique1" + ";" + Shape1.Name + ";" + "OUVRIR S2" + ";" + Application.ActiveProject.UserName
+		f.Close
+		Set fso = Nothing
+		Set f = Nothing
+	End Sub
+	Private Sub Symbol1_Click()
+		Set fso = CreateObject("Scripting.FileSystemObject")
+		Set f = fso.OpenTextFile(".\\ActemiumLog_" + Format(Now, "yyyy-MM-dd") + ".log", 8, True, -1)
+		f.WriteLine "[" + Format(Now, "dd/MM/yyyy HH:mm:ss") + "]" + ";" + "SY" + ";" + Application.ActiveProject.ProjectName + ";" + "Mimic1" + ";" + "Synoptique1" + ";" + Symbol1.Name + ";" + "Symb_VBA" + ";" + "" + ";" + Application.ActiveProject.UserName
+		f.Close
+		Set fso = Nothing
+		Set f = Nothing
+	End Sub
+VBA_HOSTPROJECT,END
+FONTS,BEGIN
+	FONT,1,20,9,700,0,0,"System",0,0
+	FONT,2,-21,0,400,0,0,"Arial",0,1
+FONTS,END
+COLORS,BEGIN
+	COLOREX,1,0,0,0,0,0,0
+	COLOREX,2,192,192,192,0,0,0
+COLORS,END
+O,BEGIN,R,"Shape1"
+	B,552,184,88,96,552,184,65535,0,6400,0,1,1,1,0,1,0
+	ST,0,1,COLOR,1,COLOR,1,0,0,COLOR,2,0,COLOR,2,0,COLOR,1,0,COLOR,1
+	A,BEGIN,LO,"Anim1",0,0,"",""
+		PP,"test2","",1,0,1,0,"","",0
+	A,END
+O,END
+O,BEGIN,R,"Shape2"
+	B,544,408,88,312,544,408,65535,0,6400,0,1,1,1,0,1,0
+	ST,0,1,COLOR,1,COLOR,1,0,0,COLOR,2,0,COLOR,2,0,COLOR,1,0,COLOR,1
+	A,BEGIN,LC,"Anim1",0,0,"",""
+		PP,"test2",""
+	A,END
+O,END
+O,BEGIN,T,"Text1"
+	B,256,128,380,152,256,128,65535,0,6400,0,1,0,0,0,1,0
+	ST,0,1,COLOR,1,COLOR,1,0,0,COLOR,2,0,COLOR,2,0,COLOR,1,0,COLOR,1
+	PP,1,256,128,0,0,FONT,2,"OUVRIR S2",37,FONT,2,"OUVRIR S2",37
+	A,BEGIN,VB,"Anim1",0,0,"",""
+		PP,"@System.Eqt.XOn",0,1,0,0,1,0,0,1,0
+	A,END
+O,END
+O,BEGIN,T,"Text2"
+	B,256,344,380,368,256,344,65535,0,6400,0,1,0,0,0,1,0
+	ST,0,1,COLOR,1,COLOR,1,0,0,COLOR,2,0,COLOR,2,0,COLOR,1,0,COLOR,1
+	PP,1,256,344,0,0,FONT,2,"FERMER S2",37,FONT,2,"FERMER S2",37
+O,END
+O,BEGIN,S,"Symbol1"
+	B,792,216,912,272,792,272,65535,0,6400,0,1,1,1,0,1,0
+	PP,"Symb_VBA","",792,216,912,272,1,0,1,1,0,0,1,0,360,8,360,8
+O,END
+O,BEGIN,GRP,"Group3"
+	B,744,416,1368,664,744,664,65535,0,6400,0,1,0,0,0,1,0
+	O,BEGIN,GRP,"Group1"
+		B,744,416,936,656,744,656,65535,0,6400,0,2,0,0,0,1,0
+		O,BEGIN,R,"Shape3"
+			B,936,504,752,416,936,504,65535,0,6400,0,2,0,0,0,1,0
+			ST,0,1,COLOR,1,COLOR,1,0,0,COLOR,2,0,COLOR,2,0,COLOR,1,0,COLOR,1
+		O,END
+		O,BEGIN,R,"Shape4"
+			B,928,656,744,576,928,656,65535,0,6400,0,2,0,0,0,1,0
+			ST,0,1,COLOR,1,COLOR,1,0,0,COLOR,2,0,COLOR,2,0,COLOR,1,0,COLOR,1
+		O,END
+	O,END
+	O,BEGIN,GRP,"Group2"
+		B,1168,440,1368,664,1168,664,65535,0,6400,0,2,0,0,0,1,0
+		O,BEGIN,R,"Shape5"
+			B,1336,504,1168,440,1336,504,65535,0,6400,0,2,0,0,0,1,0
+			ST,0,1,COLOR,1,COLOR,1,0,0,COLOR,2,0,COLOR,2,0,COLOR,1,0,COLOR,1
+		O,END
+		O,BEGIN,R,"Shape6"
+			B,1368,664,1208,592,1368,664,65535,0,6400,0,2,0,0,0,1,0
+			ST,0,1,COLOR,1,COLOR,1,0,0,COLOR,2,0,COLOR,2,0,COLOR,1,0,COLOR,1
+		O,END
+	O,END
+O,END

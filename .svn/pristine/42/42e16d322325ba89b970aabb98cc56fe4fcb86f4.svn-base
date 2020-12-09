@@ -1,0 +1,115 @@
+﻿using PropertyChanged;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
+
+namespace PcVueSpyWPFListener
+{
+    /// <summary>
+    /// ViewModel de la fenêtre principale
+    /// </summary>
+    public class MainViewModel : BaseViewModel
+    {
+        #region Private Members
+        private Visibility PHomeVisibility { get; set; }
+        private Visibility PInfosVisibility { get; set; }
+        private Visibility PSettingsVisibility { get; set; }
+        #endregion
+        
+        #region Public Members
+        
+        /// <summary>
+        /// Définit la visibilité de la vue Home
+        /// </summary>
+        [DoNotNotify]
+        public Visibility HomeVisibility
+        {
+            get => PHomeVisibility;
+            set
+            {
+                PHomeVisibility = value;
+                if ( PHomeVisibility == Visibility.Visible )
+                {
+                    InfosVisibility = Visibility.Hidden;
+                    SettingsVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Définit la visibilité de la vue Infos
+        /// </summary>
+        [DoNotNotify]
+        public Visibility InfosVisibility
+        {
+            get => PInfosVisibility;
+            set
+            {
+                PInfosVisibility = value;
+                if (PInfosVisibility == Visibility.Visible)
+                {
+                    HomeVisibility = Visibility.Hidden;
+                    SettingsVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Définit la visibilité de la vue Settings
+        /// </summary>
+        [DoNotNotify]
+        public Visibility SettingsVisibility
+        {
+            get => PSettingsVisibility;
+            set
+            {
+                PSettingsVisibility = value;
+                if (PSettingsVisibility == Visibility.Visible)
+                {
+                    HomeVisibility = Visibility.Hidden;
+                    InfosVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Commands 
+        /// <summary>
+        /// Commande permettant de mettre la vue Home au premier plan
+        /// </summary>
+        public ICommand SetHomePage { get; set; }
+
+        /// <summary>
+        /// Commande permettant de mettre la vue Infos au premier plan
+        /// </summary>
+        public ICommand SetInfosPage { get; set; }
+
+        /// <summary>
+        /// Commande permettant de mettre la vue Settings au premier plan
+        /// </summary>
+        public ICommand SetSettingsPage { get; set; }
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        public MainViewModel()
+        {
+            // Vue d'accueil
+            HomeVisibility = Visibility.Visible;
+
+            // Commands
+            SetHomePage = new RelayCommand(() => HomeVisibility = Visibility.Visible);
+            SetInfosPage = new RelayCommand(() => InfosVisibility = Visibility.Visible);
+            SetSettingsPage = new RelayCommand(() => SettingsVisibility = Visibility.Visible);
+        }
+        #endregion
+    }
+}

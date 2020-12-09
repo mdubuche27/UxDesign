@@ -1,0 +1,179 @@
+﻿using PropertyChanged;
+using System;
+using System.Windows;
+using System.Windows.Input;
+
+namespace PcVueSpyWPF
+{
+    /// <summary>
+    /// ViewModel de la fenêtre principale
+    /// </summary>
+    public class MainViewModel : BaseViewModel
+    {
+
+        #region Private Members
+        private Visibility PHomeVisibility { get; set; }
+        private Visibility PLogsVisibility { get; set; }
+        private Visibility PInfosVisibility { get; set; }
+        private Visibility PSettingsVisibility { get; set; }
+        private Visibility PEyeTrackingVisibility { get; set; }
+        #endregion
+        
+        #region Public Members
+        
+        /// <summary>
+        /// Définit la visibilité de la vue Home
+        /// </summary>
+        [DoNotNotify]
+        public Visibility HomeVisibility
+        {
+            get => PHomeVisibility;
+            set
+            {
+                PHomeVisibility = value;
+                if ( PHomeVisibility == Visibility.Visible )
+                {
+                    LogsVisibility = Visibility.Hidden;
+                    InfosVisibility = Visibility.Hidden;
+                    SettingsVisibility = Visibility.Hidden;
+                    EyeTrackingVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Définit la visibilité de la vue Logs
+        /// </summary>
+        [DoNotNotify]
+        public Visibility LogsVisibility
+        {
+            get => PLogsVisibility;
+            set
+            {
+                PLogsVisibility = value;
+                if (PLogsVisibility == Visibility.Visible)
+                {
+                    HomeVisibility = Visibility.Hidden;
+                    InfosVisibility = Visibility.Hidden;
+                    SettingsVisibility = Visibility.Hidden;
+                    EyeTrackingVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Définit la visibilité de la vue Infos
+        /// </summary>
+        [DoNotNotify]
+        public Visibility InfosVisibility
+        {
+            get => PInfosVisibility;
+            set
+            {
+                PInfosVisibility = value;
+                if (PInfosVisibility == Visibility.Visible)
+                {
+                    HomeVisibility = Visibility.Hidden;
+                    LogsVisibility = Visibility.Hidden;
+                    SettingsVisibility = Visibility.Hidden;
+                    EyeTrackingVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Définit la visibilité de la vue Settings
+        /// </summary>
+        [DoNotNotify]
+        public Visibility SettingsVisibility
+        {
+            get => PSettingsVisibility;
+            set
+            {
+                PSettingsVisibility = value;
+                if (PSettingsVisibility == Visibility.Visible)
+                {
+                    HomeVisibility = Visibility.Hidden;
+                    LogsVisibility = Visibility.Hidden;
+                    InfosVisibility = Visibility.Hidden;
+                    EyeTrackingVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Définit la visibilité de la vue EyeTracking
+        /// </summary>
+        [DoNotNotify]
+        public Visibility EyeTrackingVisibility
+        {
+            get => PEyeTrackingVisibility;
+            set
+            {
+                PEyeTrackingVisibility  = value;
+                if (PEyeTrackingVisibility == Visibility.Visible)
+                {
+                    HomeVisibility = Visibility.Hidden;
+                    LogsVisibility = Visibility.Hidden;
+                    InfosVisibility = Visibility.Hidden;
+                    SettingsVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Commands 
+        /// <summary>
+        /// Commande permettant de mettre la vue Home au premier plan
+        /// </summary>
+        public static ICommand SetHomePage { get; set; }
+
+        /// <summary>
+        /// Commande permettant de mettre la vue Logs au premier plan
+        /// </summary>
+        public ICommand SetLogsPage { get; set; }
+
+        /// <summary>
+        /// Commande permettant de mettre la vue Infos au premier plan
+        /// </summary>
+        public ICommand SetInfosPage { get; set; }
+
+        /// <summary>
+        /// Commande permettant de mettre la vue Settings au premier plan
+        /// </summary>
+        public static ICommand SetSettingsPage { get; set; }
+
+        ///<summary>
+        ///Commande permettant de mettre la vue EyeTracking au premier plan 
+        ///</summary>
+
+        public ICommand SetEyeTrackingPage { get; set; }
+        #endregion
+
+
+        #region Constructor
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        
+        public MainViewModel()
+        {
+            // Vue d'accueil
+            HomeVisibility = Visibility.Visible;
+
+            // Commands
+            SetHomePage = new RelayCommand(() => HomeVisibility = Visibility.Visible);
+            SetLogsPage = new RelayCommand(() => LogsVisibility = Visibility.Visible);
+            SetInfosPage = new RelayCommand(() => InfosVisibility = Visibility.Visible);
+            SetSettingsPage = new RelayCommand(() => SettingsVisibility = Visibility.Visible);
+            SetEyeTrackingPage = new RelayCommand(() => EyeTrackingVisibility = Visibility.Visible);
+        }
+        #endregion
+    }
+}

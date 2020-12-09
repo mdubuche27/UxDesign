@@ -1,0 +1,628 @@
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows;
+using Tobii.Research;
+using PcVueSpyLog;
+using System;
+using System.IO;
+using System.Threading;
+
+namespace PcVueSpyWPF
+{
+    class EyeTrackingViewModel : BaseViewModel
+    {
+
+        #region Public Properties
+        /// <summary>
+        /// definition des variables a binder 
+        /// </summary>
+        private Visibility _visiblePoint1 = Visibility.Hidden;
+        private Visibility _visiblePoint2 = Visibility.Hidden;
+        private Visibility _visiblePoint3 = Visibility.Hidden;
+        private Visibility _visiblePoint4 = Visibility.Hidden;
+        private Visibility _visiblePoint5 = Visibility.Hidden;
+        private Visibility _visiblePoint6 = Visibility.Hidden;
+        private Visibility _visiblePoint7 = Visibility.Hidden;
+        private Visibility _visiblePoint8 = Visibility.Hidden;
+        private Visibility _visiblePoint9 = Visibility.Hidden;
+
+        private Visibility _PointGreen = Visibility.Hidden;
+
+        private Thickness _PointMargin1 = new Thickness(0, 0, 0, 0);
+        private Thickness _PointMargin2 = new Thickness(0, 0, 0, 0);
+        private Thickness _PointMargin3 = new Thickness(0, 0, 0, 0);
+        private Thickness _PointMargin4 = new Thickness(0, 0, 0, 0);
+        private Thickness _PointMargin5 = new Thickness(0, 0, 0, 0);
+        private Thickness _PointMargin6 = new Thickness(0, 0, 0, 0);
+        private Thickness _PointMargin7 = new Thickness(0, 0, 0, 0);
+        private Thickness _PointMargin8 = new Thickness(0, 0, 0, 0);
+        private Thickness _PointMargin9 = new Thickness(0, 0, 0, 0);
+
+        private int _WidthSize = 1000;
+        private int _HeightSize = 800;
+        /// <summary>
+        /// état de l'application
+        /// </summary>
+        private string _AppState = "Désactiver";
+        private string _ColorAppState = "Red";
+
+        /// <summary>
+        /// changer la visibilité des points de calibrages
+        /// </summary>
+        public Visibility VisiblePoint1
+        {
+            get
+            {
+                return _visiblePoint1;
+            }
+            set
+            {
+                if (value != _visiblePoint1)
+                {
+                    _visiblePoint1 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint1));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint2
+        {
+            get { return _visiblePoint2; }
+            set
+            {
+                if (value != _visiblePoint2)
+                {
+                    _visiblePoint2 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint2));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint3
+        {
+            get { return _visiblePoint3; }
+            set
+            {
+                if (value != _visiblePoint3)
+                {
+                    _visiblePoint3 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint3));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint4
+        {
+            get { return _visiblePoint4; }
+            set
+            {
+                if (value != _visiblePoint4)
+                {
+                    _visiblePoint4 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint4));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint5
+        {
+            get { return _visiblePoint5; }
+            set
+            {
+                if (value != _visiblePoint5)
+                {
+                    _visiblePoint5 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint5));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint6
+        {
+            get { return _visiblePoint6; }
+            set
+            {
+                if (value != _visiblePoint6)
+                {
+                    _visiblePoint6 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint6));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint7
+        {
+            get { return _visiblePoint7; }
+            set
+            {
+                if (value != _visiblePoint7)
+                {
+                    _visiblePoint7 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint7));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint8
+        {
+            get { return _visiblePoint8; }
+            set
+            {
+                if (value != _visiblePoint8)
+                {
+                    _visiblePoint8 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint8));
+                }
+            }
+        }
+
+        public Visibility VisiblePoint9
+        {
+            get { return _visiblePoint9; }
+            set
+            {
+                if (value != _visiblePoint9)
+                {
+                    _visiblePoint9 = value;
+                    NotifyPropertyChanged(nameof(VisiblePoint9));
+                }
+            }
+        }
+
+        /// <summary>
+        /// changer la visibilité des points de verification
+        /// </summary>
+        public Visibility PointGreen
+        {
+            get { return _PointGreen; }
+            set
+            {
+                if (value != _PointGreen)
+                {
+                    _PointGreen = value;
+                    NotifyPropertyChanged(nameof(PointGreen));
+                }
+            }
+        }
+
+        /// <summary>
+        /// changer les coordonées des points de verification
+        /// </summary>
+        public Thickness PointMargin1
+        {
+            get { return _PointMargin1; }
+            set
+            {
+                if (value != _PointMargin1)
+                {
+                    _PointMargin1 = value;
+                    NotifyPropertyChanged(nameof(PointMargin1));
+                }
+            }
+        }
+
+        public Thickness PointMargin2
+        {
+            get { return _PointMargin2; }
+            set
+            {
+                if (value != _PointMargin2)
+                {
+                    _PointMargin2 = value;
+                    NotifyPropertyChanged(nameof(PointMargin2));
+                }
+            }
+        }
+
+        public Thickness PointMargin3
+        {
+            get { return _PointMargin3; }
+            set
+            {
+                if (value != _PointMargin3)
+                {
+                    _PointMargin3 = value;
+                    NotifyPropertyChanged(nameof(PointMargin3));
+                }
+            }
+        }
+
+        public Thickness PointMargin4
+        {
+            get { return _PointMargin4; }
+            set
+            {
+                if (value != _PointMargin4)
+                {
+                    _PointMargin4 = value;
+                    NotifyPropertyChanged(nameof(PointMargin4));
+                }
+            }
+        }
+        public int WidthSize
+        {
+            get { return _WidthSize; }
+            set
+            {
+                if (value != _WidthSize)
+                {
+                    _WidthSize = value;
+                    NotifyPropertyChanged(nameof(WidthSize));
+                }
+
+            }
+        }
+        public int HeightSize
+        {
+            get { return _HeightSize; }
+            set
+            {
+                if (value != _HeightSize)
+                {
+                    _HeightSize = value;
+                    NotifyPropertyChanged(nameof(HeightSize));
+                }
+
+            }
+        }
+        public Thickness PointMargin5
+        {
+            get { return _PointMargin5; }
+            set
+            {
+                if (value != _PointMargin5)
+                {
+                    _PointMargin5 = value;
+                    NotifyPropertyChanged(nameof(PointMargin5));
+                }
+            }
+        }
+        public Thickness PointMargin6
+        {
+            get { return _PointMargin6; }
+            set
+            {
+                if (value != _PointMargin6)
+                {
+                    _PointMargin6 = value;
+                    NotifyPropertyChanged(nameof(PointMargin6));
+                }
+            }
+        }
+        public Thickness PointMargin7
+        {
+            get { return _PointMargin7; }
+            set
+            {
+                if (value != _PointMargin7)
+                {
+                    _PointMargin7 = value;
+                    NotifyPropertyChanged(nameof(PointMargin7));
+                }
+            }
+        }
+        public Thickness PointMargin8
+        {
+            get { return _PointMargin8; }
+            set
+            {
+                if (value != _PointMargin8)
+                {
+                    _PointMargin8 = value;
+                    NotifyPropertyChanged(nameof(PointMargin8));
+                }
+            }
+        }
+
+        /// <summary>
+        /// changer la couleur et le nom de l'état de l'application
+        /// </summary>
+        public Thickness PointMargin9
+        {
+            get { return _PointMargin9; }
+            set
+            {
+                if (value != _PointMargin9)
+                {
+                    _PointMargin9 = value;
+                    NotifyPropertyChanged(nameof(PointMargin9));
+                }
+            }
+        }
+
+        /// <summary>
+        /// definie l'état de l'application
+        /// </summary>
+        public string AppState
+        {
+            get { return _AppState; }
+            set
+            {
+                if (value != _AppState)
+                {
+                    _AppState = value;
+                    NotifyPropertyChanged(nameof(AppState));
+                }
+            }
+        }
+
+        /// <summary>
+        /// definie la couleur d'affichage de l'état de l'appliaction
+        /// </summary>
+        public string ColorAppState
+        {
+            get { return _ColorAppState; }
+            set
+            {
+                if (value != _ColorAppState)
+                {
+                    _ColorAppState = value;
+                    NotifyPropertyChanged(nameof(ColorAppState));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Commande permettant de démarrer ou stoper le suivi du regard
+        /// </summary>
+        public ICommand EyeTrack { get; set; }
+
+        /// <summary>
+        /// Commande permantant de calibrer Tobii
+        /// </summary>
+        public ICommand Calibrate { get; set; }
+
+        /// <summary>
+        /// Verfie si l'appareil a été calibré avant de le démarrer
+        /// </summary>
+        public static bool CalibrateState = false;
+
+        /// <summary>
+        /// Verifie l'etat de l'appli ET
+        /// </summary>
+        public static bool AppStateBool = false;
+
+        ///<summary>
+        ///bool indicant si L'eyeTracker fonctionne ou pas .
+        ///</summary>
+        public bool EyeTracker = false;
+
+        /// <summary>
+        /// Liste des points du regard apres avoir fais fonctionner l'eye tracker au moins une fois!
+        /// </summary>
+        public static List<GazeDataEventArgs> ListeEyeGaze = new List<GazeDataEventArgs>();
+
+        ///<summary>
+        ///bool qui verifie la taille de l'ecran
+        ///</summary>
+        public bool ScreenSize = false;
+
+        /// <summary>
+        /// définie le pas des logs statiques et points de fuite
+        /// </summary>
+        public static int StaticNum;
+        public static int VanishNum;
+        #endregion
+
+        #region Command Methods
+
+        /// <summary>
+        /// Démarre ou stop le suivi du regard
+        /// </summary>
+        public void DoEyeTrack()
+        {
+
+            //connection aux appareils de eye tracking 
+            EyeTrackerCollection Tobii = EyeTrackingOperations.FindAllEyeTrackers();
+
+            //verifie qu'il est bien connécté et que la calibration est faite
+            if (CalibrateState == true)
+            {
+                if (Tobii.Count >= 1)
+                {
+                    //active le tracking
+                    if (AppState == "Activer")
+                    {
+                        LogHelpers.GazeDataOff(Tobii[0]);
+                        AppStateBool = false;
+                        AppState = "Désactiver";
+                        ColorAppState = "Red";
+                    }
+                    //desactive le tracking
+                    else
+                    {
+                        LogHelpers.GazeDataOn(Tobii[0]);
+                        AppStateBool = true;
+                        AppState = "Activer";
+                        ColorAppState = "Green";
+                    }
+
+                }
+                else { System.Windows.MessageBox.Show("Vous devez avoir un appareil de connecté et paramétrer sur Eye-Tracking-Manager!"); }
+            }
+            else { System.Windows.MessageBox.Show("Vous devez avoir calibré Tobii Nano Pro pour le démarrer !"); }
+        }
+
+        /// <summary>
+        /// Calibre Tobii
+        /// </summary>
+        public void DoCalibrate()
+        {
+
+            System.Windows.MessageBox.Show("Verfier que la resolution pour le calibrage est bonne et que l'application est en pleine écran : (" + Screen.PrimaryScreen.WorkingArea.Width + "," + Screen.PrimaryScreen.WorkingArea.Height + ")");
+
+            //definition des variables 
+            EyeTrackerCollection Tobii = EyeTrackingOperations.FindAllEyeTrackers();
+
+            ///verifie qu'il est bien connécté et le bon model et que la calibration est faite
+            if (Tobii.Count >= 1)
+            {
+                for (int x = 0; x < Tobii.Count; x++)
+                {
+                    if (String.IsNullOrWhiteSpace(ComputerInfos.InstallFolderBin))
+                    {
+                        System.Windows.MessageBox.Show("Veuillez séléctionner le répertoire Bin de l'installation de PcVue avant de pouvoir exécuter l'écoute sur la souris et le clavier !");
+                        GlobalSettings.SelectBinPath();
+                    }
+
+                    var Calibration = new ScreenBasedCalibration(Tobii[0]);
+                    Calibration.EnterCalibrationMode();
+                    CollectPointData(Calibration);
+
+                    CalibrationResult Result = Calibration.ComputeAndApply();
+
+                    Calibration.LeaveCalibrationMode();
+                    CheckResult(Result);
+                }
+            }
+            else { System.Windows.MessageBox.Show("Vous devais avoir un appreil de connécté !"); }
+        }
+        /// <summary>
+        /// collect les coordonnées des Points de notre regard afin de calibrer L'appareil
+        /// </summary>
+        /// <param name="Calibration"></param>
+        public void CollectPointData(ScreenBasedCalibration Calibration)
+        {
+            //definie lese poitns de calibration
+            var PointsToCalibrate = new NormalizedPoint2D[] {
+                            new NormalizedPoint2D(0.1f, 0.1f),
+                            new NormalizedPoint2D(0.1f, 0.5f),
+                            new NormalizedPoint2D(0.1f, 0.9f),
+                            new NormalizedPoint2D(0.5f, 0.1f),
+                            new NormalizedPoint2D(0.5f, 0.5f),
+                            new NormalizedPoint2D(0.5f, 0.9f),
+                            new NormalizedPoint2D(0.9f, 0.1f),
+                            new NormalizedPoint2D(0.9f, 0.5f),
+                            new NormalizedPoint2D(0.9f, 0.9f)
+                        };
+            
+            //affiche les points touts les 1250ms
+            for (int PTC = 0; PTC < PointsToCalibrate.Length; PTC++)
+            {
+                NormalizedPoint2D P = PointsToCalibrate[PTC];
+
+                if (PTC == 0) { VisiblePoint1 = Visibility.Visible; }
+                else if (PTC == 1) { VisiblePoint1 = Visibility.Hidden; VisiblePoint2 = Visibility.Visible; }
+                else if (PTC == 2) { VisiblePoint2 = Visibility.Hidden; VisiblePoint3 = Visibility.Visible; }
+                else if (PTC == 3) { VisiblePoint3 = Visibility.Hidden; VisiblePoint4 = Visibility.Visible; }
+                else if (PTC == 4) { VisiblePoint4 = Visibility.Hidden; VisiblePoint5 = Visibility.Visible; }
+                else if (PTC == 5) { VisiblePoint5 = Visibility.Hidden; VisiblePoint6 = Visibility.Visible; }
+                else if (PTC == 6) { VisiblePoint6 = Visibility.Hidden; VisiblePoint7 = Visibility.Visible; }
+                else if (PTC == 7) { VisiblePoint7 = Visibility.Hidden; VisiblePoint8 = Visibility.Visible; }
+                else if (PTC == 8) { VisiblePoint8 = Visibility.Hidden; VisiblePoint9 = Visibility.Visible; }
+
+                wait(1250);
+
+                VisiblePoint1 = VisiblePoint2 = VisiblePoint3 = VisiblePoint4 = VisiblePoint5 = VisiblePoint6 = VisiblePoint7 = VisiblePoint8 = VisiblePoint9 = PointGreen = Visibility.Hidden;
+                CalibrationStatus CalibStatus = Calibration.CollectData(P);
+            }
+        }
+
+        public void CheckResult(CalibrationResult Result)
+        {
+            //si les 9 points de calibrations on été validés on affiche le resultat pendant 15s
+            if (Result.Status.ToString() == "Success" & Result.CalibrationPoints.Count == 9)
+            {
+
+                for (int P = 0; P < Result.CalibrationPoints.Count; P++)
+                {
+
+                    double X = Result.CalibrationPoints[P].CalibrationSamples[0].LeftEye.PositionOnDisplayArea.X * Screen.PrimaryScreen.WorkingArea.Width;
+                    double Y = Result.CalibrationPoints[P].CalibrationSamples[0].LeftEye.PositionOnDisplayArea.Y * Screen.PrimaryScreen.WorkingArea.Height;
+                    double _X = Result.CalibrationPoints[P].PositionOnDisplayArea.X * Screen.PrimaryScreen.WorkingArea.Width;
+                    double _Y = Result.CalibrationPoints[P].PositionOnDisplayArea.Y * Screen.PrimaryScreen.WorkingArea.Height;
+
+
+                    if (P == 0) { PointMargin5 = new Thickness(X, Y, 0, 0); }
+                    else if (P == 1) { PointMargin8 = new Thickness(X, Y, 0, 0); }
+                    else if (P == 2) { PointMargin2 = new Thickness(X, Y, 0, 0); }
+                    else if (P == 3) { PointMargin6 = new Thickness(X, Y, 0, 0); }
+                    else if (P == 4) { PointMargin9 = new Thickness(X, Y, 0, 0); }
+                    else if (P == 5) { PointMargin3 = new Thickness(X, Y, 0, 0); }
+                    else if (P == 6) { PointMargin4 = new Thickness(X, Y, 0, 0); }
+                    else if (P == 7) { PointMargin7 = new Thickness(X, Y, 0, 0); }
+                    else if (P == 8) { PointMargin1 = new Thickness(X, Y, 0, 0); }
+                }
+
+                VisiblePoint1 = VisiblePoint2 = VisiblePoint3 = VisiblePoint4 = VisiblePoint5 = VisiblePoint6 = VisiblePoint7 = VisiblePoint8 = VisiblePoint9 = PointGreen = Visibility.Visible;
+                wait(15000);
+                VisiblePoint1 = VisiblePoint2 = VisiblePoint3 = VisiblePoint4 = VisiblePoint5 = VisiblePoint6 = VisiblePoint7 = VisiblePoint8 = VisiblePoint9 = PointGreen = Visibility.Hidden;
+
+                var resultBox = System.Windows.MessageBox.Show("Vous avez reussi a calibré tous les points verfier qu'il soit bien au niveau des marqueurs", "Form Closing",
+                                             MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                switch (resultBox)
+                {
+                    //si l'utilisteur accepte le calibrage il l'applique
+                    case MessageBoxResult.Yes:
+                        if (Result.Status.ToString() == "Success")
+                        {
+                            if (CalibrateState == false) { CalibrateState = true; }
+                        }
+                        break;
+                    //si l'utilisateur refuse le calibrage il relance la fonction
+                    case MessageBoxResult.No:
+                        DoCalibrate();
+                        break;
+                }
+            }
+
+            //si il ne reussi pas a calibré les 9 points
+            else
+            {
+                var resultBox = System.Windows.MessageBox.Show("Vous n'avez pas reussi a calibré tous les points! nous allons donc vous faire recommencer pour plus de précison !", "Form Closing",
+                MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                switch (resultBox)
+                {
+                    //si l'utilisateur veut recommencer on relance la fonction
+                    case MessageBoxResult.Yes:
+                        DoCalibrate();
+                        break;
+                    //sinon le fait quitter la fonction
+                    case MessageBoxResult.No:
+                        break;
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// permet de wait sans impacter l'UI
+        /// </summary>
+        /// <param name="milliseconds"></param>
+        public void wait(int milliseconds)
+        {
+
+            System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+            if (milliseconds == 0 || milliseconds < 0) return;
+            timer1.Interval = milliseconds;
+            timer1.Enabled = true;
+            timer1.Start();
+            timer1.Tick += (s, e) =>
+            {
+                timer1.Enabled = false;
+                timer1.Stop();
+
+            };
+            while (timer1.Enabled)
+            {
+                System.Windows.Forms.Application.DoEvents();
+            }
+        }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Constructeur de MainViewModel
+        /// </summary>
+        public EyeTrackingViewModel()
+        {
+            EyeTrack = new RelayCommand(DoEyeTrack);
+            Calibrate = new RelayCommand(DoCalibrate);
+        }
+        #endregion
+    }
+}
+

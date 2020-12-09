@@ -1,0 +1,55 @@
+﻿	
+	Public Sub ChoseFile(Log As String, PathFileLog As String)
+		Dim PathDir As String, PathFile As String, objfso As Object, FilePathLog As Object, FolderFilesPath() As String, compt As Integer, FileSize As Long, PathLog As String, NewFile As Object, inumfile As Integer, File As Object, MaxSize As Long, NumFile As String, PathDirBis As String
+		PathDirBis = PathFileLog + "\ActemiumLogs"
+		PathDir = PathFileLog + "\ActemiumLogs\ActemiumLog_" + Format(Now, "yyyy-MM-dd")
+		PathFile = PathDir + "\ActemiumLog_" + Format(Now, "yyyy-MM-dd") + "_0000.log"
+		If Len(Dir(PathDir, vbDirectory)) = 0 Then
+			If Len(Dir(PathDirBis, vbDirectory)) = 0 Then
+				MkDir(PathDirBis)
+			End If
+			MkDir(PathDir)
+			Set fso = CreateObject("Scripting.FileSystemObject")
+			Set f = fso.CreateTextFile(PathFile, True)
+		End If
+		Set objfso = CreateObject("Scripting.FileSystemObject")
+		Set FilePathLog = objfso.GetFolder(PathDir)
+		inumfile = 0
+		Redim preserve FolderFilesPath(FilePathLog.Files.Count - 1)
+		For Each File In FilePathLog.Files
+			FolderFilesPath(inumfile) = File.path
+			inumfile = inumfile + 1
+		Next File
+		compt = 0
+		For F = 0 To FilePathLog.Files.Count - 1
+			If FileExists(FolderFilesPath(F)) Then
+				FileSize = FileLen(FolderFilesPath(F))
+				MaxSize = CLng(5000) * 1000
+				If FileSize < MaxSize Then
+					Open FolderFilesPath(F) For Append As #1
+					Print #1, Log
+					Close #1
+				Else
+					compt = compt + 1
+				End If	
+			End If
+			if FilePathLog.Files.Count < 10000 Then 
+				NumFile = Cstr(FilePathLog.Files.Count)
+				If FilePathLog.Files.Count < 1000 Then
+					NumFile = "0" + Cstr(FilePathLog.Files.Count)
+				End If
+				If FilePathLog.Files.Count < 100 Then
+					NumFile = "00" + Cstr(FilePathLog.Files.Count)
+				End If
+				If FilePathLog.Files.Count < 10 Then
+					NumFile = "000" + Cstr(FilePathLog.Files.Count)
+				End If
+				If compt = FilePathLog.Files.Count Then
+					Set nfso = CreateObject("Scripting.FileSystemObject")
+					Set NewFile = nfso.CreateTextFile(PathDir + "\ActemiumLog_" + Format(Now, "yyyy-MM-dd") + "_" + NumFile + ".log")
+					NewFile.WriteLine Log
+					NewFile.Close
+				End If
+			End If
+		Next F
+	End Sub

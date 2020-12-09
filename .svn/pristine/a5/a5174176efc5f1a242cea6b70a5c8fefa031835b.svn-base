@@ -1,0 +1,113 @@
+﻿using PropertyChanged;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace PcVueSpyWPF
+{
+    /// <summary>
+    /// Logique d'interaction pour SwitchOnOff.xaml
+    /// </summary>
+    public partial class SwitchOnOff : UserControl, INotifyPropertyChanged
+    {
+        /// <summary>
+        /// The event that is fired when any child property changes its value
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Notifie les changements des variables
+        /// </summary>
+        /// <param name="str">Nom de la variable de l'appelant rempli automatiquement</param>
+        public void NotifyPropertyChanged([CallerMemberName] string str = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(str));
+        }
+
+        private Thickness Off = new Thickness(0, 0, 75, 0);
+        private Thickness On = new Thickness(75, 0, 0, 0);
+
+        public static readonly DependencyProperty IsCheckedProperty =
+            DependencyProperty.Register("IsChecked", typeof(bool), typeof(SwitchOnOff));
+
+        [DoNotNotify]
+        public bool IsChecked {
+            get
+            {
+                return (bool)GetValue(IsCheckedProperty);
+            }
+            set
+            {
+                SetValue(IsCheckedProperty, value);
+                if (value)
+                {
+                    ThicknessAnimation animate = new ThicknessAnimation(On, TimeSpan.FromMilliseconds(100));
+                    Dot.BeginAnimation(Canvas.MarginProperty, animate);
+                    Switch.Fill = (SolidColorBrush)Application.Current.Resources["SideBarLightColorBrush"];
+                }
+                else
+                {
+                    ThicknessAnimation animate = new ThicknessAnimation(Off, TimeSpan.FromMilliseconds(100));
+                    Dot.BeginAnimation(Canvas.MarginProperty, animate);
+                    Switch.Fill = (SolidColorBrush)Application.Current.Resources["ForegroundMainBrush"];
+                }
+                NotifyPropertyChanged();
+            }
+        }
+        public SwitchOnOff()
+        {
+            InitializeComponent();
+            IsChecked = false;
+        }
+        
+        private void ChangedCheckedState(object sender, MouseButtonEventArgs e)
+        {
+            IsChecked = !IsChecked;
+        }
+
+        public ICommand Command
+        {
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
+            "Command",
+            typeof(ICommand),
+            typeof(SwitchOnOff),
+            new PropertyMetadata(null, OnCommandPropertyChanged));
+
+        private static void OnCommandPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is SwitchOnOff element)) return;
+
+            element.MouseLeftButtonDown -= OnMouseLeftButtonDown;
+            element.MouseLeftButtonDown += OnMouseLeftButtonDown;
+        }
+
+        private static void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is SwitchOnOff element)) return;
+
+            ICommand command = element.Command;
+            if (command == null) return;
+
+            if (command.CanExecute(null))
+                command.Execute(null);
+        }
+    }
+}

@@ -1,0 +1,50 @@
+﻿using PcVueSpyLog;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows;
+
+namespace PcVueSpyWPF
+{
+    /// <summary>
+    /// Logique d'interaction pour MainWindow.xaml
+    /// </summary>
+    
+    public partial class MainWindow : Window
+    {
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            this.DataContext = new MainViewModel();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (HomeWindow.Hooks.IsChecked)
+            {
+                MouseHook.StopMouseHook();
+                KeyboardHook.StopKeyHook();
+            }
+        }
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            ChargPageWithGoodBin();
+        }
+
+
+        private void ChargPageWithGoodBin ()
+        {
+                if (!Directory.Exists(ComputerInfos.InstallFolderBin))
+                {
+                    MainViewModel.SetSettingsPage.Execute(null);
+                    SettingsViewModel.ChangeBinPath.Execute(null);
+                    HomeViewModel.ListeningWithHooks.Execute(null);
+                }
+                else
+                {
+                    HomeViewModel.ListeningWithHooks.Execute(null);
+                }
+        }
+    }
+}

@@ -1,0 +1,397 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.Entity;
+using PcVueSpyLog.Entities;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PcVueSpyLog
+{
+    /// <summary>
+    /// Cette classe est une fabrique, il faut appeler la méthode statique Create afin de pouvoir gérer les logs
+    /// </summary>
+    public class Log
+    {
+        #region Public Members
+        [Key]
+        [MaxLength(64), MinLength(64)]
+        [Column("HashKey", Order = 1)]
+        public String HashKey { get; private set; }
+
+        [Key]
+        [MaxLength(64), MinLength(64)]
+        [Column("HashKeyCode", Order = 2)]
+        public String HashKeyCode { get; private set; }
+
+        [Required]
+        [Column("DateTime")]
+        public DateTime DateTime { get; private set; }
+
+        [Required]
+        [Column("Type")]
+        public String Type { get; private set; }
+
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Constructeur protected sans paramètres pour EntityFramework
+        /// </summary>
+        protected Log()
+        {
+
+        }
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        /// <param name="Line">Ligne correspondant au log d'une action utilisateur</param>
+        protected Log(String Line)
+        {
+            string[] Split = Line.Split(';');
+            DateTime = DateTime.ParseExact(Split[0], "[dd/MM/yyyy HH:mm:ss]", System.Globalization.CultureInfo.InvariantCulture);
+            Type = Split[1];
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Cette fonction permet de supprimer les espaces blancs inutiles devant une chaîne de caractères
+        /// </summary>
+        /// <param name="Attribute"></param>
+        /// <returns></returns>
+        private static string DeleteFirstSpaces(string Attribute)
+        {
+            int StartIndex = Attribute.IndexOf(Attribute.Where(s => s != ' ').FirstOrDefault(), 0);
+            return StartIndex != -1 ? Attribute.Substring(StartIndex, Attribute.Length - StartIndex) : String.Empty;
+        }
+
+        /// <summary>
+        /// Récupère le hash SHA256 de l'objet
+        /// </summary>
+        /// <returns></returns>
+        private string GetHashKey()
+        {
+            SHA256 mySHA256 = SHA256Managed.Create();
+
+            PropertyInfo[] Properties = this?.GetType().GetProperties();
+
+            foreach (PropertyInfo PI in Properties)
+            {
+                if (PI.Name == "HashKey")
+                    continue;
+
+                if (PI.Name == "HashKeyCode")
+                    continue;
+
+                if (PI.Name == "DateTime")
+                    continue;
+
+                // Exception pour les alarmes
+                if (PI.Name == "Handle")
+                {
+                    string objThis = PI.GetValue(this).ToString();
+                    objThis = objThis.Substring(0, objThis.IndexOf('<', 0));
+
+                    byte[] HandleArray = ObjectToByteArray(objThis);
+                    if (HandleArray != null)
+                        mySHA256.TransformBlock(HandleArray, 0, HandleArray.Length, null, 0);
+
+                    continue;
+                }
+
+                // Exception pour les alarmes
+                if (PI.Name == "Selected")
+                    continue;
+
+                byte[] ObjectArray = ObjectToByteArray(PI.GetValue(this));
+                if (ObjectArray != null)
+                    mySHA256.TransformBlock(ObjectArray, 0, ObjectArray.Length, null, 0);
+            }
+
+            byte[] DateTimeArray = ObjectToByteArray(this.DateTime);
+            mySHA256.TransformFinalBlock(DateTimeArray, 0, DateTimeArray.Length);
+            return ByteArrayToString(mySHA256.Hash);
+        }
+
+        /// <summary>
+        /// Récupère le hash SHA256 de l'objet comparable
+        /// </summary>
+        /// <returns></returns>
+        private string GetHashKeyCode()
+        {
+            SHA256 mySHA256 = SHA256Managed.Create();
+
+            PropertyInfo[] Properties = this?.GetType().GetProperties();
+
+            foreach (PropertyInfo PI in Properties)
+            {
+                if (PI.Name == "HashKey")
+                    continue;
+
+                if (PI.Name == "HashKeyCode")
+                    continue;
+
+                if (PI.Name == "DateTime")
+                    continue;
+
+                if (PI.Name == "Type")
+                    continue;
+
+                // Exception pour les alarmes
+                if (PI.Name == "Handle")
+                {
+                    string objThis = PI.GetValue(this).ToString();
+                    objThis = objThis.Substring(0, objThis.IndexOf('<', 0));
+
+                    byte[] HandleArray = ObjectToByteArray(objThis);
+                    if (HandleArray != null)
+                        mySHA256.TransformBlock(HandleArray, 0, HandleArray.Length, null, 0);
+
+                    continue;
+                }
+
+                // Exception pour les alarmes
+                if (PI.Name == "Selected")
+                    continue;
+
+                byte[] ObjectArray = ObjectToByteArray(PI.GetValue(this));
+                if (ObjectArray != null)
+                    mySHA256.TransformBlock(ObjectArray, 0, ObjectArray.Length, null, 0);
+            }
+
+            byte[] TypeArray = ObjectToByteArray(this.Type);
+            mySHA256.TransformFinalBlock(TypeArray, 0, TypeArray.Length);
+            return ByteArrayToString(mySHA256.Hash);
+        }
+
+        /// <summary>
+        /// Converti les valeurs d'un tableau hexadécimal en chaîne de caractères
+        /// </summary>
+        /// <param name="ba"></param>
+        /// <returns></returns>
+        private static string ByteArrayToString(byte[] ba)
+        {
+            if (ba != null)
+            {
+                StringBuilder hex = new StringBuilder(ba.Length * 2);
+                foreach (byte b in ba)
+                    hex.AppendFormat("{0:x2}", b);
+                return hex.ToString();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Converti un objet en tableau
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private static byte[] ObjectToByteArray(object obj)
+        {
+            if (obj == null)
+                return null;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bf.Serialize(ms, obj);
+                return ms.ToArray();
+            }
+        }
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Fabrique retournant le type du log
+        /// </summary>
+        /// <param name="Line"></param>
+        /// <returns></returns>
+        public static Log Create(String Line)
+        {
+            Log newLog;
+            string[] Split = Line.Split(';');
+
+            // Suppression des espaces blancs devant chaque attribut
+            foreach (string Attribute in Split)
+            {
+                Line = String.IsNullOrEmpty(Attribute) ? Line : Line.Replace(Attribute, DeleteFirstSpaces(Attribute));
+            }
+
+            if (Split[1] == ConstsType.FENETRE)
+                newLog = new Fenetre(Line);
+            else if (Split[1] == ConstsType.OUVERTURE_FERMETURE)
+                newLog = new OuvertureFermeture(Line);
+            else if (Split[1] == ConstsType.ALARME)
+                newLog = new Alarme(Line);
+            else if (Split[1] == ConstsType.SOURIS)
+                newLog = new Souris(Line);
+            else if (Split[1] == ConstsType.CLAVIER)
+                newLog = new Clavier(Line);
+            else if (Split[1] == ConstsType.SYMBOLE)
+                newLog = new Symbole(Line);
+            else
+                throw new Exception("Log inconnu");
+
+            // Récupération du hash de l'objet
+            newLog.HashKey = newLog.GetHashKey();
+            newLog.HashKeyCode = newLog.GetHashKeyCode();
+            return newLog;
+        }
+
+
+        /// <summary>
+        /// Récupère le hash du log
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            PropertyInfo[] Properties = this?.GetType().GetProperties();
+
+            // FNV Hash
+            int hash = -2128831035;
+
+            foreach (PropertyInfo PI in Properties)
+                hash = (hash * 16777619) ^ PI.GetValue(this, null).GetHashCode();
+
+            return hash;
+        }
+
+        /// <summary>
+        /// Permet de vérifier si deux logs sont égaux dans le but de détecter les doublons
+        /// </summary>
+        /// <param name="objA"></param>
+        /// <param name="objB"></param>
+        /// <returns></returns>
+        public static bool Equals(Log objA, Log objB)
+        {
+            return objA?.HashKey == objB?.HashKey;
+        }
+
+        /// <summary>
+        /// Permet de vérifier si le log actuel est identique à un autre dans le but de détecter les doublons
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool Equals(Log obj)
+        {
+            return this?.HashKey == obj?.HashKey;
+        }
+
+        /// <summary>
+        /// Permet de vérifier si un log correspond à un autre ( sans date, ni heure )
+        /// </summary>
+        /// <param name="objA"></param>
+        /// <param name="objB"></param>
+        /// <returns></returns>
+        public bool IsSameLog(Log obj)
+        {
+            return this?.HashKeyCode == obj?.HashKeyCode;
+        }
+
+        /// <summary>
+        /// Récupère la liste des logs liés à un log
+        /// </summary>
+        /// <param name="Log"></param>
+        /// <returns></returns>
+        public static List<Log> GetLogsWithSameKey(Log Log)
+        {
+            return GetLogsFromHashKeyCode(Log?.HashKeyCode);
+        }
+
+        /// <summary>
+        /// Récupère la liste des logs liés à un log entre deux dates
+        /// </summary>
+        /// <param name="Log"></param>
+        /// <returns></returns>
+        public static List<Log> GetLogsWithSameKeyBetweenDates(Log Log, DateTime DateDebut, DateTime DateFin)
+        {
+            return GetLogsFromHashKeyCodeBetweenDates(Log?.HashKeyCode, DateDebut, DateFin);
+        }
+
+        /// <summary>
+        /// Recupère la liste des logs en fonction du HashKeyCode
+        /// </summary>
+        /// <param name="HashKeyCode"></param>
+        /// <returns></returns>
+        public static List<Log> GetLogsFromHashKeyCode(string HashKeyCode)
+        {
+            return LogContext.Context.Logs.Where(s => s.HashKeyCode == HashKeyCode).ToList();
+        }
+
+        /// <summary>
+        /// Récupère la liste des logs en fonction du HashKeyCode et des dates de début et de fin
+        /// </summary>
+        /// <param name="HashKeyCode"></param>
+        /// <param name="DateDebut"></param>
+        /// <param name="DateFin"></param>
+        /// <returns></returns>
+        public static List<Log> GetLogsFromHashKeyCodeBetweenDates(string HashKeyCode, DateTime DateDebut, DateTime DateFin)
+        {
+            return LogContext.Context.Logs.Where(s => s.HashKeyCode == HashKeyCode && s.DateTime >= DateDebut && s.DateTime <= DateFin).ToList();
+        }
+
+        /// <summary>
+        /// Récupère la liste des logs triés par correspondance et par nombre d'occurrences
+        /// </summary>
+        /// <returns></returns>
+        public static List<List<Log>> SortListLog()
+        {
+            List<String> HashKeyCodes = LogContext.Context.Logs.Select(s => s.HashKeyCode).Distinct().ToList();
+            List<List<Log>> Logs = new List<List<Log>>();
+            HashKeyCodes.ForEach(s => Logs.Add(GetLogsFromHashKeyCode(s)));
+            return Logs.OrderByDescending(s => s.Count).ToList();
+        }
+
+        /// <summary>
+        /// Récupère la liste des logs triés par correspondance et par nombre d'occurrences entre une date de début et une date de fin
+        /// </summary>
+        /// <returns></returns>
+        public static List<List<Log>> SortListLogBetweenDates(DateTime DateDebut, DateTime DateFin)
+        {
+            List<String> HashKeyCodes = LogContext.Context.Logs.Select(s => s.HashKeyCode).Distinct().ToList();
+            List<List<Log>> Logs = new List<List<Log>>();
+            HashKeyCodes.ForEach(s => Logs.Add(GetLogsFromHashKeyCodeBetweenDates(s, DateDebut, DateFin)));
+            return Logs.OrderByDescending(s => s.Count).ToList();
+        }
+
+        /// <summary>
+        /// Récupère la liste des logs triés par correspondance, par nombre d'occurrences et par type
+        /// </summary>
+        /// <returns></returns>
+        public static List<List<Log>> SortListLogByType(string Type)
+        {
+            List<String> HashKeyCodes = LogContext.Context.Logs.Where(s => s.Type == Type).Select(s => s.HashKeyCode).Distinct().ToList();
+            List<List<Log>> Logs = new List<List<Log>>();
+            HashKeyCodes.ForEach(s => Logs.Add(GetLogsFromHashKeyCode(s)));
+            return Logs.OrderByDescending(s => s.Count).ToList();
+        }
+
+        /// <summary>
+        /// Récupère la liste des logs triés par correspondance, par nombre d'occurrences et par type entre une date de début et une date de fin
+        /// </summary>
+        /// <returns></returns>
+        public static List<List<Log>> SortListLogByTypeBetweenDates(string Type, DateTime DateDebut, DateTime DateFin)
+        {
+            List<String> HashKeyCodes = LogContext.Context.Logs.Where(s => s.Type == Type).Select(s => s.HashKeyCode).Distinct().ToList();
+            List<List<Log>> Logs = new List<List<Log>>();
+            HashKeyCodes.ForEach(s => Logs.Add(GetLogsFromHashKeyCodeBetweenDates(s, DateDebut, DateFin)));
+            return Logs.OrderByDescending(s => s.Count).ToList();
+        }
+
+        #endregion
+    }
+}

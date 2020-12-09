@@ -1,0 +1,24 @@
+[15/05/2018 10:55:59];F;TeleoperationSNCF;Mimic2;Synoptique2;Symbol1;;Admin
+[15/05/2018 10:56:02];OF;TeleoperationSNCF;Mimic3;     Menu Elevatique;OPENED;Admin
+[15/05/2018 10:56:04];F;TeleoperationSNCF;Mimic3;Menu Elévatique;Text2;Alarmes courantes;Admin
+[15/05/2018 10:56:12];A;TeleoperationSNCF;General_Alarmes;GESTION DES ALARMES\\nALARMES COURANTES;alarmWindow;Gares.VILLEPARISIS.INFORESEAU.AUTOMATE.API01.TA_COMMUNICATION<lineselect x="304" y="488" variable="1990" selected="0" time="1526374387577.000000" ><element value="15/05/18 10:53:07"/><element value="VILLEPARISIS"/><element value="AUTOMATE"/><element value="271510 - Automate Gare"/><element value="1"/><element value="Défaut communication"/><element value="Défaut présent non acq"/><element value=" "/></lineselect>;True;Admin
+[15/05/2018 10:56:14];F;TeleoperationSNCF;Mimic1;                                                           ACQUITTEMENT CRITICITES 1 ET 2;Text14;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX;Admin
+[15/05/2018 10:56:18];F;TeleoperationSNCF;Mimic1;                                                           ACQUITTEMENT CRITICITES 1 ET 2;Text15;Acquitter;Admin
+[15/05/2018 10:56:20];A;TeleoperationSNCF;General_Alarmes;GESTION DES ALARMES\\nALARMES COURANTES;alarmWindow;Gares.VERT_GALANT.INFORESEAU.AUTOMATE.API01.TA_COMMUNICATION<lineselect x="421" y="506" variable="2859" selected="0" time="1526374387577.000000" ><element value="15/05/18 10:53:07"/><element value="VERT_GALANT"/><element value="AUTOMATE"/><element value="271437 - Automate Gare"/><element value="1"/><element value="Défaut communication"/><element value="Défaut présent non acq"/><element value=" "/></lineselect>;True;Admin
+[15/05/2018 10:56:23];F;TeleoperationSNCF;General_Alarmes;GESTION DES ALARMES\\nALARMES COURANTES;Group1;;Admin
+[15/05/2018 10:56:25];F;TeleoperationSNCF;General_Alarmes;GESTION DES ALARMES\\nALARMES COURANTES;Group1;;Admin
+[15/05/2018 10:56:27];F;TeleoperationSNCF;Mimic1;                                                               PRISE EN COMPTE DE L'ALARME;Text14;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX;Admin
+[15/05/2018 10:56:29];F;TeleoperationSNCF;Mimic1;                                                               PRISE EN COMPTE DE L'ALARME;Text15;Prendre en compte;Admin
+[15/05/2018 10:56:43];F;TeleoperationSNCF;Mimic1;                                                           ACQUITTEMENT CRITICITES 1 ET 2;Text14;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX;Admin
+[15/05/2018 10:56:44];F;TeleoperationSNCF;Mimic1;                                                           ACQUITTEMENT CRITICITES 1 ET 2;Text14;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX;Admin
+[15/05/2018 10:56:47];F;TeleoperationSNCF;Mimic1;                                                           ACQUITTEMENT CRITICITES 1 ET 2;Text15;Acquitter;Admin
+[15/05/2018 10:56:55];OF;TeleoperationSNCF;Mimic3;;OPENED;Admin
+[15/05/2018 10:56:56];F;TeleoperationSNCF;Mimic3;;Text2;Ascenseurs;Admin
+[15/05/2018 10:56:59];F;TeleoperationSNCF;Gares_AEROPORT_CDG1_ELEVATIQUE_ASCENSEUR_Syno;Vue des ascenseurs;Gares_AEROPORT_CDG1_ELEVATIQUE_ASCENSEUR_ASC01_Symb;;Admin
+[15/05/2018 10:56:59];OF;TeleoperationSNCF;Mimic1;Informations ascenseur;OPENED;Admin
+[15/05/2018 10:56:59];OF;TeleoperationSNCF;Mimic1;Informations ascenseur;OPENED;Admin
+[15/05/2018 10:57:30];F;TeleoperationSNCF;Mimic1;Informations ascenseur;Symbol1;;Admin
+[15/05/2018 10:57:34];OF;TeleoperationSNCF;Mimic1;Informations ascenseur;CLOSED;Admin
+[15/05/2018 10:57:34];OF;TeleoperationSNCF;Mimic1;Informations ascenseur;CLOSED;Admin
+[15/05/2018 10:56:17];A;TeleoperationSNCF;General_Alarmes;GESTION DES ALARMES\\nALARMES COURANTES;alarmWindow;Gares.VILLEPARISIS.INFORESEAU.AUTOMATE.API01.TA_COMMUNICATION<lineselect x="305" y="488" variable="1990" selected="0" time="1526374387577.000000" ><element value="15/05/18 10:53:07"/><element value="VILLEPARISIS"/><element value="AUTOMATE"/><element value="271510 - Automate Gare"/><element value="1"/><element value="Défaut communication"/><element value="Défaut présent non acq"/><element value=" "/></lineselect>;True;Admin
+[15/05/2018 10:56:13];A;TeleoperationSNCF;General_Alarmes;GESTION DES ALARMES\\nALARMES COURANTES;alarmWindow;Gares.VILLEPARISIS.INFORESEAU.AUTOMATE.API01.TA_COMMUNICATION<lineselect x="304" y="488" variable="1990" selected="0" time="1526374387577.000000" ><element value="15/05/18 10:53:07"/><element value="VILLEPARISIS"/><element value="AUTOMATE"/><element value="271510 - Automate Gare"/><element value="1"/><element value="Défaut communication"/><element value="Défaut présent non acq"/><element value=" "/></lineselect>;True;Admin

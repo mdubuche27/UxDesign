@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="PcVueSpyWPF.Home"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PcVueSpyWPF"
+             xmlns:res="clr-namespace:PcVueSpyWPF.Resources"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Border x:Name="HomeContext" Background="{StaticResource ForegroundLightBrush}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="4" Style="{StaticResource TextButton}" Content="{x:Static res:UserControls.HomeInjectProject}" Command="{Binding SpyProject}"/>
+            <Separator Grid.Column="1" Grid.Row="3" Grid.RowSpan="2" Background="{StaticResource ForegroundMainBrush}">
+                <Separator.LayoutTransform>
+                    <RotateTransform Angle="90" />
+                </Separator.LayoutTransform>
+            </Separator>
+            <Separator Grid.Row="1" Grid.ColumnSpan="3" Background="{StaticResource ForegroundMainBrush}"/>
+            <Separator Grid.Row="3" Grid.ColumnSpan="3" Background="{StaticResource ForegroundMainBrush}"/>
+
+            <Label Style="{StaticResource FontAwesomeLabel}" Content="{StaticResource FontAwesomeHomeIconText}" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Button Grid.Column="2" Grid.Row="4" Style="{StaticResource TextButton}" Content="{x:Static res:UserControls.HomeBindLogs}" Command="{Binding LogFile}"></Button>
+            <Label x:Name="HooksLabel" Grid.Row="2" BorderThickness="0"  Grid.ColumnSpan="3" Content="{Binding HooksLabel}" Style="{StaticResource RegularLabel}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <local:SwitchOnOff x:Name="Hooks" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="50" Command="{Binding ListeningWithHooks}"/>
+        </Grid>
+    </Border>
+</UserControl>

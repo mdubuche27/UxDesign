@@ -1,0 +1,11 @@
+Esser/Loop	Parameters	V/Numero	V/Panel	V/Description	V/adress_MB
+Loop_00113	/Esser/Loop/EDP	113	1		13
+Loop_00121	/Esser/Loop/EDP	121	1	4203 RDC	14
+Loop_00122	/Esser/Loop/EDP	122	1	4203 1er ETAGE	15
+Loop_00123	/Esser/Loop/EDP	123	1	4203 OI AET	16
+Loop_00131	/Esser/Loop/EDP	131	1	4203 1er ATEC	17
+Loop_00132	/Esser/Loop/EDP	132	1		18
+Loop_00221	/Esser/Loop/EDP	221	2		367
+Loop_00321	/Esser/Loop/EDP	321	3		382
+Loop_00322	/Esser/Loop/EDP	322	3	batiment 4414 BUS 322	383
+Loop_00323	/Esser/Loop/EDP	323	3		384

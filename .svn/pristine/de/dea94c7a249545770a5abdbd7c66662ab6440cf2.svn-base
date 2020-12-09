@@ -1,0 +1,42 @@
+﻿using PcVueSpyLog;
+using PropertyChanged;
+using System.Windows.Input;
+
+namespace PcVueSpyWPF
+{
+    public class SettingsViewModel : BaseViewModel
+    {
+        /// <summary>
+        /// Chemin d'accès vers le dossier d'installation Bin de PcVue
+        /// </summary>
+        [DoNotNotify]
+        public string InstallFolderBin { get => ComputerInfos.InstallFolderBin; }
+
+        /// <summary>
+        /// Commande permettant de changer le dossier d'installation Bin de PcVue
+        /// </summary>
+        public static ICommand ChangeBinPath { get; set; }
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        public SettingsViewModel()
+        {
+            // Instances des commandes
+            ChangeBinPath = new RelayCommand(SetBinPath);
+        }
+
+        /// <summary>
+        /// Permet de changer le dossier Bin d'installation de PcVue
+        /// </summary>
+        public void SetBinPath()
+        {
+            // Si le dossier a été changé correctement, alors on met à jour la propriété InstallFolderBin
+            if ( GlobalSettings.SelectBinPath() )
+            {
+                NotifyPropertyChanged(nameof(InstallFolderBin));
+                Infos.ViewDataContext.NotifyPropertyChanged(nameof(InfosViewModel.VERSION_PC_VUE));
+            }
+        }
+    }
+}

@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Forms;
+using PcVueSpyLog;
+
+namespace PcVueSpyWPFListener
+{
+    /// <summary>
+    /// ViewModel du contrôle utilisateur Home
+    /// </summary>
+    public class HomeViewModel : BaseViewModel
+    {
+        #region Private Members
+        private Home HomeWindow { get; set; }
+        #endregion
+
+        #region Public Properties
+        /// <summary>
+        /// Permet la mise à jour du label pour dire à l'utilisateur si l'écoute clavier/souris est active ou non
+        /// </summary>
+        public string HooksLabel { get; set; }
+
+        /// <summary>
+        /// Commande permettant de démarrer ou stopper l'écoute clavier/souris
+        /// </summary>
+        public ICommand ListeningWithHooks { get; set; }
+        #endregion
+
+        #region Command Methods
+
+        /// <summary>
+        /// Démarre ou stoppe l'écoute sur la souris et le clavier
+        /// </summary>
+        public void DoListeningWithHooks()
+        {
+            if (String.IsNullOrWhiteSpace(ComputerInfos.InstallFolderBin))
+            {
+                HomeWindow.Hooks.IsChecked = false;
+                MessageBox.Show("Veuillez séléctionner le répertoire Bin de l'installation de PcVue avant de pouvoir exécuter l'écoute sur la souris et le clavier !");
+                if (GlobalSettings.SelectBinPath())
+                    HomeWindow.Hooks.IsChecked = true;
+                else
+                    return;
+            }
+
+            if (HomeWindow.Hooks.IsChecked)
+            {
+                HooksLabel = "Écoute active";
+                MouseHook.StartMouseHook();
+                //KeyboardHook.StartKeyHook();
+            }
+            else
+            {
+                HooksLabel = "Écoute inactive";
+                MouseHook.StopMouseHook();
+                //KeyboardHook.StopKeyHook();
+            }
+        }
+ 
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        /// <param name="HomeWindow">Instance de la vue Home</param>
+        public HomeViewModel(Home HomeWindow)
+        {
+            this.HomeWindow = HomeWindow;
+            this.HooksLabel = "Écoute inactive";
+
+            // Instances des commandes
+            ListeningWithHooks = new RelayCommand(DoListeningWithHooks);
+        }
+
+        #endregion
+
+    }
+}

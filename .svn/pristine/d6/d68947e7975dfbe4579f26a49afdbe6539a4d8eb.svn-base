@@ -1,0 +1,91 @@
+﻿using PcVueSpyLog.Entities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PcVueSpy
+{
+    public partial class Fenetre : Form
+    {
+        private int CurrentMouseOverRow { get; set; }
+        private int CurrentMouseOverColumn { get; set; } 
+        
+        private List<PcVueSpyLog.Fenetre> Fenetres { get; set; }
+
+        public Fenetre()
+        {
+            InitializeComponent();
+
+            Fenetres = LogContext.Context.Fenetres.ToList();
+
+            if (Fenetres != null)
+            {
+                foreach (PcVueSpyLog.Fenetre Fenetre in Fenetres)
+                {
+                    dataGridView1.Rows.Add
+                    (
+                        Fenetre.DateTime.ToString(),
+                        Fenetre.NomProjet,
+                        Fenetre.NomSynoptique,
+                        Fenetre.TitreSynoptique,
+                        Fenetre.Action,
+                        Fenetre.Text,
+                        Fenetre.NomUtilisateur
+                    );
+                }
+            }
+        }
+
+        public Fenetre(PcVueSpyLog.Fenetre _Fenetre)
+        {
+            InitializeComponent();
+
+            voirLesRelationsToolStripMenuItem.Visible = false;
+            this.Text = "Filtre sur les actions dans les fenêtres synoptiques";
+            Fenetres = PcVueSpyLog.Log.GetLogsWithSameKey(_Fenetre).Cast<PcVueSpyLog.Fenetre>().ToList();
+
+            foreach (PcVueSpyLog.Fenetre Fenetre in Fenetres)
+            {
+                dataGridView1.Rows.Add
+                (
+                    Fenetre.DateTime.ToString(),
+                    Fenetre.NomProjet,
+                    Fenetre.NomSynoptique,
+                    Fenetre.TitreSynoptique,
+                    Fenetre.Action,
+                    Fenetre.Text,
+                    Fenetre.NomUtilisateur
+                );
+            }
+        }
+
+        private void DataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if ( e.Button == MouseButtons.Right)
+            {
+                CurrentMouseOverRow = dataGridView1.HitTest(e.X, e.Y).RowIndex;
+                CurrentMouseOverColumn = dataGridView1.HitTest(e.X, e.Y).ColumnIndex;
+
+                if ( CurrentMouseOverRow != -1 && CurrentMouseOverColumn != -1 )
+                    contextMenuStrip1.Show(dataGridView1, new Point(e.X, e.Y));
+            }
+        }
+
+        private void CopierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(dataGridView1.Rows[CurrentMouseOverRow].Cells[CurrentMouseOverColumn].Value);
+        }
+
+        private void VoirLesRelationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Fenetre fenetre = new Fenetre(Fenetres[CurrentMouseOverRow]);
+            fenetre.Show();
+        }
+    }
+}

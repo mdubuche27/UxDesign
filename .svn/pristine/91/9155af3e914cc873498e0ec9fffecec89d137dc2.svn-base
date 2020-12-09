@@ -1,0 +1,38 @@
+﻿	Function ChoseFile(Log)
+		Dim PathDir As String, PathFile As String, objfso As Object, FilePathLog As Object, FolderFilesPath() As String, compt As Integer, FileSize As Integer, PathLog As String, NewFile As Object, i As Integer, File As Object, MaxSize As Integer
+		PathDir = Application.Path + "\ActemiumLog_" + Format(Now, "yyyy-MM-dd")
+		PathFile = PathDir + "\ActemiumLog_" + Format(Now, "yyyy-MM-dd") + "_0.log"
+		If Len(Dir(PathDir, vbDirectory)) = 0 Then
+			MkDir(PathDir)
+			Set fso = CreateObject("Scripting.FileSystemObject")
+			Set f = fso.CreateTextFile(PathFile, True)
+		End If
+		Set objfso = CreateObject("Scripting.FileSystemObject")
+		Set FilePathLog = objfso.GetFolder(PathDir)
+		i = 0
+		Redim preserve FolderFilesPath(Len(Dir(PathDir, vbDirectory)))
+		For Each File In FilePathLog.Files
+			FolderFilesPath(i) = File.path
+			i = i + 1
+		Next File
+		compt = 0
+		For F = 0 To Len(Dir(PathDir, vbDirectory))
+			FileSize = FolderSize(FolderFilesPath(F))
+			MaxSize = 15
+			If FileSize < MaxSize Then
+				If IsFileOpen(FolderFilesPath(F)) Then
+					Open FolderFilesPath(F) For Append As #1
+					Print #1, Log
+					Close #1
+			End If
+			Else
+				compt = compt + 1
+			End If	
+			If compt = Len(Dir(PathDir, vbDirectory)) Then
+				Set nfso = CreateObject("Scripting.FileSystemObject")
+				Set NewFile = nfso.CreateTextFile(PathDir + "\ActemiumLog_" + Format(Now, "yyyy-MM-dd") + "_" + Cstr(Len(Dir(PathDir, vbDirectory))) + ".log")
+				NewFile.WriteLine Log
+				NewFile.Close
+			End If
+		Next F
+	End Function

@@ -1,0 +1,63 @@
+﻿using PcVueSpyLog.Entities;
+using System;
+
+namespace PcVueSpyLog
+{
+    public static class Users
+    {
+        /// <summary>
+        /// Récupération d'un utilisateur
+        /// </summary>
+        /// <param name="SID">Security Identifier</param>
+        /// <returns></returns>
+        public static Utilisateur GetUser(String SID)
+        {
+            return LogContext.Context.Utilisateurs.Find(SID);
+        }
+
+        /// <summary>
+        /// Création de l'utilisateur Windows dans la base de données
+        /// </summary>
+        /// <returns></returns>
+        public static bool CreateUser()
+        {
+            try
+            {
+                LogContext.Context.Utilisateurs.Add(new Utilisateur());
+                LogContext.Context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Mise à jour d'un utilisateur
+        /// </summary>
+        /// <param name="SID">Security Identifier</param>
+        /// <param name="User">Utilisateur</param>
+        /// <returns></returns>
+        public static bool UpdateUser(String SID, Utilisateur User)
+        {
+            try
+            {
+                Utilisateur _User = GetUser(SID);
+
+                if (_User == null)
+                    return false;
+
+                _User.UserName = User.UserName;
+                _User.Trace = User.Trace;
+
+                LogContext.Context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
+}

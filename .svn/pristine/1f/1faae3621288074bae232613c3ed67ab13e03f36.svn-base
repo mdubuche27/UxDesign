@@ -1,0 +1,52 @@
+﻿<Window x:Class="PcVueSpyWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PcVueSpyWPF"
+        WindowStartupLocation="CenterScreen"
+        Icon="Images/logo.png"
+        mc:Ignorable="d"
+        MinWidth="750"
+        MinHeight="450"
+        Title="PcVue Analyzer" WindowState="Maximized" Closing="Window_Closing"
+        ContentRendered="Window_ContentRendered">
+
+    <Border Background="{StaticResource ForegroundLightBrush}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Background="{StaticResource SideBarColorBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Main buttons -->
+                <StackPanel Orientation="Vertical">
+                    <Button Style="{StaticResource IconButton}" Content="{StaticResource FontAwesomeHomeIcon}" Command="{Binding SetHomePage}"/>
+                    <Button Style="{StaticResource IconButton}" Content="{StaticResource FontAwesomeEditIcon}" Command="{Binding SetEyeTrackingPage}"/>
+                    <Button Style="{StaticResource IconButton}" Content="{StaticResource FontAwesomeUserIcon}" Command="{Binding SetInfosPage}"/>
+                </StackPanel>
+
+                <Button Grid.Row="2" Style="{StaticResource IconButton}" Content="{StaticResource FontAwesomeCogIcon}" Command="{Binding SetSettingsPage}"/>
+
+            </Grid>
+
+            <!-- Border effect -->
+            <Border Grid.Column="1" Background="{StaticResource SideBarLightMonochromaticColorBrush}"></Border>
+
+            <!-- Content -->
+            <local:Home x:Name="HomeWindow" Grid.Column="2" Visibility="{Binding HomeVisibility}"/>
+            <local:Logs Grid.Column="2" Visibility="{Binding LogsVisibility}"/>
+            <local:Infos Grid.Column="2" Visibility="{Binding InfosVisibility}"/>
+            <local:Settings Grid.Column="2" Visibility="{Binding SettingsVisibility}"/>
+            <local:EyeTracking Grid.Column="2" Visibility="{Binding EyeTrackingVisibility}"/>
+        </Grid>
+    </Border>
+</Window>

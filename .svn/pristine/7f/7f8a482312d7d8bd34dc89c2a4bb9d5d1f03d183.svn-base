@@ -1,0 +1,236 @@
+﻿using PcVueSpyLog;
+using System;
+using System.IO;
+using System.Windows;
+using System.Windows.Forms;
+using Tobii.Research;
+
+namespace PcVueSpyWPF
+{
+    class LogHelpers
+    {
+        /// <summary>
+        /// affiche les logs reguliers 
+        /// </summary>
+        /// <param name="EyeGaze"></param>
+        /// <param name="EyeGazeTime"></param>
+        public static void LogGazeRegular(GazeDataEventArgs EyeGaze, DateTime EyeGazeTime)
+        {
+            int rep = 5;
+            if (EyeTrackingViewModel.ListeEyeGaze.Count > rep)
+            {
+                if ((EyeTrackingViewModel.StaticNum % rep) == 0)
+                {
+                    double X = EyeGaze.LeftEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.WorkingArea.Width;
+                    double Y = EyeGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.WorkingArea.Height;
+
+                    //affiche le log si l'utilisateur regarde l'écran
+                    if (double.IsNaN(X) == false & double.IsNaN(Y) == false)
+                    {
+                        string LogRegular = "[" + EyeGazeTime.ToString("dd/MM/yyyy HH:mm:ss:ff0") + "]" + ";" + "ETR" + ";" + GetX(X) + ";" + GetY(Y) + ";";
+                        LogRegular = ChoseFile.GetSyn(LogRegular);
+                        ChoseFile.ChoseFileLogET(EyeGazeTime, LogRegular);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// affiche dans le fichier Logs les logs des points de fuites tous les 0.25s
+        /// </summary>
+        public static void LogGazeVanishingPoint(GazeDataEventArgs EyeGaze, DateTime EyeGazeTime)
+        {
+            int rep = 10;
+            EyeTrackingViewModel.VanishNum++;
+
+            //recupere le dernier logs avnant que sont regards quitte l'écran
+            if (EyeTrackingViewModel.VanishNum >= rep)
+            {
+                if ((EyeTrackingViewModel.VanishNum % rep) == 0)
+                {
+                    double X = EyeGaze.LeftEye.GazePoint.PositionOnDisplayArea.X;
+                    double Y = EyeGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y;
+                    double _X = double.NaN;
+                    double _Y = double.NaN;
+
+                    for (int R = 1; R <= rep; R++)
+                    {
+                        if (double.IsNaN(Convert.ToDouble(EyeTrackingViewModel.ListeEyeGaze[EyeTrackingViewModel.ListeEyeGaze.Count - R].LeftEye.GazePoint.PositionOnDisplayArea.X)) == false && double.IsNaN(Convert.ToDouble(EyeTrackingViewModel.ListeEyeGaze[EyeTrackingViewModel.ListeEyeGaze.Count - R].LeftEye.GazePoint.PositionOnDisplayArea.Y)) == false)
+                        {
+                            _X = Convert.ToDouble(EyeTrackingViewModel.ListeEyeGaze[EyeTrackingViewModel.ListeEyeGaze.Count - R].LeftEye.GazePoint.PositionOnDisplayArea.X) * Screen.PrimaryScreen.WorkingArea.Width;
+                            _Y = Convert.ToDouble(EyeTrackingViewModel.ListeEyeGaze[EyeTrackingViewModel.ListeEyeGaze.Count - R].LeftEye.GazePoint.PositionOnDisplayArea.Y) * Screen.PrimaryScreen.WorkingArea.Height;
+                        }
+                    }
+                    if (double.IsNaN(X) || double.IsNaN(Y))
+                    {
+                        if (double.IsNaN(_X) == false && double.IsNaN(_Y) == false)
+                        {
+                            string LogVanishingPoint = "[" + EyeGazeTime.ToString("dd/MM/yyyy HH:mm:ss:ff0") + "]" + ";" + "ETF" + ";" + GetX(_X) + ";" + GetY(_Y) + ";";
+                            LogVanishingPoint = ChoseFile.GetSyn(LogVanishingPoint);
+                            ChoseFile.ChoseFileLogET(EyeGazeTime, LogVanishingPoint);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// affiche dans le fichier Logs les logs du regard statique tous les (0.25s)
+        /// </summary>
+        public static void LogGazeStatic(GazeDataEventArgs EyeGaze, DateTime EyeGazeTime)
+        {
+            int rep = 5;
+            int gap = 20;
+            EyeTrackingViewModel.StaticNum++;
+
+            if (EyeTrackingViewModel.ListeEyeGaze.Count > rep)
+            {
+                if ((EyeTrackingViewModel.StaticNum % rep) == 0)
+                {
+                    double X = EyeGaze.LeftEye.GazePoint.PositionOnDisplayArea.X;
+                    double Y = EyeGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y;
+
+                    //verifie si le regard a bouger de plus de 20pxs tous les 0.25s
+                    if (EyeTrackingViewModel.ListeEyeGaze[EyeTrackingViewModel.ListeEyeGaze.Count - rep].LeftEye.GazePoint.PositionOnDisplayArea.X + gap >= X & X >= EyeTrackingViewModel.ListeEyeGaze[EyeTrackingViewModel.ListeEyeGaze.Count - rep].LeftEye.GazePoint.PositionOnDisplayArea.X - gap)
+                    {
+                        if (EyeTrackingViewModel.ListeEyeGaze[EyeTrackingViewModel.ListeEyeGaze.Count - rep].LeftEye.GazePoint.PositionOnDisplayArea.Y + gap >= Y & Y >= EyeTrackingViewModel.ListeEyeGaze[EyeTrackingViewModel.ListeEyeGaze.Count - rep].LeftEye.GazePoint.PositionOnDisplayArea.Y - gap)
+                        {
+                            string LogStatic = "[" + EyeGazeTime.ToString("dd/MM/yyyy HH:mm:ss:ff0") + "]" + ";" + "ETS" + ";" + GetX(X * Screen.PrimaryScreen.WorkingArea.Width) + ";" + GetY(Y * Screen.PrimaryScreen.WorkingArea.Height) + ";";
+                            LogStatic = ChoseFile.GetSyn(LogStatic);
+                            ChoseFile.ChoseFileLogET(EyeGazeTime, LogStatic);
+                        }
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// affiche les logs lorsque le regard d'user quitte ou entre dans l'ecran!
+        /// </summary>
+        /// <param name="EyeGaze"></param>
+        /// <param name="EyeGazeTime"></param>
+        public static void LogGazeOutIn(GazeDataEventArgs EyeGaze, DateTime EyeGazeTime)
+        {
+            int RepMax = 10;
+
+            double X_1 = 0;
+            double Y_1 = 0;
+
+            if (EyeTrackingViewModel.ListeEyeGaze.Count >= 2)
+            {
+                X_1 = Convert.ToDouble(EyeTrackingViewModel.ListeEyeGaze[EyeTrackingViewModel.ListeEyeGaze.Count - 2].LeftEye.GazePoint.PositionOnDisplayArea.X);
+                Y_1 = Convert.ToDouble(EyeTrackingViewModel.ListeEyeGaze[EyeTrackingViewModel.ListeEyeGaze.Count - 2].LeftEye.GazePoint.PositionOnDisplayArea.Y);
+            }
+
+            double X = Convert.ToDouble(EyeGaze.LeftEye.GazePoint.PositionOnDisplayArea.X);
+            double Y = Convert.ToDouble(EyeGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y);
+
+            //affiche le log lorsque le regard arrive sur l'écran
+            if (double.IsNaN(X_1) | double.IsNaN(Y_1))
+            {
+                if (double.IsNaN(X) == false && double.IsNaN(Y) == false)
+                {
+                    string LogStatic = "[" + EyeGazeTime.ToString("dd/MM/yyyy HH:mm:ss:ff0") + "]" + ";" + "ETIO" + ";1" + ";";
+                    LogStatic = ChoseFile.GetSyn(LogStatic);
+                    ChoseFile.ChoseFileLogET(EyeGazeTime, LogStatic);
+                }
+            }
+
+            //affiche lorsque le regard quitte l'écran
+            if (double.IsNaN(X) | double.IsNaN(Y))
+            {
+                if (double.IsNaN(X_1) == false && double.IsNaN(Y_1) == false)
+                {
+                    string LogStatic = "[" + EyeGazeTime.ToString("dd/MM/yyyy HH:mm:ss:ff0") + "]" + ";" + "ETIO" + ";0" + ";";
+                    LogStatic = ChoseFile.GetSyn(LogStatic);
+                    ChoseFile.ChoseFileLogET(EyeGazeTime, LogStatic);
+                }
+            }
+            if (EyeTrackingViewModel.ListeEyeGaze.Count > RepMax + 1)
+            {
+                EyeTrackingViewModel.ListeEyeGaze.RemoveAt(EyeTrackingViewModel.ListeEyeGaze.Count - (RepMax + 1));
+            }
+        }
+
+        public static void GazeDataOn(IEyeTracker Tracker)
+        {
+            //debut de l'ecoute de gazedata
+            Tracker.GazeDataReceived += _GazeDataReceived;
+        }
+
+        public static void GazeDataOff(IEyeTracker Tracker)
+        {
+            //fin de l'ecoute de gazedata
+            Tracker.GazeDataReceived -= _GazeDataReceived;
+        }
+
+        /// <summary>
+        /// transforme X en un pourcentage de la fenetre avec seulement 3 chiffre derriere la virgule
+        /// </summary>
+        /// <param name="X"></param>
+        /// <returns></returns>
+        public static double GetX(double X)
+        {
+            string FilePath = ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\InfoScreen.txt";
+            if (File.Exists(FilePath))
+            {
+                try
+                {
+                    string FileContent = File.ReadAllText(FilePath);
+                    string[] FileContentSplit = FileContent.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    X = (X - Convert.ToDouble(FileContentSplit[3])) / Convert.ToDouble(FileContentSplit[1]);
+                    X = Math.Round(X, 3);
+                    return X;
+                }
+                catch (Exception e) 
+                { 
+                    
+                }
+            }
+            X = Math.Round(X, 3);
+            return X;
+        }
+
+        /// <summary>
+        /// transforme Y en un pourcentage de la fenetre avec seulement 3 chiffre derriere la virgule
+        /// </summary>
+        /// <param name="Y"></param>
+        /// <returns></returns>
+        public static double GetY(double Y)
+        {
+            string FilePath = ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\InfoScreen.txt";
+            if (File.Exists(FilePath))
+            {
+                try
+                {
+                    string FileContent = File.ReadAllText(FilePath);
+                    string[] FileContentSplit = FileContent.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    Y = (Y - Convert.ToDouble(FileContentSplit[2])) / Convert.ToDouble(FileContentSplit[0]);
+                    Y = Math.Round(Y, 3);
+                    return Y;
+                }
+                catch(Exception e) 
+                { 
+
+                }
+            }
+            Y = Math.Round(Y, 3);
+            return Y;
+        }
+
+        public static void _GazeDataReceived(object sender, GazeDataEventArgs e)
+        {
+            DateTime LogTime = DateTime.Now;
+            EyeTrackingViewModel.ListeEyeGaze.Add(e);
+
+            if (EyeTrackingViewModel.AppStateBool)
+            {
+                //appel les fonctions qui genere les logs
+                LogGazeRegular(e, LogTime);
+                LogGazeVanishingPoint(e, LogTime);
+                LogGazeStatic(e, LogTime);
+                LogGazeOutIn(e, LogTime);
+            }
+        }
+
+    }
+}

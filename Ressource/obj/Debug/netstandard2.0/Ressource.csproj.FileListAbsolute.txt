@@ -1,0 +1,10 @@
+C:\Users\maxence.dubuche\Desktop\Projet ControlToSCADA\Ressource\bin\Debug\netstandard2.0\Ressource.deps.json
+C:\Users\maxence.dubuche\Desktop\Projet ControlToSCADA\Ressource\bin\Debug\netstandard2.0\Ressource.dll
+C:\Users\maxence.dubuche\Desktop\Projet ControlToSCADA\Ressource\bin\Debug\netstandard2.0\Ressource.pdb
+C:\Users\maxence.dubuche\Desktop\Projet ControlToSCADA\Ressource\obj\Debug\netstandard2.0\Ressource.csprojAssemblyReference.cache
+C:\Users\maxence.dubuche\Desktop\Projet ControlToSCADA\Ressource\obj\Debug\netstandard2.0\Ressource.Resource.resources
+C:\Users\maxence.dubuche\Desktop\Projet ControlToSCADA\Ressource\obj\Debug\netstandard2.0\Ressource.csproj.GenerateResource.cache
+C:\Users\maxence.dubuche\Desktop\Projet ControlToSCADA\Ressource\obj\Debug\netstandard2.0\Ressource.AssemblyInfoInputs.cache
+C:\Users\maxence.dubuche\Desktop\Projet ControlToSCADA\Ressource\obj\Debug\netstandard2.0\Ressource.AssemblyInfo.cs
+C:\Users\maxence.dubuche\Desktop\Projet ControlToSCADA\Ressource\obj\Debug\netstandard2.0\Ressource.dll
+C:\Users\maxence.dubuche\Desktop\Projet ControlToSCADA\Ressource\obj\Debug\netstandard2.0\Ressource.pdb

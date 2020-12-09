@@ -1,0 +1,263 @@
+﻿using PcVueSpyLog.Entities;
+using PropertyChanged;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+
+namespace PcVueSpyWPF
+{
+    public class VueLogsViewModel : BaseViewModel
+    {
+        #region Private Visibility Members
+
+        private Visibility PAlarmeLogsVisibility { get; set; }
+        private Visibility PClavierLogsVisibility { get; set; }
+        private Visibility PFenetreLogsVisibility { get; set; }
+        private Visibility POFLogsVisibility { get; set; }
+        private Visibility PSourisLogsVisibility { get; set; }
+        private Visibility PSymboleLogsVisibility { get; set; }
+
+        #endregion
+
+        #region Public Visibility Members
+
+        [DoNotNotify]
+        public Visibility AlarmeLogsVisibility
+        {
+            get { return PAlarmeLogsVisibility; }
+            set
+            {
+                PAlarmeLogsVisibility = value;
+                if (PAlarmeLogsVisibility == Visibility.Visible)
+                {
+                    ClavierLogsVisibility = Visibility.Hidden;
+                    FenetreLogsVisibility = Visibility.Hidden;
+                    OFLogsVisibility = Visibility.Hidden;
+                    SourisLogsVisibility = Visibility.Hidden;
+                    SymboleLogsVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        [DoNotNotify]
+        public Visibility ClavierLogsVisibility
+        {
+            get { return PClavierLogsVisibility; }
+            set
+            {
+                PClavierLogsVisibility = value;
+                if (PClavierLogsVisibility == Visibility.Visible)
+                {
+                    AlarmeLogsVisibility = Visibility.Hidden;
+                    FenetreLogsVisibility = Visibility.Hidden;
+                    OFLogsVisibility = Visibility.Hidden;
+                    SourisLogsVisibility = Visibility.Hidden;
+                    SymboleLogsVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        [DoNotNotify]
+        public Visibility FenetreLogsVisibility
+        {
+            get { return PFenetreLogsVisibility; }
+            set
+            {
+                PFenetreLogsVisibility = value;
+                if (PFenetreLogsVisibility == Visibility.Visible)
+                {
+                    AlarmeLogsVisibility = Visibility.Hidden;
+                    ClavierLogsVisibility = Visibility.Hidden;
+                    OFLogsVisibility = Visibility.Hidden;
+                    SourisLogsVisibility = Visibility.Hidden;
+                    SymboleLogsVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        [DoNotNotify]
+        public Visibility OFLogsVisibility
+        {
+            get { return POFLogsVisibility; }
+            set
+            {
+                POFLogsVisibility = value;
+                if (POFLogsVisibility == Visibility.Visible)
+                {
+                    AlarmeLogsVisibility = Visibility.Hidden;
+                    ClavierLogsVisibility = Visibility.Hidden;
+                    FenetreLogsVisibility = Visibility.Hidden;
+                    SourisLogsVisibility = Visibility.Hidden;
+                    SymboleLogsVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        [DoNotNotify]
+        public Visibility SourisLogsVisibility
+        {
+            get { return PSourisLogsVisibility; }
+            set
+            {
+                PSourisLogsVisibility = value;
+                if (PSourisLogsVisibility == Visibility.Visible)
+                {
+                    AlarmeLogsVisibility = Visibility.Hidden;
+                    ClavierLogsVisibility = Visibility.Hidden;
+                    FenetreLogsVisibility = Visibility.Hidden;
+                    OFLogsVisibility = Visibility.Hidden;
+                    SymboleLogsVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        [DoNotNotify]
+        public Visibility SymboleLogsVisibility
+        {
+            get { return PSymboleLogsVisibility; }
+            set
+            {
+                PSymboleLogsVisibility = value;
+                if (PSymboleLogsVisibility == Visibility.Visible)
+                {
+                    AlarmeLogsVisibility = Visibility.Hidden;
+                    ClavierLogsVisibility = Visibility.Hidden;
+                    FenetreLogsVisibility = Visibility.Hidden;
+                    OFLogsVisibility = Visibility.Hidden;
+                    SourisLogsVisibility = Visibility.Hidden;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region Public Logs Lists
+
+        public List<PcVueSpyLog.Alarme> AlarmeLogs { get; set; }
+        public List<PcVueSpyLog.Clavier> ClavierLogs { get; set; }
+        public List<PcVueSpyLog.Fenetre> FenetreLogs { get; set; }
+        public List<PcVueSpyLog.OuvertureFermeture> OFLogs { get; set; }
+        public List<PcVueSpyLog.Souris> SourisLogs { get; set; }
+        public List<PcVueSpyLog.Symbole> SymboleLogs { get; set; }
+
+        #endregion
+
+        #region Public Members
+
+        /// <summary>
+        /// Commande pour voir toutes les références
+        /// </summary>
+        public ICommand SeeRefs { get; set; }
+
+        /// <summary>
+        /// Commande pour voir les références par dates
+        /// </summary>
+        public ICommand SeeRefsBetweenDates { get; set; }
+
+        /// <summary>
+        /// Active ou désactive l'option pour voir les références par dates
+        /// </summary>
+        public bool ESeeRefsBetweenDates { get; set; }
+
+        /// <summary>
+        /// Active ou désactive l'option pour voir  toutes les références
+        /// </summary>
+        public bool ESeeRefs { get; set; }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Chargement des logs en fonction du Type
+        /// </summary>
+        /// <param name="Type"></param>
+        /// <param name="Logs"></param>
+        private void LoadLogs(string Type, List<PcVueSpyLog.Log> Logs)
+        {
+            if (Type == PcVueSpyLog.ConstsType.ALARME)
+            {
+                AlarmeLogs = Logs.Cast<PcVueSpyLog.Alarme>().ToList();
+                AlarmeLogsVisibility = Visibility.Visible;
+            }
+            else if (Type == PcVueSpyLog.ConstsType.CLAVIER)
+            {
+                ClavierLogs = Logs.Cast<PcVueSpyLog.Clavier>().ToList();
+                ClavierLogsVisibility = Visibility.Visible;
+            }
+            else if (Type == PcVueSpyLog.ConstsType.FENETRE)
+            {
+                FenetreLogs = Logs.Cast<PcVueSpyLog.Fenetre>().ToList();
+                FenetreLogsVisibility = Visibility.Visible;
+            }
+            else if (Type == PcVueSpyLog.ConstsType.OUVERTURE_FERMETURE)
+            {
+                OFLogs = Logs.Cast<PcVueSpyLog.OuvertureFermeture>().ToList();
+                OFLogsVisibility = Visibility.Visible;
+            }
+            else if (Type == PcVueSpyLog.ConstsType.SOURIS)
+            {
+                SourisLogs = Logs.Cast<PcVueSpyLog.Souris>().ToList();
+                SourisLogsVisibility = Visibility.Visible;
+            }
+            else if (Type == PcVueSpyLog.ConstsType.SYMBOLE)
+            {
+                SymboleLogs = Logs.Cast<PcVueSpyLog.Symbole>().ToList();
+                SymboleLogsVisibility = Visibility.Visible;
+            }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        /// <param name="Type"></param>
+        /// <param name="AllPeriod"></param>
+        /// <param name="StartDate"></param>
+        /// <param name="EndDate"></param>
+        public VueLogsViewModel(string Type, bool AllPeriod, DateTime? StartDate, DateTime? EndDate)
+        {
+            List<PcVueSpyLog.Log> Logs = AllPeriod ? LogContext.Context.Logs.Where(s => s.Type == Type).ToList() : LogContext.Context.Logs.Where(s => s.Type == Type && s.DateTime >= StartDate.Value && s.DateTime <= EndDate.Value).ToList();
+            LoadLogs(Type, Logs);
+            ESeeRefs = true;
+            ESeeRefsBetweenDates = !AllPeriod;
+            SeeRefs = new RelayParameterizedCommand((m) => new VueLogs((m as DataGrid).SelectedItem as PcVueSpyLog.Log, Type, true, StartDate, EndDate).Show());
+            SeeRefsBetweenDates = new RelayParameterizedCommand((m) => new VueLogs((m as DataGrid).SelectedItem as PcVueSpyLog.Log, Type, false, StartDate, EndDate).Show());
+
+            if (Logs == null || Logs?.Count == 0)
+            {
+                ESeeRefsBetweenDates = false;
+                ESeeRefs = false;
+            }
+        }
+
+        /// <summary>
+        /// Constructeur pour les actions filtrées
+        /// </summary>
+        /// <param name="Log"></param>
+        /// <param name="AllPeriod"></param>
+        /// <param name="StartDate"></param>
+        /// <param name="EndDate"></param>
+        public VueLogsViewModel(PcVueSpyLog.Log Log, string Type, bool AllPeriod, DateTime? StartDate, DateTime? EndDate)
+        {
+            List<PcVueSpyLog.Log> Logs = AllPeriod ? PcVueSpyLog.Log.GetLogsWithSameKey(Log) : PcVueSpyLog.Log.GetLogsWithSameKeyBetweenDates(Log, StartDate.Value, EndDate.Value);
+            LoadLogs(Type, Logs);
+            ESeeRefsBetweenDates = false;
+            ESeeRefs = false;
+        }
+
+        #endregion
+    }
+}

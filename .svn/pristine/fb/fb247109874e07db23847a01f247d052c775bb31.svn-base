@@ -1,0 +1,143 @@
+﻿using PcVueSpyLog;
+using System;
+using System.IO;
+using System.Text;
+
+namespace PcVueSpyLog
+{
+    class ChoseFile
+    {
+        /// <summary>
+        /// check si le fichier est en cours d'urtilsiation
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static bool IsFileInUse(FileInfo file)
+        {
+            FileStream stream = null;
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// recupere le synoptque et le username actuel sur PcVue et injecte ceux-la au log!
+        /// </summary>
+        /// <param name="Log"></param>
+        /// <returns></returns>
+        public static string GetSyn(String Log)
+        {
+            string Path = ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\Infos.txt";
+            string EndLog = "";
+            string CurrentSynUser = "";
+
+            if (File.Exists(Path))
+            {
+                if (!IsFileInUse(new FileInfo(Path)))
+                {
+                    try
+                    {
+                        CurrentSynUser = File.ReadAllText(Path);
+                        EndLog = CurrentSynUser;
+                    }
+                    catch (Exception ex)
+                    {
+                        EndLog = CurrentSynUser;
+                    }
+                }
+            }
+            else
+            {
+                File.Create(Path).Close();
+                EndLog = "0;0";
+            }
+
+            string[] LogSplit = Log.Split("]".ToCharArray());
+            Log = LogSplit[0] + "]" + EndLog + LogSplit[1];
+            Log = Log.Replace("\r\n", "") + "\r\n";
+            return Log;
+        }
+
+        ///<summary>
+        ///envoi le log EyeTracking dans le fichier qui lui correspond 
+        ///</summary>
+        public static void ChoseFileLog(DateTime EyeGazeTime, string Log)
+        {
+            string FileNum;
+            string PathDir = ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\";
+            string PathFile = ComputerInfos.InstallFolderBin + "\\ActemiumLogs\\ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd");
+            if (Directory.Exists(PathDir) == false)
+            {
+                Directory.CreateDirectory(PathDir);
+            }
+            if (Directory.Exists(PathFile) == false)
+            {
+                Directory.CreateDirectory(PathFile);
+                File.Create(PathFile + "\\ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd") + "_0000.log").Close();
+            }
+            if (File.Exists(PathFile + "\\ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd") + "_0000.log") == false)
+            {
+                File.Create(PathFile + "\\ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd") + "_0000.log").Close();
+            }
+            //on recupere tous les path les fichiers de logs
+            string[] FilePathLog = Directory.GetFiles(PathFile);
+
+            int compt = 0;
+            //parcour tous les fichiers de logs 
+            for (int F = 0; F < FilePathLog.Length; F++)
+            {
+                int FileSize = Convert.ToInt32(new FileInfo(FilePathLog[F]).Length);
+
+                //si il fait moins de 5Mo écrit dans le fichier de logs
+                if (FileSize < (5000000))
+                {
+                    string PathLog = Path.GetFullPath(FilePathLog[F]);
+                    if (!IsFileInUse(new FileInfo(PathLog)))
+                    {
+                        string Line = GetSyn(Log);
+                        File.AppendAllText(PathLog, Line);
+                        
+                    }
+
+                }
+                //si le fichier est plein augmente le compteur de 1
+                else
+                {
+                    compt++;
+                }
+                if (FilePathLog.Length < 10000)
+                {
+                    FileNum = FilePathLog.Length.ToString();
+                    if (FilePathLog.Length < 1000)
+                    {
+                        FileNum = "0" + FilePathLog.Length.ToString();
+                    }
+                    if (FilePathLog.Length < 100)
+                    {
+                        FileNum = "00" + FilePathLog.Length.ToString();
+                    }
+                    if (FilePathLog.Length < 10)
+                    {
+                        FileNum = "000" + FilePathLog.Length.ToString();
+                    }
+                    //si tous les fichiers sont plein en créer un nouveau
+                    if (compt == FilePathLog.Length)
+                    {
+                        File.Create(PathFile + "\\ActemiumLog_" + EyeGazeTime.ToString("yyyy-MM-dd") + "_" + FileNum + ".log").Close();
+                    }
+                }
+            }
+        }
+    }
+}

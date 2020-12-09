@@ -1,0 +1,177 @@
+﻿using PcVueSpyLog.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace PcVueSpyWPF
+{
+    /// <summary>
+    /// Logique d'interaction pour VueLogs.xaml
+    /// </summary>
+    public partial class VueLogs : Window
+    {
+
+        // Constantes pour les titres des fenêtres
+        private const string TITRE_ALARME = "Actions sur les alarmes";
+        private const string TITRE_CLAVIER = "Actions sur le clavier";
+        private const string TITRE_FENETRE = "Actions sur les synoptiques";
+        private const string TITRE_OUVERTURE_FERMETURE = "Actions sur les ouvertures et fermetures des synoptiques";
+        private const string TITRE_SOURIS = "Actions sur les clics";
+        private const string TITRE_SYMBOLE = "Actions sur les symboles";
+
+        // Constantes pour les titres des fenêtres filtrées
+        private const string TITRE_FILTRE_ALARME = "Filtre sur les actions des alarmes";
+        private const string TITRE_FILTRE_CLAVIER = "Filtre sur les actions du clavier";
+        private const string TITRE_FILTRE_FENETRE = "Filtre sur les actions des synoptiques";
+        private const string TITRE_FILTRE_OUVERTURE_FERMETURE = "Filtre sur les actions des ouvertures et fermetures des synoptiques";
+        private const string TITRE_FILTRE_SOURIS = "Filtre sur les actions des clics";
+        private const string TITRE_FILTRE_SYMBOLE = "Filtre sur les actions des symboles";
+
+        private VueLogs()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// Constructeur permettant d'instancier la classe VueLogs
+        /// </summary>
+        /// <param name="Type"></param>
+        /// <param name="AllPeriod"></param>
+        /// <param name="StartDate"></param>
+        /// <param name="EndDate"></param>
+        public VueLogs(string Type, bool AllPeriod, DateTime? StartDate, DateTime? EndDate) : this()
+        {
+            // Assignation du titre en fonction du type
+            if (Type == PcVueSpyLog.ConstsType.ALARME)
+                this.Title = TITRE_ALARME;
+            else if (Type == PcVueSpyLog.ConstsType.CLAVIER)
+                this.Title = TITRE_CLAVIER;
+            else if (Type == PcVueSpyLog.ConstsType.FENETRE)
+                this.Title = TITRE_FENETRE;
+            else if (Type == PcVueSpyLog.ConstsType.OUVERTURE_FERMETURE)
+                this.Title = TITRE_OUVERTURE_FERMETURE;
+            else if (Type == PcVueSpyLog.ConstsType.SOURIS)
+                this.Title = TITRE_SOURIS;
+            else if (Type == PcVueSpyLog.ConstsType.SYMBOLE)
+                this.Title = TITRE_SYMBOLE;
+
+            this.DataContext = new VueLogsViewModel(Type, AllPeriod, StartDate, EndDate);
+        }
+
+        /// <summary>
+        /// Constructeur permettant de filtrer selon une correspondance
+        /// </summary>
+        /// <param name="Log"></param>
+        /// <param name="Type"></param>
+        /// <param name="AllPeriod"></param>
+        /// <param name="StartDate"></param>
+        /// <param name="EndDate"></param>
+        public VueLogs(PcVueSpyLog.Log Log, string Type, bool AllPeriod, DateTime? StartDate, DateTime? EndDate) : this()
+        {
+            // Assignation du titre en fonction du type
+            if (Type == PcVueSpyLog.ConstsType.ALARME)
+                this.Title = TITRE_FILTRE_ALARME;
+            else if (Type == PcVueSpyLog.ConstsType.CLAVIER)
+                this.Title = TITRE_FILTRE_CLAVIER;
+            else if (Type == PcVueSpyLog.ConstsType.FENETRE)
+                this.Title = TITRE_FILTRE_FENETRE;
+            else if (Type == PcVueSpyLog.ConstsType.OUVERTURE_FERMETURE)
+                this.Title = TITRE_FILTRE_OUVERTURE_FERMETURE;
+            else if (Type == PcVueSpyLog.ConstsType.SOURIS)
+                this.Title = TITRE_FILTRE_SOURIS;
+            else if (Type == PcVueSpyLog.ConstsType.SYMBOLE)
+                this.Title = TITRE_FILTRE_SYMBOLE;
+
+            this.DataContext = new VueLogsViewModel(Log, Type, AllPeriod, StartDate, EndDate);
+        }
+
+        /// <summary>
+        /// Modifie le nom des colonnes et met la Date et l'Heure en premier
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            // On ne met pas le type dans le tableau puisqu'on le connaît déjà
+            if (e.PropertyName == "Type" || e.PropertyName == "HashKey" || e.PropertyName == "HashKeyCode")
+                e.Column = null;
+
+            else if (e.PropertyName == "DateTime")
+            {
+                e.Column.DisplayIndex = 0;
+                e.Column.Header = "Date & Heure";
+            }
+
+            else if (e.PropertyName == "NomProjet")
+                e.Column.Header = "Nom du projet";
+
+            else if (e.PropertyName == "NomSynoptique")
+                e.Column.Header = "Nom du synoptique";
+
+            else if (e.PropertyName == "TitreSynoptique")
+                e.Column.Header = "Titre du synoptique";
+
+            else if (e.PropertyName == "NomAlarme")
+                e.Column.Header = "Nom de l'alarme";
+
+            else if (e.PropertyName == "Selected")
+                e.Column.Header = "Sélectionné";
+
+            else if (e.PropertyName == "NomUtilisateur")
+                e.Column.Header = "Nom d'utilisateur";
+
+            else if (e.PropertyName == "Text")
+                e.Column.Header = "Texte";
+
+            else if (e.PropertyName == "KeyData")
+                e.Column.Header = "Touche";
+
+            else if (e.PropertyName == "TypeClic")
+                e.Column.Header = "Type de clic";
+
+            else if (e.PropertyName == "PointX")
+                e.Column.Header = "Point X";
+
+            else if (e.PropertyName == "PointY")
+                e.Column.Header = "Point Y";
+
+        }
+
+        private bool OriginESeeRefs { get; set; }
+        private bool OriginESeeRefsBetweenDates { get; set; }
+        private bool FirstLoad { get; set; } = true;
+
+        private void DataGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if ( FirstLoad )
+            {
+                OriginESeeRefs = (DataContext as VueLogsViewModel).ESeeRefs;
+                OriginESeeRefsBetweenDates = (DataContext as VueLogsViewModel).ESeeRefsBetweenDates;
+                FirstLoad = false;
+            }
+
+            DataGrid dtGrid = sender as DataGrid;
+
+            if (dtGrid?.SelectedItem == null || dtGrid == null)
+            {
+                (DataContext as VueLogsViewModel).ESeeRefs = false;
+                (DataContext as VueLogsViewModel).ESeeRefsBetweenDates = false;
+            }
+            else
+            {
+                (DataContext as VueLogsViewModel).ESeeRefs = OriginESeeRefs;
+                (DataContext as VueLogsViewModel).ESeeRefsBetweenDates = OriginESeeRefsBetweenDates;
+            }
+        }
+    }
+}

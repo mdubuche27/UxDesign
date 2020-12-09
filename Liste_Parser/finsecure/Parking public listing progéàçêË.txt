@@ -1,0 +1,213 @@
+                                               *****************************************************************
+                                               *                   CONFIGURATION CMSI                          *
+                                               *****************************************************************
+                                               CMSI  1 : PARKING CADAM
+
+
+                                               *****************************************************************
+                                                                         BUS
+                                               *****************************************************************
+                    *****************************************************************
+                                                     Bus n° 1
+                    *****************************************************************
+*****************************************************************
+                           MDA4 n° 1
+*****************************************************************
+
+          Voie n° 1 Entrée
+ | Nom de la voie = ZDM2 GARAGE | ADRESSE MODBUS = 0
+ | Mode = DM Adressable                     | Type = mdlo | Nb d'adresse = 13
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Entrée = NF
+MDLO N° 1 | Nom du MDLO = DM ENTREE GARAGE VEHICULE PRET | Adresse ModBus = 0
+MDLO N° 2 | Nom du MDLO = DM GARAGE FACE ATELIER VELO | Adresse ModBus = 1
+MDLO N° 3 | Nom du MDLO = DM ATELIER VEHICULE EST | Adresse ModBus = 2
+MDLO N° 4 | Nom du MDLO = DM ATELIER VEHICULE OUEST | Adresse ModBus = 3
+MDLO N° 5 | Nom du MDLO = DM ENTREE VEHICULE ATELIER | Adresse ModBus = 4
+MDLO N° 6 | Nom du MDLO = DM CIRCULATION 1ER BUREAU CHAUFFEUR CD06 | Adresse ModBus = 5
+MDLO N° 7 | Nom du MDLO = DM RDC ENTREPOT MENUISERIE ETAT | Adresse ModBus = 6
+MDLO N° 8 | Nom du MDLO = DM RDC ENTREE BUREAU COURRIER ETAT | Adresse ModBus = 7
+MDLO N° 9 | Nom du MDLO = DM CIRCULATION 1ER BUREAU COURRIER ETAT | Adresse ModBus = 8
+MDLO N° 10 | Nom du MDLO = DM GARAGE ETAT EST | Adresse ModBus = 9
+MDLO N° 11 | Nom du MDLO = DM POSTE LIVRAISON EDF NORD | Adresse ModBus = 10
+MDLO N° 12 | Nom du MDLO = DM POSTE LIVRAISON EDF OUEST | Adresse ModBus = 11
+MDLO N° 13 | Nom du MDLO = DM GARAGE ETAT OUEST | Adresse ModBus = 12
+              -----------------------
+
+          Voie n° 2 Entrée
+ | Nom de la voie = ZDM1 PARKING COTE ESCALIER OUEST | ADRESSE MODBUS = 1
+ | Mode = DM Adressable                     | Type = mdlo | Nb d'adresse = 4
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Entrée = NF
+MDLO N° 1 | Nom du MDLO = DM PARKING ISSUE CAISSES | Adresse ModBus = 13
+MDLO N° 2 | Nom du MDLO = DM PARKING COTE ESCALIER OUEST R+2 | Adresse ModBus = 14
+MDLO N° 3 | Nom du MDLO = DM PARKING COTE ESCALIER OUEST R+3 | Adresse ModBus = 15
+MDLO N° 4 | Nom du MDLO = DM PARKING COTE ESCALIER OUEST R+4 | Adresse ModBus = 16
+              -----------------------
+
+          Voie n° 3 Entrée
+ | Nom de la voie = ZDM1 PARKING COTE ESCALIER PRINCIPALE | ADRESSE MODBUS = 2
+ | Mode = DM Adressable                     | Type = mdlo | Nb d'adresse = 4
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Entrée = NF
+MDLO N° 1 | Nom du MDLO = DM PARKING COTE ESCALIER PRINCIPALE R+1 | Adresse ModBus = 17
+MDLO N° 2 | Nom du MDLO = DM PARKING COTE ESCALIER PRINCIPALE R+2 | Adresse ModBus = 18
+MDLO N° 3 | Nom du MDLO = DM PARKING COTE ESCALIER PRINCIPALE R+3 | Adresse ModBus = 19
+MDLO N° 4 | Nom du MDLO = DM PARKING COTE ESCALIER PRINCIPALE R+4 | Adresse ModBus = 20
+              -----------------------
+
+          Voie n° 4 Entrée
+ | Nom de la voie = ZDM1 PARKING COTE ESCALIER NORD | ADRESSE MODBUS = 3
+ | Mode = DM Adressable                     | Type = mdlo | Nb d'adresse = 4
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Entrée = NF
+MDLO N° 1 | Nom du MDLO = DM PARKING COTE ESCALIER NORD R+1 | Adresse ModBus = 21
+MDLO N° 2 | Nom du MDLO = DM PARKING COTE ESCALIER NORD R+2 | Adresse ModBus = 22
+MDLO N° 3 | Nom du MDLO = DM PARKING COTE ESCALIER NORD R+3 | Adresse ModBus = 23
+MDLO N° 4 | Nom du MDLO = DM PARKING COTE ESCALIER NORD R+4 | Adresse ModBus = 24
+              -----------------------
+
+          Voie n° 5 Entrée Systeme
+ | Nom de la voie = SURVEILLANCE AES | ADRESSE MODBUS = 4
+ | Mode = Surveillance Alim (MEAE)         | Type = meae | Nb d'adresse = 1
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Entrée = NF
+MDLO N° 1 | Nom du MDLO = Adresse n° 1  Voie n° 5 | Adresse ModBus = 25
+              -----------------------
+*****************************************************************
+                    *****************************************************************
+                                                     Bus n° 2
+                    *****************************************************************
+*****************************************************************
+                           MDA4 n° 1
+*****************************************************************
+
+          Voie n° 1 Sortie
+ | Nom de la voie = SIRENES BATIMENT GARAGE | ADRESSE MODBUS = 5
+ | Mode = Sirène                            | Type = collectif | Nb d'adresse = 0
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Alimentation = emission
+              -----------------------
+
+          Voie n° 2 Sortie
+ | Nom de la voie = SIRENES PARKING COTE ESCALIER OUEST | ADRESSE MODBUS = 6
+ | Mode = Sirène                            | Type = collectif | Nb d'adresse = 0
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Alimentation = emission
+              -----------------------
+
+          Voie n° 3 Sortie
+ | Nom de la voie = SIRENES PARKING COTE ESCALIER PRINCIPALE | ADRESSE MODBUS = 7
+ | Mode = Sirène                            | Type = collectif | Nb d'adresse = 0
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Alimentation = emission
+              -----------------------
+
+          Voie n° 4 Sortie
+ | Nom de la voie = SIRENES PARKING COTE ESCALIER NORD | ADRESSE MODBUS = 8
+ | Mode = Sirène                            | Type = collectif | Nb d'adresse = 0
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Alimentation = emission
+              -----------------------
+Voie Non Utilisée
+              -----------------------
+*****************************************************************
+*****************************************************************
+                           MDA4 n° 2
+*****************************************************************
+
+          Voie n° 1 Sortie
+ | Nom de la voie = PANNEAU EXTERIEUR PARKING | ADRESSE MODBUS = 10
+ | Mode = Sirène                            | Type = collectif | Nb d'adresse = 0
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Alimentation = emission
+              -----------------------
+
+          Voie n° 2 Entrée
+ | Nom de la voie = DM CAISSE PARKING RDC | ADRESSE MODBUS = 11
+ | Mode = DM Adressable                     | Type = mdlo | Nb d'adresse = 1
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Entrée = NF
+MDLO N° 1 | Nom du MDLO = DM CAISSE PARKING RDC | Adresse ModBus = 26
+              -----------------------
+
+          Voie n° 3 Sortie
+ | Nom de la voie = SIRENES GARAGE | ADRESSE MODBUS = 12
+ | Mode = Sirène                            | Type = collectif | Nb d'adresse = 0
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Alimentation = emission
+              -----------------------
+
+          Voie n° 4 Entrée Systeme
+ | Nom de la voie = AES passerelle UAE | ADRESSE MODBUS = 13
+ | Mode = Defaut Alim (MDLO)               | Type = mdlo | Nb d'adresse = 1
+ | Filtrage(sec) = 0 | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+ | Mode Entrée = NF
+MDLO N° 1 | Nom du MDLO = Adresse n° 1  Voie n° 4 | Adresse ModBus = 27
+              -----------------------
+Voie Non Utilisée
+              -----------------------
+*****************************************************************
+                    *****************************************************************
+                                                     Bus n° 3
+                    *****************************************************************
+                    *****************************************************************
+                                                     Bus n° 4
+                    *****************************************************************
+                                               *****************************************************************
+                                                          Rack
+                                               *****************************************************************
+                    *****************************************************************
+                                                     Rack n° 1
+                    *****************************************************************
+
+          UGA n° 1 | Nom de la fonction = ZA1 PARKING | ADRESSE MODBUS = 0
+ | Type = UGA | Numero d'interdiction = 41541080 | Synthèse = (null)
+ | Durée d'activation(sec) = 300 | Temporisation d'alarme restreinte (sec) = 300
+              -----------------------
+Scenario Entrée:Fonction
+   Fonction  2-2 : ZDM2 GARAGE
+   Fonction  2-1 : ZDM1 PARKING
+              -----------------------
+Scenario Sortie:Voie
+   BUS 2  MDA4 1  Voie 2 : SIRENES PARKING COTE ESCALIER OUEST
+   BUS 2  MDA4 1  Voie 3 : SIRENES PARKING COTE ESCALIER PRINCIPALE
+   BUS 2  MDA4 1  Voie 4 : SIRENES PARKING COTE ESCALIER NORD
+   BUS 2  MDA4 2  Voie 1 : PANNEAU EXTERIEUR PARKING
+              ***********************
+                    *****************************************************************
+                                                     Rack n° 2
+                    *****************************************************************
+
+          UGA n° 1 | Nom de la fonction = ZA2 BATIMENT GARAGE | ADRESSE MODBUS = 1
+ | Type = UGA | Numero d'interdiction = 41540928 | Synthèse = (null)
+ | Durée d'activation(sec) = 300 | Temporisation d'alarme restreinte (sec) = 300
+              -----------------------
+Scenario Entrée:Fonction
+   Fonction  2-2 : ZDM2 GARAGE
+              -----------------------
+Scenario Sortie:Voie
+   BUS 2  MDA4 1  Voie 1 : SIRENES BATIMENT GARAGE
+   BUS 2  MDA4 2  Voie 3 : SIRENES GARAGE
+              ***********************
+
+          Fonction n°5
+ | Nom de la fonction = ZDM1 PARKING | ADRESSE MODBUS = 2
+ | Type = Commande Man. | Numero d'interdiction = 0 | Synthèse = Non
+ | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+              -----------------------
+              -----------------------
+Scenario Sortie:UGA
+   UGA 1-1 : ZA1 PARKING
+              ***********************
+
+          Fonction n°6
+ | Nom de la fonction = ZDM2 GARAGE | ADRESSE MODBUS = 3
+ | Type = Commande Man. | Numero d'interdiction = 0 | Synthèse = Non
+ | Durée d'activation(sec) = 0 | Retard à l'activation (sec) = 0
+              -----------------------
+              -----------------------
+Scenario Sortie:UGA
+   UGA 1-1 : ZA1 PARKING
+   UGA 2-1 : ZA2 BATIMENT GARAGE
+              ***********************

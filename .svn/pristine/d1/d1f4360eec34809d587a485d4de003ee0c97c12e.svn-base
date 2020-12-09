@@ -1,0 +1,87 @@
+﻿using PropertyChanged;
+using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+
+namespace PcVueSpyWPF
+{
+    public class LogsViewModel : BaseViewModel
+    {
+        /// <summary>
+        /// Propriété de stockage de valeur de variable
+        /// </summary>
+        private string PType { get; set; }
+
+        /// <summary>
+        /// Type de Log
+        /// </summary>
+        [DoNotNotify]
+        public string Type {
+            get { return Filtre[PType]; }
+            set { PType = value; NotifyPropertyChanged(); }
+        }
+
+        /// <summary>
+        /// Toutes les dates
+        /// </summary>
+        public bool AllPeriod { get; set; }
+
+        /// <summary>
+        /// Date de début
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+
+        /// <summary>
+        /// Date de fin
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// Filtres pour les logs
+        /// </summary>
+        public Dictionary<string, string> Filtre { get; } = new Dictionary<string, string>
+        {
+            { "Alarme", PcVueSpyLog.ConstsType.ALARME },
+            { "Clavier", PcVueSpyLog.ConstsType.CLAVIER },
+            { "Fenêtre", PcVueSpyLog.ConstsType.FENETRE },
+            { "Ouverture / Fermeture", PcVueSpyLog.ConstsType.OUVERTURE_FERMETURE },
+            { "Souris", PcVueSpyLog.ConstsType.SOURIS },
+            { "Symbole", PcVueSpyLog.ConstsType.SYMBOLE }
+        };
+
+        /// <summary>
+        /// Commande pour voir les logs
+        /// </summary>
+        public ICommand OpenLogCmd { get; set; }
+
+        /// <summary>
+        /// Commande pour les synthèses
+        /// </summary>
+        public ICommand DataSynthesisCmd { get; set; }
+
+        /// <summary>
+        /// Fonction pour ouvrir la fenêtre des logs
+        /// </summary>
+        public void OpenLog()
+        {
+            new VueLogs(Type, AllPeriod, StartDate, EndDate).Show();
+        }
+
+        /// <summary>
+        /// Fonction pour ouvrir la fenêtre de synthèse
+        /// </summary>
+        public void DataSynthesis()
+        {
+
+        }
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        public LogsViewModel()
+        {
+            // Instances des commandes
+            OpenLogCmd = new RelayCommand(OpenLog);
+        }
+    }
+}

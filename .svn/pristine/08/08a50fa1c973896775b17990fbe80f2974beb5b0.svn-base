@@ -1,0 +1,14 @@
+﻿using System.Windows;
+using System.Windows.Input;
+
+namespace TestET2
+{
+    /// <summary>
+    /// Logique d'interaction pour App.xaml
+    /// </summary>
+    public partial class App : Application
+    {   
+    
+    }
+
+}

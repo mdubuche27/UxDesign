@@ -1,0 +1,85 @@
+﻿using PcVueSpyLog.Entities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PcVueSpy
+{
+    public partial class Souris : Form
+    {
+        private int CurrentMouseOverRow { get; set; }
+        private int CurrentMouseOverColumn { get; set; } 
+        
+        private List<PcVueSpyLog.Souris> ListeSouris { get; set; }
+
+        public Souris()
+        {
+            InitializeComponent();
+
+            ListeSouris = LogContext.Context.Clics.ToList();
+
+            if (ListeSouris != null)
+            {
+                foreach (PcVueSpyLog.Souris Souris in ListeSouris)
+                {
+                    dataGridView1.Rows.Add
+                    (
+                        Souris.DateTime.ToString(),
+                        Souris.TypeClic == "G" ? "Gauche" : "Droit",
+                        Souris.PointX.ToString(),
+                        Souris.PointY.ToString()
+                    );
+                }
+            }
+        }
+
+        public Souris(PcVueSpyLog.Souris _Souris)
+        {
+            InitializeComponent();
+
+            voirLesRelationsToolStripMenuItem.Visible = false;
+            this.Text = "Filtre sur les actions des clics de la souris";
+            ListeSouris = PcVueSpyLog.Log.GetLogsWithSameKey(_Souris).Cast<PcVueSpyLog.Souris>().ToList();
+
+            foreach (PcVueSpyLog.Souris Souris in ListeSouris)
+            {
+                dataGridView1.Rows.Add
+                (
+                    Souris.DateTime.ToString(),
+                    Souris.TypeClic == "G" ? "Gauche" : "Droit",
+                    Souris.PointX.ToString(),
+                    Souris.PointY.ToString()
+                );
+            }
+        }
+
+        private void DataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if ( e.Button == MouseButtons.Right)
+            {
+                CurrentMouseOverRow = dataGridView1.HitTest(e.X, e.Y).RowIndex;
+                CurrentMouseOverColumn = dataGridView1.HitTest(e.X, e.Y).ColumnIndex;
+
+                if ( CurrentMouseOverRow != -1 && CurrentMouseOverColumn != -1 )
+                    contextMenuStrip1.Show(dataGridView1, new Point(e.X, e.Y));
+            }
+        }
+
+        private void CopierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(dataGridView1.Rows[CurrentMouseOverRow].Cells[CurrentMouseOverColumn].Value);
+        }
+
+        private void VoirLesRelationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Souris Souris = new Souris(ListeSouris[CurrentMouseOverRow]);
+            Souris.Show();
+        }
+    }
+}

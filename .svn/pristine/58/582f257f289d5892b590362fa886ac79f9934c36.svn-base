@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PcVueSpyLog
+{
+    /// <summary>
+    /// Cette classe liste toutes les constantes possibles pour les types de log
+    /// </summary>
+    public static class ConstsType
+    {
+        public const string FENETRE = "F";
+        public const string OUVERTURE_FERMETURE = "OF";
+        public const string ALARME = "A";
+        public const string SOURIS = "S";
+        public const string CLAVIER = "C";
+        public const string SYMBOLE = "SY";
+    }
+}

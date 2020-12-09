@@ -1,0 +1,40 @@
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PcVueSpyLog;
+using PcVueSpyLog.Entities;
+
+namespace PcVueSpyTests
+{
+    [TestClass()]
+    public class ComputerInfosTests
+    {
+        [TestMethod()]
+        public void GetUsername()
+        {
+            Assert.AreEqual("davy.rousselin", ComputerInfos.USERNAME.ToLower());
+        }
+
+        [TestMethod()]
+        public void GetMachineName()
+        {
+            Assert.AreEqual("L-5CG7142WPD", ComputerInfos.COMPUTER_NAME);
+        }
+
+        [TestMethod()]
+        public void GetMacAddress()
+        {
+            Assert.AreEqual("3C52824D6B7C", ComputerInfos.MAC_ADDRESS);
+        }
+
+        [TestMethod()]
+        public void GetPcVueVersion()
+        {
+            Assert.AreEqual("PcVue 11.2", ComputerInfos.VERSION_PC_VUE);
+        }
+
+        [TestMethod()]
+        public void GetUserSID()
+        {
+            Assert.AreEqual("S-1-5-21-2473865291-2479799406-1312266313-288692", ComputerInfos.USER_SID);
+        }
+    }
+}

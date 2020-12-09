@@ -1,0 +1,32 @@
+<POINT
+-[points] recuperrer libelee Archives 6A
+-[Points] adresse est a registre gbus
+- info a recup pour une adresse:
+->tableau
+->ligne
+->adresse point (physique)
+->libellé point 
+->num zone
+->registre gbus
+->octet dans registre gbus
+----> recuperer en plus a boucle
+
+DCT
+->libelle DCT
+->libelle fonction 1
+->adresse DCT
+->adresse modbus deui de adresse DCT grace au fichier de comparaison
+->octet dedui de adresse DCT grace au fichier de comparaison
+----> numero satelite :!\
+
+FONCTION
+/!\ le nuumero est eafficher tel qu'elle mais il faudra chercher a l'adresses modbus n-1
+->type
+->numero
+->adresse modbus(numero - 1)
+->libelle fonction
+
+A VOIR: les normes suivnavtes:
+-sheet toujours identique dans le meme ordre
+-toujours les memes collones dans le meme ordre
+-

@@ -1,0 +1,47 @@
+﻿using PcVueSpyLog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
+
+namespace PcVueSpyWPF
+{
+    /// <summary>
+    /// Classe rassemblant les fonctions et les attributs des paramètres de l'application
+    /// </summary>
+    public class GlobalSettings : BaseViewModel
+    {
+        /// <summary>
+        /// Permet de sélectionner le répertoire d'installation Bin de PcVue
+        /// </summary>
+        /// <returns></returns>
+        public static bool SelectBinPath()
+        {
+            FolderBrowserDialog Folder = new FolderBrowserDialog
+            {
+                Description = "Veuillez séléctionner le répertoire Bin du dossier d'installation de PcVue."
+            };
+
+            if (Folder.ShowDialog() == DialogResult.OK)
+            {
+                string[] res = Folder.SelectedPath.Split('\\');
+                if (res[res.Length - 1].ToLower().Equals("bin"))
+                {
+                    ComputerInfos.InstallFolderBin = Folder.SelectedPath;
+                    return true;
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Veuillez séléctionner le répertoire Bin du dossier d'installation de PcVue ou annuler l'opération.");
+                    return SelectBinPath();
+                }
+            }
+            return false;
+        }
+    }
+
+}

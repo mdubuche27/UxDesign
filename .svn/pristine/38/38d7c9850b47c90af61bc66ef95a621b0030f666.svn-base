@@ -1,0 +1,6 @@
+﻿	Public Function FolderSize(FilePath As String) As Integer
+		Dim fs, f
+		Set fs = CreateObject("Scripting.FileSystemObject")
+		Set f = fs.GetFolder(FilePath)
+		FolderSize = f.size
+	End Function
