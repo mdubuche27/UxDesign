@@ -1,4 +1,0 @@
-Siemens/FONCTION	Parametres	V/Description	V/ParentDescription	V/ModbusAdresse
-FONCTION_0	/Siemens/FONCTION/mou_test/FCT	_ZC1_Compartimentage_TOUS_NIVEAUX_MOUNIER	_Zone_de_Compartimentage	 0
-Siemens/FONCTION_UGA	Parametres	V/Description	V/ParentDescription	V/ModbusAdresse
-FONCTION_UGA_0	/Siemens/FONCTION/mou_test/FCTUGA	_UGA_pour_ERP_BATIMENT_MOUNIER	_Zone_Alarme_ERP	 0

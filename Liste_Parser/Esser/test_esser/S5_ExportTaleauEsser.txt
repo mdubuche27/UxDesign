@@ -1,2 +1,0 @@
-Esser/Tableau	Parameters	V/Numero	V/Libelle
-Tab_1	/Esser/Tab/S5/1	1	FlexES

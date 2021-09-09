@@ -1,4 +1,0 @@
-Siemens/FONCTION	Parametres	V/Description	V/ParentDescription	V/ModbusAdresse
-FONCTION_0	Siemens/FONCTION/mou_test/FCT	 ZC1 Compartimentage TOUS NIVEAUX MOUNIER	 Zone de Compartimentage	 0
-Siemens/FONCTIONUGA	Parametres	V/Description	V/ParentDescription	V/ModbusAdresse
-FONCTION_0	Siemens/FONCTION/mou_test/FCT	 UGA pour ERP BATIMENT MOUNIER	 Zone Alarme ERP	 0
